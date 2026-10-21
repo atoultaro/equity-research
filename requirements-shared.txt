@@ -1,0 +1,3 @@
+--no-index
+--find-links vendor
+market-shared==0.2.0 --hash=sha256:e425124219d7be06ff8b82f2e0b7bcda2f293c6c26825ece19347e9316083df7

@@ -1,0 +1,8 @@
+{
+  "repository": "https://github.com/atoultaro/finwhaling",
+  "source_commit": "57fc6c30836d13a7fcfc3c1a9b6b496fe472d555",
+  "subdirectory": "packages/market_shared",
+  "version": "0.2.0",
+  "wheel": "market_shared-0.2.0-py3-none-any.whl",
+  "wheel_sha256": "e425124219d7be06ff8b82f2e0b7bcda2f293c6c26825ece19347e9316083df7"
+}

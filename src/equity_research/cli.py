@@ -1,0 +1,29 @@
+"""One obvious offline command; no broker/data-provider code path."""
+
+import argparse
+from pathlib import Path
+import sys
+
+from .reporting import canonical, run_experiment
+
+
+def main(argv=None) -> int:
+    parser = argparse.ArgumentParser(prog="equity-research")
+    commands = parser.add_subparsers(dest="command", required=True)
+    run = commands.add_parser("run")
+    for option in ("data", "candidate", "config", "manifest", "output"):
+        run.add_argument("--" + option, type=Path, required=True)
+    run.add_argument("--source-commit", help="full source SHA for installed-wheel use outside a checkout")
+    args = parser.parse_args(argv)
+    try:
+        result = run_experiment(args.data, args.candidate, args.config, args.manifest, args.output,
+                                source_commit=args.source_commit)
+    except (ValueError, KeyError, TypeError, OSError) as exc:
+        print(f"equity-research: {exc}", file=sys.stderr)
+        return 2
+    print(canonical({"status": result["status"], "trade": result["trade"]}).decode(), end="")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
