@@ -4,7 +4,8 @@ One offline daily-bar equity swing research slice:
 candidate → qualification → buy-stop plan → replay → dollar risk/cost ledger →
 reproducible artifacts. Python3.12+, one security, one manual candidate, long only.
 The included SYNTH data is synthetic acceptance evidence, not a profitable-strategy
-claim. There is no broker, market-data service or vendor-screen integration.
+claim. There is no broker or vendor-screen integration. Optional data preparation
+is separate from the fully offline replay engine; see the workflow below.
 
 ## Install
 
@@ -68,6 +69,14 @@ and no completed research run. Ordinary trade/no-trade outcomes return exit0.
 
 ## Test
 
+The full suite also exercises the optional data-preparation subsystem. Install
+its pinned extras in the development venv first (package installation may use a
+package index; tests themselves use no network):
+
+```bash
+.venv/bin/python -m pip install '.[data,yahoo,test]'
+```
+
 ```bash
 .venv/bin/python -m pytest -q
 ```
@@ -88,7 +97,7 @@ See [MVP specification](docs/MVP_SPEC.md) for exact data, qualification, sizing,
 cost, gap, expiration and same-day ambiguity contracts, and
 [research conventions](docs/RESEARCH_CONVENTIONS.md) for acceptance evidence and
 hand calculations. The manifest supplies a complete versioned ET session schedule;
-there is no automatic holiday calendar. Only raw prices with no declared corporate
+the replay loader has no automatic holiday calendar. Only raw prices with no declared corporate
 actions are supported. Missing sessions are never forward filled. Daily OHLC does
 not establish true intraday stop/target ordering; conservative collisions are flagged.
 
@@ -96,3 +105,59 @@ Maximum holding and explicit end-of-data full exits are modeled. Initial dollar
 risk uses the actual entry and actual placed stop, before costs; no minimum-one-share
 clamp exists. There is no trailing/partial exit, shorting, leverage, portfolio NAV,
 vendor screening history or fundamental analysis. All results remain research evidence.
+
+## Prepare historical daily data
+
+PR 5B adds an optional single-security Yahoo adapter and offline validation,
+comparison and export. `run` retains its existing input contract and never
+imports the Yahoo client. The only core runtime dependency remains the pinned
+shared wheel. The `data` extra pins pandas 2.2.3, numpy 2.2.4,
+exchange-calendars 4.13.1 and tzdata 2025.2; the `yahoo` extra pins yfinance 0.2.66.
+See [the pilot record](docs/YAHOO_PROVIDER_PILOT.md) for the unexecuted real-data
+basket and the permitted-use blocker, and [data contracts](docs/DATA_PREPARATION.md)
+for schemas and evidence requirements. No real-stock replay is certified.
+
+A complete, offline, **synthetic** example creates a new directory and tests the
+gates without making a Yahoo request. Substitute your own unused output name on
+each execution:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/make_yahoo_synthetic_example.py \
+  --output /tmp/equity-synthetic-data-example-v1
+PYTHONPATH=src .venv/bin/python -m equity_research.cli data validate \
+  --snapshot /tmp/equity-synthetic-data-example-v1/snapshot \
+  --evidence /tmp/equity-synthetic-data-example-v1/evidence.json \
+  --output /tmp/equity-synthetic-quality-v1
+PYTHONPATH=src .venv/bin/python -m equity_research.cli data export \
+  --snapshot /tmp/equity-synthetic-data-example-v1/snapshot \
+  --evidence /tmp/equity-synthetic-data-example-v1/evidence.json \
+  --output /tmp/equity-synthetic-research-v1
+```
+
+That two-bar export satisfies `load_dataset` and demonstrates `EXPORT_READY`
+using synthetic evidence only; it has insufficient strategy warmup. It does not
+verify any actual Yahoo price basis or historical publication timestamp.
+
+When retrieval and retention are permitted, acquisition is an explicit command:
+
+```bash
+equity-research data fetch-yahoo --symbol SPY --start 2024-11-20 --end 2024-12-06 \
+  --output /tmp/equity-yahoo-snapshots
+equity-research data validate --snapshot /tmp/equity-yahoo-snapshots/ATTEMPT_UUID \
+  --output /tmp/equity-yahoo-quality-v1
+equity-research data compare --before /tmp/equity-yahoo-snapshots/BEFORE_UUID \
+  --after /tmp/equity-yahoo-snapshots/AFTER_UUID --output /tmp/equity-yahoo-diff-v1
+equity-research data export --snapshot /tmp/equity-yahoo-snapshots/ATTEMPT_UUID \
+  --output /tmp/equity-yahoo-export-v1
+```
+
+Dates are inclusive; the adapter explicitly converts the provider end to the next
+calendar day. Fetch prints the new UUID directory and acquisition status. Without
+affirmative evidence the export command writes immutable quality artifacts,
+returns exit 3, and produces **no** `data.csv` or replay manifest. Validation
+returns 0 when its report was successfully written, even for blocked data; inspect
+the gates. Exit 2 means an invalid command/input, integrity problem or missing
+optional dependency; fetch/compare also return 3 for failed/partial/unknown outcomes.
+No command overwrites an existing snapshot/report/export directory. Snapshots
+are client-return captures, not original HTTP payloads. Nothing fills gaps or
+relabels adjusted prices raw; no availability model is automatically introduced.

@@ -1,4 +1,4 @@
-"""One obvious offline command; no broker/data-provider code path."""
+"""Offline replay and separately invoked optional data-preparation commands."""
 
 import argparse
 from pathlib import Path
@@ -14,11 +14,16 @@ def main(argv=None) -> int:
     for option in ("data", "candidate", "config", "manifest", "output"):
         run.add_argument("--" + option, type=Path, required=True)
     run.add_argument("--source-commit", help="full source SHA for installed-wheel use outside a checkout")
+    from .ingestion.cli import register
+    register(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "data":
+            from .ingestion.cli import dispatch
+            return dispatch(args)
         result = run_experiment(args.data, args.candidate, args.config, args.manifest, args.output,
                                 source_commit=args.source_commit)
-    except (ValueError, KeyError, TypeError, OSError) as exc:
+    except (ValueError, KeyError, TypeError, OSError, ImportError) as exc:
         print(f"equity-research: {exc}", file=sys.stderr)
         return 2
     print(canonical({"status": result["status"], "trade": result["trade"]}).decode(), end="")
