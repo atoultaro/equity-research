@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "equity-research"
+version = "0.1.0"
+description = "Offline daily equity swing research, one candidate at a time"
+requires-python = ">=3.12"
+dependencies = ["market-shared==0.2.0"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+equity-research = "equity_research.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
