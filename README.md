@@ -74,7 +74,7 @@ its pinned extras in the development venv first (package installation may use a
 package index; tests themselves use no network):
 
 ```bash
-.venv/bin/python -m pip install '.[data,yahoo,test]'
+.venv/bin/python -m pip install '.[data,yahoo,history,test]'
 ```
 
 ```bash
@@ -161,3 +161,44 @@ optional dependency; fetch/compare also return 3 for failed/partial/unknown outc
 No command overwrites an existing snapshot/report/export directory. Snapshots
 are client-return captures, not original HTTP payloads. Nothing fills gaps or
 relabels adjusted prices raw; no availability model is automatically introduced.
+
+## Yahoo and IBKR historical research datasets
+
+PR 5D adds explicit multi-symbol acquisition, per-provider Parquet caches,
+immutable research datasets, an offline loader/indicators and provider comparison.
+These technical datasets preserve native bases and unknown availability; strict
+execution replay and PR 5B export gates retain their existing contracts. See
+[historical data infrastructure](docs/HISTORICAL_EQUITY_DATA_INFRASTRUCTURE.md)
+for identity mappings, permissions, refresh policies, native semantics and all CLI
+options. The `history` extra adds pyarrow 23.0.1; optional `ibkr` adds ib_async
+2.1.0. Normal tests and the following example use only offline synthetic responses:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/make_historical_equity_example.py \
+  --output /tmp/equity-history-demo-v1
+PYTHONPATH=src .venv/bin/python -m equity_research.cli data freeze \
+  --provider yahoo --symbols SPY,QQQ,AAPL \
+  --mappings /tmp/equity-history-demo-v1/mappings.json --start 2024-01-02 --end 2024-12-31 \
+  --cache /tmp/equity-history-demo-v1/yahoo-cache --output /tmp/equity-history-refrozen-v1
+PYTHONPATH=src .venv/bin/python -m equity_research.cli data compare-providers \
+  --symbol AAPL --start 2024-01-02 --end 2024-12-31 \
+  --yahoo-dataset /tmp/equity-history-demo-v1/yahoo-dataset \
+  --ibkr-dataset /tmp/equity-history-demo-v1/ibkr-dataset \
+  --output /tmp/equity-history-comparison-v1
+```
+
+Use a new output path for every example. `load_research_dataset(path).bars("SPY")`
+returns canonical rows without provider parsing; `.indicators("SPY")` supplies
+SMA50/200, EMA50, shared simple ATR14 and volume mean20. Frozen loading/indicators
+work without acquisition libraries or a cache. Comparisons report discrepancies
+and unresolved bases; they never select or combine providers.
+
+Real acquisition is an explicit `data history --provider yahoo|ibkr` command with
+reviewed `--mappings`, `--symbols`, `--start`, `--end`, `--cache` and
+`--permission-reference`. Yahoo permissions identified in PR 5C remain unresolved
+for unapproved access. IBKR additionally requires an existing local authenticated
+TWS/Gateway and explicit `--ibkr-port`/`--ibkr-client-id`; the adapter requests
+historical stock data only. `--mode offline` reads cache without provider access;
+`--mode incremental` forces overlap refresh and `--mode full` refreshes the whole
+requested interval. No live acquisition or account, position or order operation
+was performed for PR 5D.

@@ -13,6 +13,8 @@ dependencies = ["market-shared==0.2.0"]
 test = ["pytest>=8,<10"]
 data = ["pandas==2.2.3", "numpy==2.2.4", "exchange-calendars==4.13.1", "tzdata==2025.2"]
 yahoo = ["yfinance==0.2.66"]
+history = ["pyarrow==23.0.1"]
+ibkr = ["ib_async==2.1.0"]
 
 [project.scripts]
 equity-research = "equity_research.cli:main"

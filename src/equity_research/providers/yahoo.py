@@ -105,3 +105,21 @@ def fetch(symbol: str, start: str, end: str, output: Path, *, clock=now_utc) -> 
         files = snapshot_files(request, acquisition)
     seal(output, files)
     return acquisition
+
+
+class YahooDailyProvider:
+    """Reuse the PR 5B capture unchanged, with an explicit provider-symbol mapping."""
+
+    name = "yahoo"
+
+    def __init__(self, *, clock=now_utc):
+        self.clock = clock
+
+    def fetch_daily(self, security, start, end, output):
+        from ..history.normalize import read_acquisition
+        # PR 5B maps class-share notation only. Explicit aliases/renames need a
+        # request retaining both names, rather than masquerading as another symbol.
+        if provider_symbol(security.symbol) != security.yahoo_symbol:
+            raise ValueError("Yahoo v1 permits class-share notation mapping only; no ticker substitution")
+        fetch(security.symbol, start, end, output, clock=self.clock)
+        return read_acquisition(output, security)
