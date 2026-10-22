@@ -204,6 +204,8 @@ def history(cache, provider: DailyProvider, securities, start, end, *, mode="aut
                                   returned_coverage=fresh["acquisition"].get("coverage"), basis=fresh["basis"],
                                   snapshot_sha256=fresh["snapshot_sha256"], request=fresh["request"],
                                   excluded_incomplete_sessions=fresh["excluded_incomplete_sessions"])
+                    if fresh["acquisition"].get("termination"):
+                        result["termination"] = fresh["acquisition"]["termination"]
                     result.update(cache.update(provider.name, security, start, end, fresh,
                                                full=mode == "full", clock=clock))
         except Exception as exc:

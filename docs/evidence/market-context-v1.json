@@ -1,0 +1,771 @@
+{
+  "base_commit": "9e03cff0374c35b67fb3acca36cc77ea99636c3b",
+  "branch": "feat/market-context-infrastructure-v1",
+  "failfast": {
+    "consecutive_chunks": 2,
+    "duplicate_callbacks_count_as_chunks": false,
+    "errored_response_native_bars_retained_but_not_selected": true,
+    "existing_transient_retry_categories": [
+      "PACING",
+      "TIMEOUT",
+      "CONNECTION"
+    ],
+    "interpretation": "Apparent persistence, not a generalized cause for code162",
+    "known_permission_stop": "immediate",
+    "no_data_stops_all_chunks": false,
+    "signature": [
+      "integer_numeric_code",
+      "PROVIDER_ERROR_category"
+    ],
+    "success_or_different_code_resets": true,
+    "termination_recorded_in_snapshot_and_batch_report": true
+  },
+  "identity_review": {
+    "QQQ": {
+      "actual_ibkr_qualified_contract": null,
+      "actual_primary_exchange": null,
+      "identity_evidence": "Issuer product description reviewed; Invesco dynamic body limitations supplemented by indexed issuer description. No historical membership/structure continuity claim.",
+      "issuer_source": "https://www.invesco.com/us/en/financial-products/etfs/invesco-qqq-trust-series-1.html",
+      "reviewed_name": "Invesco QQQ Trust Series1",
+      "role": "Nasdaq100 large-cap growth-oriented ETF proxy, not a technology-sector index"
+    },
+    "RSP": {
+      "actual_ibkr_qualified_contract": null,
+      "actual_primary_exchange": null,
+      "identity_evidence": "Issuer product description reviewed; Invesco dynamic body limitations supplemented by indexed issuer description. No historical membership/structure continuity claim.",
+      "issuer_source": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-etf.html",
+      "reviewed_name": "Invesco S&P 500 Equal Weight ETF",
+      "role": "Equal-weight S&P500 ETF proxy, not literal breadth"
+    },
+    "SPY": {
+      "actual_ibkr_qualified_contract": null,
+      "actual_primary_exchange": null,
+      "identity_evidence": "Issuer product description reviewed; Invesco dynamic body limitations supplemented by indexed issuer description. No historical membership/structure continuity claim.",
+      "issuer_source": "https://www.ssga.com/us/en/institutional/etfs/state-street-spdr-sp-500-etf-trust-spy",
+      "reviewed_name": "SPDR S&P 500 ETF Trust",
+      "role": "Broad US large-cap S&P500 ETF proxy, not the index"
+    }
+  },
+  "limitations": [
+    "No real PR7A qualification or acquisition while current preflight is pending",
+    "Historical dissemination and revision completeness unknown; latest-vintage reconstruction only",
+    "Native IBKR price/volume basis not independently verified, not dividend-adjusted total returns",
+    "No PIT constituent/universe data, true breadth or leadership observations",
+    "Descriptive state is project-defined, not an official named framework or trading permission"
+  ],
+  "market_context": {
+    "core_feature_count": 26,
+    "definitions": {
+      "QQQ.atr14_close": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "shared simple ATR14[t]/Close[t]; 14 true ranges, 15 bars",
+        "group": "volatility_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 15,
+        "operation": "atr",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.close_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-199:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 200,
+        "operation": "close_sma",
+        "parameters": [
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.close_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-49:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 50,
+        "operation": "close_sma",
+        "parameters": [
+          50
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.realized_volatility20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "population stddev of 20 simple Close[d]/Close[d-1]-1 returns; not annualized",
+        "group": "volatility_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 21,
+        "operation": "volatility",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.return20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 21,
+        "operation": "return",
+        "parameters": [
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.return60": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-60]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 61,
+        "operation": "return",
+        "parameters": [
+          60
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.sma200_slope20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA200[t]/SMA200[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 220,
+        "operation": "slope",
+        "parameters": [
+          200,
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.sma50_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA50[t]/SMA200[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 200,
+        "operation": "sma_ratio",
+        "parameters": [
+          50,
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP.close_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-199:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "RSP"
+        ],
+        "observations": 200,
+        "operation": "close_sma",
+        "parameters": [
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP.close_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-49:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "RSP"
+        ],
+        "observations": 50,
+        "operation": "close_sma",
+        "parameters": [
+          50
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP.return20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "RSP"
+        ],
+        "observations": 21,
+        "operation": "return",
+        "parameters": [
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP_SPY.change20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Ratio[t]/Ratio[t-20]-1",
+        "group": "participation_proxies",
+        "inputs": [
+          "RSP",
+          "SPY"
+        ],
+        "observations": 21,
+        "operation": "ratio_change",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP_SPY.level": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "RSP_Close[t]/SPY_Close[t]",
+        "group": "participation_proxies",
+        "inputs": [
+          "RSP",
+          "SPY"
+        ],
+        "observations": 1,
+        "operation": "ratio",
+        "parameters": [],
+        "units": "native_price_ratio",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP_SPY.relative_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Ratio[t]/mean(Ratio[t-49:t])-1",
+        "group": "participation_proxies",
+        "inputs": [
+          "RSP",
+          "SPY"
+        ],
+        "observations": 50,
+        "operation": "ratio_sma",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.atr14_close": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "shared simple ATR14[t]/Close[t]; 14 true ranges, 15 bars",
+        "group": "volatility_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 15,
+        "operation": "atr",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.close_sma150": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-149:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 150,
+        "operation": "close_sma",
+        "parameters": [
+          150
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.close_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-199:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 200,
+        "operation": "close_sma",
+        "parameters": [
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.close_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-49:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 50,
+        "operation": "close_sma",
+        "parameters": [
+          50
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.range20_close": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "(max(High[t-19:t])-min(Low[t-19:t]))/Close[t]",
+        "group": "volatility_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 20,
+        "operation": "range",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.realized_volatility20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "population stddev of 20 simple Close[d]/Close[d-1]-1 returns; not annualized",
+        "group": "volatility_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 21,
+        "operation": "volatility",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.return20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 21,
+        "operation": "return",
+        "parameters": [
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.return60": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-60]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 61,
+        "operation": "return",
+        "parameters": [
+          60
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma150_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA150[t]/SMA200[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 200,
+        "operation": "sma_ratio",
+        "parameters": [
+          150,
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma200_slope20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA200[t]/SMA200[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 220,
+        "operation": "slope",
+        "parameters": [
+          200,
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma50_sma150": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA50[t]/SMA150[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 150,
+        "operation": "sma_ratio",
+        "parameters": [
+          50,
+          150
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma50_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA50[t]/SMA200[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 200,
+        "operation": "sma_ratio",
+        "parameters": [
+          50,
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.above_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.above_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.advance_decline": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.new_high52w": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.new_low52w": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.trend_template": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_universe.valid_setup_share": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe and versioned setup definition",
+        "group": "leadership_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      }
+    },
+    "optional_unavailable_features": 7,
+    "participation": "Native ETF price ratio; differing distributions/bases can affect it. Not literal constituent breadth, pure concentration, or total return.",
+    "required_history_observations": 220,
+    "rv": "20 simple daily close returns, population stddev, unannualized, includes current completed session, requires21 consecutive expected closes",
+    "schema": {
+      "assumed_availability": {
+        "availability": "RECONSTRUCTED_CLOSE_PLUS_DELAY",
+        "availability_interpretation": "MODEL_ASSUMPTION_NOT_VERIFIED_VENDOR_PUBLICATION",
+        "delay_minutes": 60,
+        "describe_state": true,
+        "descriptor_rule": "Both SPY/QQQ close_sma200 and sma200_slope20 positive: UPTREND; all negative: DOWNTREND; otherwise MIXED; missing inputs: UNCLASSIFIED",
+        "descriptor_version": "spy_qqq_long_trend_v1",
+        "trading_permission_rule": "NONE",
+        "version": "market_configuration_v1"
+      },
+      "evaluation_end": "2026-10-20",
+      "evaluation_start": "2024-01-02",
+      "execution_admission": "UNCHANGED_NOT_GRANTED",
+      "feature_definition_version": "market_features_v1",
+      "historical_price_vintage_availability": "UNKNOWN",
+      "market_reference_set_id": "364abbabfdaa2546e065da1451968a3b70c397e896a92f97ba18336544b42644",
+      "participation_interpretation": "NATIVE_ETF_RELATIVE_PRICE_PROXY_NOT_CONSTITUENT_BREADTH_OR_TOTAL_RETURN",
+      "required_observations_including_evaluation_session": 220,
+      "required_preceding_sessions": 219,
+      "schema_version": "market_context_v1",
+      "source_dataset_hashes": {
+        "QQQ": "4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee",
+        "RSP": "4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee",
+        "SPY": "4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee"
+      }
+    },
+    "shared_dependency": {
+      "indicators_sha256": "660c7654ac59ac5c51738a34b9264e5c1d9b751b514b8e4b55030759b8242c29",
+      "source_commit": "57fc6c30836d13a7fcfc3c1a9b6b496fe472d555",
+      "version": "0.2.0",
+      "wheel_sha256": "e425124219d7be06ff8b82f2e0b7bcda2f293c6c26825ece19347e9316083df7"
+    },
+    "timing": "Strictly before decision, regular-session close plus60 modeled minutes; not verified vendor dissemination; unknown mode never admits as-of rows."
+  },
+  "offline_tests": {
+    "broker_sdk_required": false,
+    "command": ".venv/bin/python -m pytest -q",
+    "elapsed_seconds": 76.89,
+    "failed": 0,
+    "network_required": false,
+    "new_regressions": 30,
+    "passed": 284,
+    "prior_regressions": 254
+  },
+  "offline_verification": {
+    "cache_and_calendar_imports_denied": true,
+    "context_sha256": "d7c3990fa0f3abd6927e5e069f3eb71433ecdb9dafc95246236adb7dba4b927e",
+    "network_denied": true,
+    "optional_and_provider_imports_denied": true,
+    "origin": "SYNTHETIC_ONLY",
+    "original_files_unchanged": 297,
+    "result": "PASS",
+    "self_contained": true
+  },
+  "operating_boundaries": {
+    "account_order_position_portfolio_balance_execution_requests": 0,
+    "automatic_yahoo_fallback": false,
+    "broker_settings_changed": false,
+    "execution_accounting_changes": false,
+    "finwhaling_modified": false,
+    "new_tws_session_started": false,
+    "optimization": false,
+    "pr7b_started": false,
+    "trade_policy_added": false
+  },
+  "pr6b_merged_in_base": true,
+  "preservation": {
+    "all_byte_unchanged": true,
+    "historical_pr5_pr6_reports_unchanged": true,
+    "pre_existing_research_cache_files": 297
+  },
+  "publication": {
+    "committed_evidence": "Safe counts, schema/formulas, references and hashes only",
+    "real_licensed_rows_or_restricted_derivatives_committed": false
+  },
+  "real_acquisition": {
+    "actual_acquired_sessions": null,
+    "actual_feature_quality": null,
+    "actual_source_dataset_hashes": {
+      "QQQ": null,
+      "RSP": null,
+      "SPY": null
+    },
+    "actual_state_counts": null,
+    "actual_warmup_complete": null,
+    "broker_connections": 0,
+    "evaluation_end": "2026-10-20",
+    "evaluation_start": "2024-01-02",
+    "expected_evaluation_sessions": 703,
+    "first_complete_actual_feature_session": null,
+    "historical_requests": 0,
+    "last_complete_actual_feature_session": null,
+    "planned_acquisition_start": "2022-11-01",
+    "planned_end": "2026-10-20",
+    "planned_expected_sessions_per_instrument": 995,
+    "planned_preceding_sessions": 292,
+    "reason": "PR7A section5 requires fresh authenticated paper/socket/read-only/port and bounded-authorization confirmation; prior success is not current evidence.",
+    "status": "NOT_ATTEMPTED_CURRENT_PREFLIGHT_PENDING"
+  },
+  "recorded_at": "2026-10-22T14:38:55.148608+00:00",
+  "result": "OFFLINE_INFRASTRUCTURE_AND_SYNTHETIC_DEMONSTRATION_PASS_REAL_PREFLIGHT_PENDING",
+  "schema_version": "market_context_evidence_v1",
+  "synthetic_demonstration": {
+    "classification_counts_interpretation": "Synthetic engineering fixture frequencies, not actual historical market states",
+    "context": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "d7c3990fa0f3abd6927e5e069f3eb71433ecdb9dafc95246236adb7dba4b927e",
+        "files": {
+          "calendar.json": "c078113b5d467733598cd9e35dc1cfbc09c28db0c9ea508c2e54ac90e0c4cb0b",
+          "configuration.json": "28f5de0cb401ec6a5dcf3e826e57a88f484ddaf8bc06e3afe280d09f09615fb2",
+          "feature_definitions.json": "b82e1bafb36bdf9ced9aca83f54cc4115d0cfe0af2cb9dde3c7d41480aa8c305",
+          "feature_quality.json": "b37c5c63a58d9b5078f28ec25fc614d1b5a49a0a6438af5d238d394f1b102e60",
+          "market_context_daily.json": "b0f5d02cbded7e196cc4cf001fefd2f619f44112a2630e3a4456082587962683",
+          "market_context_manifest.json": "6ac2a2b081cca48cc6af827f3470523a97daa93520e8060032f3bf1d876d0efa",
+          "provenance.json": "19652dbd059c4bf317b231e7fec6f912dd9168d8d2a2c53ddb93b769bb1216e6",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-bars-2e4e52c7fe8d52ea1ed245ac.json": "b5ebdfaac58a04874c23adcb51a7ac1a6c0584ce5f2ddbbda756696fa63455b7",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-bars-c2b00c5bd4598d75de383e48.json": "fc0691b32d3b2e42dc9dad2b71d9a3e991ee893cb3afbb71dc084fcd1f5ac8b0",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-bars-c2c67b7c5506d815d4ab4861.json": "0a0ab8a6f6fe9dcd57d3d66db4de6fcaf62ab26de9e252c7afdfbeb563ffeead",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-dataset.json": "30333337ec22779a3274791576f7a23789f71c5bb56b8c1b74d66bcef9209e62",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-quality-2e4e52c7fe8d52ea1ed245ac.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-quality-c2b00c5bd4598d75de383e48.json": "97901ec95e4f63920e6fb19328388300d83992be75d165d0fbf619763ad0f901",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-quality-c2c67b7c5506d815d4ab4861.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-acquisition.json": "329b8ad9e220de1c6961e0538dd715bb8bb6c8e161154e9ee9ec6a9486c9a37b",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-request.json": "afcc3c656de78f2a745f9ba320a4fed76623c2754e97d2ee76d77196701672eb",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_bars.json": "4a15fdb85221ec030e3462ffdb525a3c90e7c4aa8e345f9327a00ee575a890a1",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_frame.json": "97ecc075e541cdbc9cfd14320b4063fc6ba8542d958cd7fda323b1a6b76a9756",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-acquisition.json": "75076b9c8450f3f35f7d060ff929ad0803e1d90ed6924a615702db42ddeb9905",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-request.json": "0b9de2be7655e27f2cde38b14f6ac67d82c5663efcd7562062818deeb655d639",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_bars.json": "7c56b389ec43abdfb511b4ab38d5b9ccfd93f23328f1f978ef060330ea18ff48",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_frame.json": "3f6c4bb28316025fe073765892a37d1c57681328d29d40a7b82cbf2eb2db15d3",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-acquisition.json": "2dbac1e1f3f1b7534a5498e14ed7871bbfb1c2ff71c84a609aefbe9235414504",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-request.json": "50c0f6823d484b44fa93e601d7880a77cef9ac8c9b503f0376a2336e866d729d",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_bars.json": "521e6d26af6f45691fb3243a4879504208c24a0aa1b607d7c4d551c47b4b6cad",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_frame.json": "b3450580741de4221513c59ae4af958ce2e5744304b11b9c4740939f7961b606",
+          "reference_dataset_lineage.json": "d26ff05e90554deadad821ddd34cb1f1a276e8fa23dcd533b2e0a5aefbd5651b"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/research_datasets/pr7a-synthetic-jfyafm7i-v2/context"
+    },
+    "live_requests": 0,
+    "origin": "SYNTHETIC_ONLY",
+    "quality": {
+      "complete_core_rows": 703,
+      "complete_rows_by_group": {
+        "breadth_features": 0,
+        "leadership_features": 0,
+        "participation_proxies": 703,
+        "trend_features": 703,
+        "volatility_features": 703
+      },
+      "descriptive_state_counts": {
+        "UPTREND": 703
+      },
+      "evaluation_rows": 703,
+      "first_complete_core_session": "2024-01-02",
+      "historical_availability_verified": false,
+      "incomplete_core_rows": 0,
+      "last_complete_core_session": "2026-10-20",
+      "missing_feature_counts": {
+        "historical_constituents.above_sma200": 703,
+        "historical_constituents.above_sma50": 703,
+        "historical_constituents.advance_decline": 703,
+        "historical_constituents.new_high52w": 703,
+        "historical_constituents.new_low52w": 703,
+        "historical_constituents.trend_template": 703,
+        "historical_universe.valid_setup_share": 703
+      },
+      "rows_with_missing_optional_features": 703,
+      "schema_version": "market_feature_quality_v1",
+      "trading_policy": "NONE"
+    },
+    "source_dataset": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee",
+        "files": {
+          "bars-2e4e52c7fe8d52ea1ed245ac.json": "b5ebdfaac58a04874c23adcb51a7ac1a6c0584ce5f2ddbbda756696fa63455b7",
+          "bars-c2b00c5bd4598d75de383e48.json": "fc0691b32d3b2e42dc9dad2b71d9a3e991ee893cb3afbb71dc084fcd1f5ac8b0",
+          "bars-c2c67b7c5506d815d4ab4861.json": "0a0ab8a6f6fe9dcd57d3d66db4de6fcaf62ab26de9e252c7afdfbeb563ffeead",
+          "dataset.json": "30333337ec22779a3274791576f7a23789f71c5bb56b8c1b74d66bcef9209e62",
+          "quality-2e4e52c7fe8d52ea1ed245ac.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "quality-c2b00c5bd4598d75de383e48.json": "97901ec95e4f63920e6fb19328388300d83992be75d165d0fbf619763ad0f901",
+          "quality-c2c67b7c5506d815d4ab4861.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-acquisition.json": "329b8ad9e220de1c6961e0538dd715bb8bb6c8e161154e9ee9ec6a9486c9a37b",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-request.json": "afcc3c656de78f2a745f9ba320a4fed76623c2754e97d2ee76d77196701672eb",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_bars.json": "4a15fdb85221ec030e3462ffdb525a3c90e7c4aa8e345f9327a00ee575a890a1",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_frame.json": "97ecc075e541cdbc9cfd14320b4063fc6ba8542d958cd7fda323b1a6b76a9756",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-acquisition.json": "75076b9c8450f3f35f7d060ff929ad0803e1d90ed6924a615702db42ddeb9905",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-request.json": "0b9de2be7655e27f2cde38b14f6ac67d82c5663efcd7562062818deeb655d639",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_bars.json": "7c56b389ec43abdfb511b4ab38d5b9ccfd93f23328f1f978ef060330ea18ff48",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_frame.json": "3f6c4bb28316025fe073765892a37d1c57681328d29d40a7b82cbf2eb2db15d3",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-acquisition.json": "2dbac1e1f3f1b7534a5498e14ed7871bbfb1c2ff71c84a609aefbe9235414504",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-request.json": "50c0f6823d484b44fa93e601d7880a77cef9ac8c9b503f0376a2336e866d729d",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_bars.json": "521e6d26af6f45691fb3243a4879504208c24a0aa1b607d7c4d551c47b4b6cad",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_frame.json": "b3450580741de4221513c59ae4af958ce2e5744304b11b9c4740939f7961b606"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/research_datasets/pr7a-synthetic-jfyafm7i-v2/prices"
+    },
+    "source_origin": [
+      "synthetic"
+    ],
+    "source_rows_per_instrument": {
+      "QQQ": 995,
+      "RSP": 995,
+      "SPY": 995
+    },
+    "strategy_edge_claim": false,
+    "warmup_observations_preceding_first_evaluation": 292
+  }
+}
