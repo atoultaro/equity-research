@@ -218,8 +218,9 @@ knowledge safeguards and offline reproduction. `data events-freeze` and
 in ignored local storage; committed tests use deterministic synthetic evidence.
 
 PR 6B applies the same framework to Alphabet Class C (`GOOG`).
-[The GOOG evidence study](docs/GOOG_EVENT_AWARE_RESEARCH.md) records a successful
-five-session IBKR capture, the subsequent error-162 block on the full target,
-independently sourced corporate events and an offline AAPL/GOOG completeness
-comparison. Missing prices, unresolved release clocks and unknown ex-dates remain
-explicit; the partial dataset supplies no trading conclusion.
+[The GOOG evidence study](docs/GOOG_EVENT_AWARE_RESEARCH.md) records all 703 IBKR
+daily sessions after a user-authorized retry, independently
+sourced corporate events and an offline AAPL/GOOG completeness comparison. Earlier
+error-162 failures and partial artifacts are preserved. Unresolved release clocks,
+unknown ex-dates and native-basis limitations remain explicit; no trading
+conclusion is claimed.
