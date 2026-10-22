@@ -7,3 +7,5 @@ dist/
 runs/
 data/provider_snapshots/
 research_datasets/
+data/history_cache/
+data/research_datasets/

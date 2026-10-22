@@ -22,11 +22,16 @@ def register(commands):
     compare.add_argument("--before", type=Path, required=True)
     compare.add_argument("--after", type=Path, required=True)
     compare.add_argument("--output", type=Path, required=True)
+    from ..history.cli import register as register_history
+    register_history(operations)
 
 
 def dispatch(args):
     from .storage import encode, write_bundle
 
+    if args.operation in {"history", "freeze", "compare-providers"}:
+        from ..history.cli import dispatch as dispatch_history
+        return dispatch_history(args)
     if args.operation == "fetch-yahoo":
         from ..providers.yahoo import fetch
         path = args.output / str(uuid4())
