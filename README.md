@@ -202,3 +202,8 @@ historical stock data only. `--mode offline` reads cache without provider access
 `--mode incremental` forces overlap refresh and `--mode full` refreshes the whole
 requested interval. No live acquisition or account, position or order operation
 was performed for PR 5D.
+
+PR 5E subsequently verified one real, read-only paper-TWS historical request:
+five SPY sessions were captured, validated, cached, frozen and loaded offline.
+See [the live smoke-test record](docs/LIVE_IBKR_EQUITY_SMOKE_TEST.md) for the
+confirmed prerequisites, exact scope, local artifacts and remaining data limits.
