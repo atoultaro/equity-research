@@ -89,14 +89,21 @@ evidence contains identities, references, hashes, counts and aggregate diagnosti
 | Full native capture | `data/history_cache/pr6a-aapl-gzfik0eg-v2/snapshots/ibkr/28521d410be14a64973c5efe9096eb04` | `1a6739798e098e43ac569389d7dc4cd0e5bd00b3ea1dd7ae5a1b1b90b690b0ed` |
 | Frozen prices | `data/research_datasets/pr6a-aapl-gzfik0eg-prices-v1` | `e32427f6db1c0cf6bbb21104a460c4d7f4f4bb29274b28144606facec056ecdf` |
 | Frozen events | `data/research_datasets/pr6a-aapl-gzfik0eg-events-v1` | `dbab45eac84ea3c657b60959cdd87b16abc7526641c3efdbd15a0dc1720ed9cd` |
-| Combined study | `data/research_datasets/pr6a-aapl-gzfik0eg-study-v2` | `ea56e33109a45c9d2dcd7d55216971ebcfcc1126aed31d85b96d7d96af479b67` |
+| Previous combined study (preserved) | `data/research_datasets/pr6a-aapl-gzfik0eg-study-v2` | `ea56e33109a45c9d2dcd7d55216971ebcfcc1126aed31d85b96d7d96af479b67` |
+| Corrected combined study | `data/research_datasets/pr6a-aapl-gzfik0eg-study-v3` | `5c0f21aa7d197313d2776e5ba5341512c1526e886f9f2d11f9ff1d6a37233fe7` |
 
 The cache is `data/history_cache/pr6a-aapl-gzfik0eg-v2`; original failed cache
 `data/history_cache/pr6a-aapl-gzfik0eg` remains intact. Manually transcribed inputs
 and their build helper are sealed under
 `data/research_datasets/pr6a-aapl-gzfik0eg-event-inputs-v1`. The earlier combined
-study v1 is preserved; v2 records the final stricter exclusion of unverified events
-from historical knowledge. Changes/corrections require a new exclusive bundle.
+studies v1 and v2 are preserved; v2 records stricter exclusion of unverified events
+from historical knowledge. Review version v3 corrects corporate-action window
+annotations using the same frozen prices, events and source assertions. All 131
+pre-existing local research/cache files were verified byte-for-byte unchanged.
+Changes/corrections require a new exclusive bundle. The original acquisition
+evidence retains its original v2 study hash; the separate
+[window-review evidence](evidence/aapl-corporate-action-window-review-v1.json)
+records v3, its parent and preservation checks.
 
 ## Event evidence and inventory
 
@@ -266,9 +273,47 @@ also predate acquired prices. No extra ancient history was forced.
 Prices remain **IBKR_TRADES_SPLIT_ADJUSTED_DOCUMENTED**; volume remains
 **IBKR_NATIVE_UNITS_UNVERIFIED**, overall basis verified=false. There is no
 RAW_VERIFIED relabel, total-return transformation, independent vendor correction or
-execution export. Unknown dividend dates conservatively flag potential adjustment
-effects in earnings diagnostics without assigning causes. Price historical
-publication availability is also unknown.
+execution export. Price historical publication availability is also unknown.
+
+### Corporate-action window review correction
+
+Missing ex-date evidence is a **global evidence gap**, not evidence of overlap with
+an earnings window. `corporate_action_evidence` records all unresolved effective
+dates with revision/source references and unresolved fields, plus the full action
+inventory count. Every dividend remains in the frozen event inventory; no ex-date
+is filled or inferred from announcement, record or payment dates.
+
+For each computable price window, `corporate_action_window` records its boundaries:
+**after the previous completed session, through the tenth subsequent session after
+the reaction session**, inclusive of that last session. The previous-close anchor
+session is excluded. Missing outcome bars remain missing; the window uses the
+independent exchange schedule, without compressing it to available prices.
+
+- `potential_corporate_action_effects` contains only actions with verified effective
+  exchange sessions inside that window. A matching date is not causal attribution.
+- If a reviewed source provides an explicit effective-date interval, an unknown-date
+  action can carry `payload.effective_date_bounds`: nullable ISO `not_before` and
+  `not_after` endpoints (inclusive), `evidence_status="VERIFIED"`, and nonempty
+  `source_ids` referencing its event sources. At least one endpoint must be present
+  and the bounds must be ordered; the full payload is bound by the existing source
+  assertion/provenance mechanism. No endpoints are derived from record/payment dates.
+- Bounds intersecting an actual window session produce an entry in the separate
+  `corporate_action_overlap_uncertainty` list, labeled overlap **UNDETERMINED**.
+  Disjoint bounds produce no window-specific entry. Neither case invents an ex-date.
+  Unverified/conflicting effective-session claims inside a window also stay in the
+  uncertainty list, rather than the verified-session list.
+- Without defensible bounds, an unknown ex-date is reported only in the global
+  evidence-gap inventory. Empty window lists do **not** certify absence of corporate
+  actions or completeness of the archive.
+
+In the actual corrected AAPL study, 121 unsupported entries (eleven unknown-ex-date
+dividends repeated across eleven earnings windows) become **zero** window overlap
+entries. All eleven unknown ex-dates remain explicit global evidence gaps; no
+source-backed bounds are available for them. All 24 event records, source assertions,
+703 price bars, numeric diagnostics and checked as-known views are unchanged.
+Fourteen deterministic regressions cover unrelated unknown-date dividends,
+intersecting/disjoint/one-sided bounds, a holiday-only interval, sourced-bound
+validation, and verified dividends/splits at both window boundaries.
 
 ## Offline reproduction
 
@@ -283,7 +328,7 @@ With this workspace's ignored artifacts, inspect entirely offline:
 
 ```python
 from equity_research.events import load_event_study
-study = load_event_study("data/research_datasets/pr6a-aapl-gzfik0eg-study-v2")
+study = load_event_study("data/research_datasets/pr6a-aapl-gzfik0eg-study-v3")
 assert len(study.bars()) == 703
 assert len(study.retrospective["events"]) == 24
 report = study.diagnostics
@@ -315,9 +360,11 @@ schema, timing and calculation behavior with deterministic synthetic tests:
 ```
 
 The full regression includes PR 4–5E execution/accounting behavior and denies
-network sockets. Full regression: **228 passed** (180 existing plus 48 new),
-28.44 seconds; no failures. No lint command is configured. The test command and
-result are also recorded in the aggregate evidence.
+network sockets. The initial PR passed 228 tests; the review adds fourteen
+corporate-action window regressions. Updated full regression: **242 passed in
+17.48 seconds**, zero failures. Focused event tests: **60 passed in 4.29 seconds**.
+Exact commands/results are recorded in the window-review evidence and PR description.
+No lint command is configured.
 
 The next research step is to obtain authorized primary ex-date notices and
 historical revision/publication evidence, then freeze a new event/study version.

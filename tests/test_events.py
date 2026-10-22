@@ -380,3 +380,95 @@ def test_resealing_outer_study_cannot_hide_embedded_evidence_change(tmp_path, pr
     write_bundle(tmp_path / "resealed", files)
     with pytest.raises(ValueError, match="lineage"):
         load_event_study(tmp_path / "resealed")
+
+
+def test_unrelated_unknown_ex_dates_are_global_gaps_not_window_effects(tmp_path, price_bundle):
+    earnings = event(relation="AFTER_CLOSE")
+    dividends = []
+    for index, declared in enumerate(("2024-10-01", "2024-12-16")):
+        dividend = event("DIVIDEND", day=declared)
+        dividend["event_id"] += f"-{index}"
+        dividend["unresolved_fields"] = ["ex_date"]
+        # These dates happen to fall in the earnings window. Neither establishes
+        # an ex-date or supplies a permissible effective-date bound.
+        dividend["payload"].update(record_date="2024-12-02", payment_date="2024-12-05")
+        dividends.append(dividend)
+    inventory = [earnings, *dividends]
+    report, _, ds, _, _ = run_diag(tmp_path, price_bundle, inventory)
+    r = report["events"][0]
+    assert r["corporate_action_window"] == {"after_session": "2024-11-25", "through_session": "2024-12-11"}
+    assert r["potential_corporate_action_effects"] == []
+    assert r["corporate_action_overlap_uncertainty"] == []
+    evidence = report["corporate_action_evidence"]
+    assert evidence["status"] == "INCOMPLETE_EFFECTIVE_DATES"
+    assert evidence["inventory_action_count"] == 2
+    assert [e["event_id"] for e in evidence["unknown_effective_dates"]] == [d["event_id"] for d in dividends]
+    assert all(e["effective_date"] is None and e["effective_date_bounds"] is None and
+               e["source_ids"] == ["synthetic-source"] and e["unresolved_fields"] == ["ex_date"]
+               for e in evidence["unknown_effective_dates"])
+    assert ds.events == inventory
+    assert ds.sources == [source(inventory)]
+    assert [r["issues"] for r in report["events"][1:]] == [["EX_DATE_UNKNOWN"], ["EX_DATE_UNKNOWN"]]
+
+
+@pytest.mark.parametrize("lower,upper,uncertain", [
+    ("2024-10-01", "2024-11-25", False),
+    ("2024-12-12", "2024-12-31", False),
+    ("2024-11-29", "2024-12-02", True),
+    ("2024-12-12", None, False),
+    (None, "2024-11-25", False),
+    ("2024-11-29", None, True),
+    ("2024-11-28", "2024-11-28", False),  # Thanksgiving is not an effective session.
+])
+def test_sourced_bounds_separate_possible_date_ranges_from_verified_effects(
+        tmp_path, price_bundle, lower, upper, uncertain):
+    earnings = event(relation="AFTER_CLOSE")
+    dividend = event("DIVIDEND")
+    dividend["payload"]["effective_date_bounds"] = {
+        "not_before": lower, "not_after": upper, "evidence_status": "VERIFIED",
+        "source_ids": ["synthetic-source"]}
+    report, _, ds, _, _ = run_diag(tmp_path, price_bundle, [earnings, dividend])
+    r = report["events"][0]
+    assert r["potential_corporate_action_effects"] == []
+    assert len(r["corporate_action_overlap_uncertainty"]) == int(uncertain)
+    if uncertain:
+        gap = r["corporate_action_overlap_uncertainty"][0]
+        assert gap["event_id"] == dividend["event_id"]
+        assert gap["effective_date"] is None
+        assert gap["interpretation"] == "BOUNDS_INTERSECT_WINDOW_OVERLAP_UNDETERMINED"
+        assert gap["effective_date_bounds"]["source_ids"] == dividend["source_ids"]
+    assert ds.events[1]["payload"]["ex_date"] is None
+    assert ds.events[1]["payload"]["ex_date_status"] == "UNKNOWN"
+    assert len(report["corporate_action_evidence"]["unknown_effective_dates"]) == 1
+
+
+@pytest.mark.parametrize("kind", ["DIVIDEND", "SPLIT"])
+def test_only_verified_effective_sessions_inside_the_price_window_are_flagged(tmp_path, price_bundle, kind):
+    earnings = event(relation="AFTER_CLOSE")
+    actions = []
+    for index, effective in enumerate(("2024-11-25", "2024-11-26", "2024-11-29", "2024-12-11", "2024-12-12")):
+        action = event(kind, effective=effective)
+        action["event_id"] += f"-{index}"
+        actions.append(action)
+    report, _, _, _, _ = run_diag(tmp_path, price_bundle, [earnings, *actions])
+    r = report["events"][0]
+    assert [effect["effective_date"] for effect in r["potential_corporate_action_effects"]] == [
+        "2024-11-26", "2024-11-29", "2024-12-11"]
+    assert all(effect["source_ids"] == ["synthetic-source"] and
+               effect["interpretation"] == "POSSIBLE_NOT_CAUSALLY_ATTRIBUTED"
+               for effect in r["potential_corporate_action_effects"])
+    assert r["corporate_action_overlap_uncertainty"] == []
+
+
+@pytest.mark.parametrize("status,sources,lower,upper", [
+    ("UNKNOWN", ["synthetic-source"], "2024-11-29", None),
+    ("VERIFIED", ["unrelated-source"], "2024-11-29", None),
+    ("VERIFIED", ["synthetic-source"], None, None),
+    ("VERIFIED", ["synthetic-source"], "2024-12-02", "2024-11-29"),
+])
+def test_effective_date_bounds_need_consistent_sourced_evidence(tmp_path, price_bundle, status, sources, lower, upper):
+    dividend = event("DIVIDEND")
+    dividend["payload"]["effective_date_bounds"] = {
+        "not_before": lower, "not_after": upper, "evidence_status": status, "source_ids": sources}
+    with pytest.raises(ValueError, match="bounds"):
+        run_diag(tmp_path, price_bundle, [event(relation="AFTER_CLOSE"), dividend])

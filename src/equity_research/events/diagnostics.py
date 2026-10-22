@@ -3,7 +3,54 @@
 from decimal import Decimal
 from statistics import mean
 
-from .model import revision_key
+from .model import day, revision_key
+
+
+def _effective_date_bounds(action):
+    """Use only explicit reviewed bounds, never announcement/record/payment guesses."""
+    bounds = action["payload"].get("effective_date_bounds")
+    if bounds is None:
+        return None
+    if (bounds.get("evidence_status") != "VERIFIED" or not bounds.get("source_ids") or
+            not set(bounds["source_ids"]) <= set(action["source_ids"])):
+        raise ValueError("effective-date bounds require verified event-source references")
+    lower, upper = bounds.get("not_before"), bounds.get("not_after")
+    if lower is None and upper is None:
+        raise ValueError("effective-date bounds require at least one sourced endpoint")
+    for value in (lower, upper):
+        if value is not None:
+            day(value)
+    if lower is not None and upper is not None and lower > upper:
+        raise ValueError("effective-date bounds are reversed")
+    return {"not_before": lower, "not_after": upper, "source_ids": list(bounds["source_ids"])}
+
+
+def _corporate_action_window(actions, aligned, conflicts, sessions):
+    """Classify a window's verified actions separately from bounded uncertainty."""
+    effects, uncertain = [], []
+    for action in actions:
+        effective = action["effective_date"]
+        reference = {"event_id": action["event_id"], "revision_key": revision_key(action),
+                     "type": action["event_type"], "source_ids": list(action["source_ids"])}
+        if effective is None:
+            bounds = _effective_date_bounds(action)
+            if bounds is not None and any(
+                    (bounds["not_before"] is None or bounds["not_before"] <= d) and
+                    (bounds["not_after"] is None or d <= bounds["not_after"]) for d in sessions):
+                uncertain.append({**reference, "effective_date": None, "effective_date_bounds": bounds,
+                                  "interpretation": "BOUNDS_INTERSECT_WINDOW_OVERLAP_UNDETERMINED"})
+            # Unbounded unknowns live only in the global evidence report. Neither
+            # missing dates nor intersecting bounds establish an actual overlap.
+        elif effective in sessions:
+            a = aligned[revision_key(action)]
+            if (action["event_id"] in conflicts or action["evidence_status"] == "UNVERIFIED" or
+                    a["issues"] or a["effective_session"] != effective):
+                uncertain.append({**reference, "effective_date": effective,
+                                  "interpretation": "EFFECTIVE_SESSION_NOT_VERIFIED"})
+            else:
+                effects.append({**reference, "effective_date": effective,
+                                "interpretation": "POSSIBLE_NOT_CAUSALLY_ATTRIBUTED"})
+    return effects, uncertain
 
 
 def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
@@ -47,6 +94,11 @@ def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
         raise ValueError("invalid price rows")
     aligned = {a["revision_key"]: a for a in alignments}
     conflicts = set(event_dataset.quality["conflicting_event_ids"])
+    actions = [e for e in events if e["event_type"] in {"DIVIDEND", "SPLIT"}]
+    unknown_dates = [{"event_id": e["event_id"], "revision_key": revision_key(e), "type": e["event_type"],
+                      "effective_date": None, "effective_date_bounds": _effective_date_bounds(e),
+                      "source_ids": list(e["source_ids"]), "unresolved_fields": list(e["unresolved_fields"])}
+                     for e in actions if e["effective_date"] is None]
     results = []
     for event in events:
         a = aligned[revision_key(event)]
@@ -54,6 +106,7 @@ def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
                   "reaction_session": a["reaction_session"], "status": "UNAVAILABLE", "issues": [],
                   "price_basis": basis["price_basis"], "volume_basis": basis["volume_basis"],
                   "basis_verified": basis["verified"], "potential_corporate_action_effects": [],
+                  "corporate_action_overlap_uncertainty": [], "corporate_action_window": None,
                   "previous_close": None, "first_post_open": None, "overnight_gap_pct": None,
                   "session_high_low": None, "volume_relative20": None, "pre_event_atr14": None,
                   "subsequent_close_returns_pct": {str(h): None for h in (1, 5, 10)}}
@@ -113,13 +166,11 @@ def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
             else:
                 record["subsequent_close_returns_pct"][str(horizon)] = (
                     float(by_day[outcome_days[-1]]["close"]) / float(post["close"]) - 1) * 100
-        for corporate in events:
-            if corporate["event_type"] in {"DIVIDEND", "SPLIT"}:
-                effective = corporate["effective_date"]
-                if effective is None or previous < effective <= days[min(len(days) - 1, i + 10)]:
-                    record["potential_corporate_action_effects"].append({
-                        "event_id": corporate["event_id"], "type": corporate["event_type"],
-                        "effective_date": effective, "interpretation": "POSSIBLE_NOT_CAUSALLY_ATTRIBUTED"})
+        window_sessions = days[i:i + 11]
+        record["corporate_action_window"] = {"after_session": previous, "through_session": window_sessions[-1]}
+        effects, uncertain = _corporate_action_window(actions, aligned, conflicts, window_sessions)
+        record["potential_corporate_action_effects"] = effects
+        record["corporate_action_overlap_uncertainty"] = uncertain
         if event["event_type"] == "DIVIDEND":
             record["cash_per_share_source_quote"] = event["payload"]["cash_per_share"]
             record["close_change_dollars"] = float(post["close"]) - pc
@@ -150,6 +201,11 @@ def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
             "return_definition": "reaction_session_close_to_close_at_1_5_10_subsequent_exchange_sessions",
             "pre_features_cutoff": "previous_completed_regular_session_close",
             "dividend_treatment": "native_prices_not_total_return_no_adjustment_applied",
+            "corporate_action_evidence": {
+                "inventory_action_count": len(actions), "unknown_effective_dates": unknown_dates,
+                "status": "INCOMPLETE_EFFECTIVE_DATES" if unknown_dates else "NO_UNKNOWN_DATES_IN_INVENTORY",
+                "inventory_completeness": "UNKNOWN",
+                "interpretation": "GLOBAL_EVIDENCE_GAPS_DO_NOT_ESTABLISH_WINDOW_OVERLAP_OR_ABSENCE"},
             "basis": basis, "events": results, "price_quality": checked,
             "discontinuity_review": {"absolute_gap_threshold_pct": 5, "gaps": gaps,
                                      "missing_session_pairs": missing_pairs, "causal_attribution": "UNKNOWN"},
