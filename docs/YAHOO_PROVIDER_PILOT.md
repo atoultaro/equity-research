@@ -158,3 +158,9 @@ and compare real responses to independent issuer/exchange evidence. Repeated
 retrievals must be explicitly recorded as performed, with semantic and byte diffs.
 Historical availability and raw-basis approval remain separate decisions. Do not
 start PR 6 or relax the replay contract automatically.
+
+## 2026-10-21 follow-up: PR 5C
+
+See [the real-data provider decision](REAL_DATA_PROVIDER_PILOT.md) for the subsequent
+permissions review, conditional alternative-source recommendation and explicit
+unrun-pilot disposition. The original PR 5B findings above remain unchanged.
