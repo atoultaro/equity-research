@@ -224,3 +224,10 @@ sourced corporate events and an offline AAPL/GOOG completeness comparison. Earli
 error-162 failures and partial artifacts are preserved. Unresolved release clocks,
 unknown ex-dates and native-basis limitations remain explicit; no trading
 conclusion is claimed.
+
+PR 7A adds [historical MarketContext](docs/MARKET_CONTEXT_INFRASTRUCTURE.md):
+continuous SPY/QQQ trend and volatility features, RSP/SPY participation proxies,
+explicitly unavailable breadth, immutable offline bundles and an as-of reader.
+Availability is reconstructed under a declared completed-session timing assumption.
+The current demonstration is synthetic; fresh live preflight is pending. Context
+does not approve, reject, resize or execute trades.

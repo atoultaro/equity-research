@@ -171,6 +171,7 @@ class IBKRDailyProvider:
                                   "streaming_market_data_type_observed": "unknown_not_requested",
                                   "chunk_calendar_days": 30, "timeout": 30,
                                   "max_attempts": self.max_attempts, "port": self.port,
+                                  "persistent_failure_chunk_limit": 2,
                                   "client_id": self.client_id, "local_endpoint": True,
                                   "startup_account_sync": False}}
         begun = self.clock().astimezone(UTC)
@@ -202,6 +203,7 @@ class IBKRDailyProvider:
             first, last = interval(start, end)
             cursor = first
             chunks_failed = 0
+            previous_persistent_failure, consecutive_failures = None, 0
             while cursor <= last:
                 final = min(last, cursor + timedelta(days=29))
                 anchor = datetime.combine(final + timedelta(days=1), time(), UTC)
@@ -219,14 +221,17 @@ class IBKRDailyProvider:
                     try:
                         bars = await asyncio.wait_for(backend.historical(contract, params), 35)
                         errors = backend.errors[mark:]
+                        native_start = len(native_bars)
+                        for bar in bars:
+                            native_bars.append({"chunk_start": cursor.isoformat(), "chunk_end": final.isoformat(),
+                                                "fields": {name: pack(getattr(bar, name, None)) for name in
+                                                           ("date", "open", "high", "low", "close", "volume", "average", "barCount")}})
                         if any(e["category"] != "INFORMATION" for e in errors):
                             category = next(e["category"] for e in errors if e["category"] != "INFORMATION")
                             entry.update(errors=errors, category=category)
+                            entry["native_rows_retained_but_not_selected"] = len(bars)
                         else:
-                            for bar in bars:
-                                native_bars.append({"chunk_start": cursor.isoformat(), "chunk_end": final.isoformat(),
-                                                    "fields": {name: pack(getattr(bar, name, None)) for name in
-                                                               ("date", "open", "high", "low", "close", "volume", "average", "barCount")}})
+                            for offset, bar in enumerate(bars):
                                 raw = bar.date
                                 if type(raw) is date:
                                     day = raw.isoformat()
@@ -242,7 +247,7 @@ class IBKRDailyProvider:
                                     valid_day = date.fromisoformat(day).isoformat() == day
                                 except ValueError:
                                     valid_day = False
-                                native_index = len(native_bars) - 1
+                                native_index = native_start + offset
                                 if valid_day and not cursor.isoformat() <= day <= final.isoformat():
                                     acq["excluded_native_rows"].append({"native_row": native_index,
                                         "session_date": day, "chunk_start": cursor.isoformat(),
@@ -269,7 +274,30 @@ class IBKRDailyProvider:
                 if not success:
                     chunks_failed += 1
                     if entry.get("category") == "DATA_PERMISSION":
+                        acq["termination"] = {"reason": "DATA_PERMISSION", "last_attempted_end": final.isoformat(),
+                                              "unattempted_from": (final + timedelta(days=1)).isoformat() if final < last else None,
+                                              "requested_end": end}
                         break  # No subscription workaround or retries.
+                    # Numeric code + safe category is an apparent-persistence
+                    # heuristic, not a claim that all code162 messages mean the
+                    # same condition. Never count callbacks as additional chunks.
+                    code = entry.get("error_code")
+                    if code is None:
+                        code = next((e.get("code") for e in entry.get("errors", [])
+                                     if e["category"] == "PROVIDER_ERROR"), None)
+                    failure = (entry.get("category"), code)
+                    persistent = failure[0] == "PROVIDER_ERROR" and type(code) is int
+                    consecutive_failures = consecutive_failures + 1 if persistent and failure == previous_persistent_failure else int(persistent)
+                    previous_persistent_failure = failure if persistent else None
+                    if consecutive_failures >= 2:
+                        acq["termination"] = {"reason": "REPEATED_NONTRANSIENT_PROVIDER_FAILURE",
+                                              "category": failure[0], "code": code, "consecutive_failed_chunks": consecutive_failures,
+                                              "last_attempted_end": final.isoformat(),
+                                              "unattempted_from": (final + timedelta(days=1)).isoformat() if final < last else None,
+                                              "requested_end": end}
+                        break
+                else:
+                    previous_persistent_failure, consecutive_failures = None, 0
                 cursor = final + timedelta(days=1)
             acq["status"] = "PARTIAL_RESPONSE" if chunks_failed else ("SUCCESS" if records else "EMPTY_RESPONSE")
         except Exception as exc:

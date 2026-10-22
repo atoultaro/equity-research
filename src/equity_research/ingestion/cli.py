@@ -26,10 +26,16 @@ def register(commands):
     register_history(operations)
     from ..events.cli import register as register_events
     register_events(operations)
+    from ..market_context.cli import register as register_context
+    register_context(operations)
 
 
 def dispatch(args):
     from .storage import encode, write_bundle
+
+    if args.operation == "market-context":
+        from ..market_context.cli import dispatch as dispatch_context
+        return dispatch_context(args)
 
     if args.operation in {"events-freeze", "event-study"}:
         from ..events.cli import dispatch as dispatch_events
