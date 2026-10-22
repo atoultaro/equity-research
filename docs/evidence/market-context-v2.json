@@ -1,0 +1,5048 @@
+{
+  "base_commit": "9e03cff0374c35b67fb3acca36cc77ea99636c3b",
+  "branch": "feat/market-context-infrastructure-v1",
+  "environment": {
+    "client_id_available_on_observed_handshakes": true,
+    "dependencies": {
+      "exchange-calendars": "4.13.1",
+      "ib_async": "2.1.0",
+      "market-shared": "0.2.0",
+      "numpy": "2.2.4",
+      "pandas": "2.2.3",
+      "pyarrow": "23.0.1",
+      "tzdata": "2025.2"
+    },
+    "local_listener_observed": true,
+    "python": "3.12.9"
+  },
+  "failfast": {
+    "consecutive_chunks": 2,
+    "duplicate_callbacks_count_as_chunks": false,
+    "errored_response_native_bars_retained_but_not_selected": true,
+    "existing_transient_retry_categories": [
+      "PACING",
+      "TIMEOUT",
+      "CONNECTION"
+    ],
+    "interpretation": "Apparent persistence, not a generalized cause for code162",
+    "known_permission_stop": "immediate",
+    "live_triggered": false,
+    "no_data_stops_all_chunks": false,
+    "signature": [
+      "integer_numeric_code",
+      "PROVIDER_ERROR_category"
+    ],
+    "success_or_different_code_resets": true,
+    "termination_recorded_in_snapshot_and_batch_report": true
+  },
+  "identity_review": {
+    "QQQ": {
+      "actual_ibkr_qualified_contract": {
+        "conId": 320227571,
+        "currency": "USD",
+        "exchange": "SMART",
+        "localSymbol": "QQQ",
+        "primaryExchange": "NASDAQ",
+        "secType": "STK",
+        "symbol": "QQQ",
+        "tradingClass": "NMS"
+      },
+      "actual_primary_exchange": "NASDAQ",
+      "identity_evidence": "Issuer product description reviewed; Invesco dynamic body limitations supplemented by indexed issuer description. No historical membership/structure continuity claim.",
+      "issuer_source": "https://www.invesco.com/us/en/financial-products/etfs/invesco-qqq-trust-series-1.html",
+      "qualified_long_name": "INVESCO QQQ TRUST SERIES 1",
+      "research_security_id": "research:QQQ:ETF:USD:v1",
+      "reviewed_name": "Invesco QQQ Trust Series1",
+      "role": "Nasdaq100 large-cap growth-oriented ETF proxy, not a technology-sector index"
+    },
+    "RSP": {
+      "actual_ibkr_qualified_contract": {
+        "conId": 319359375,
+        "currency": "USD",
+        "exchange": "SMART",
+        "localSymbol": "RSP",
+        "primaryExchange": "ARCA",
+        "secType": "STK",
+        "symbol": "RSP",
+        "tradingClass": "RSP"
+      },
+      "actual_primary_exchange": "ARCA",
+      "identity_evidence": "Issuer product description reviewed; Invesco dynamic body limitations supplemented by indexed issuer description. No historical membership/structure continuity claim.",
+      "issuer_source": "https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-etf.html",
+      "qualified_long_name": "INVESCO S&P 500 EQUAL WEIGHT",
+      "research_security_id": "research:RSP:ETF:USD:v1",
+      "reviewed_name": "Invesco S&P 500 Equal Weight ETF",
+      "role": "Equal-weight S&P500 ETF proxy, not literal breadth"
+    },
+    "SPY": {
+      "actual_ibkr_qualified_contract": {
+        "conId": 756733,
+        "currency": "USD",
+        "exchange": "SMART",
+        "localSymbol": "SPY",
+        "primaryExchange": "ARCA",
+        "secType": "STK",
+        "symbol": "SPY",
+        "tradingClass": "SPY"
+      },
+      "actual_primary_exchange": "ARCA",
+      "identity_evidence": "Issuer product description reviewed; Invesco dynamic body limitations supplemented by indexed issuer description. No historical membership/structure continuity claim.",
+      "issuer_source": "https://www.ssga.com/us/en/institutional/etfs/state-street-spdr-sp-500-etf-trust-spy",
+      "qualified_long_name": "SS SPDR S&P 500 ETF TRUST-US",
+      "research_security_id": "research:SPY:ETF:USD:v1",
+      "reviewed_name": "SPDR S&P 500 ETF Trust",
+      "role": "Broad US large-cap S&P500 ETF proxy, not the index"
+    }
+  },
+  "implementation_commit": "b22413a3237abe16d1b6ab1ab5ae7c58defb87b7",
+  "implementation_sha256": {
+    "src/equity_research/history/cache.py": "e44de56a9ff2900496f3f3f2dfa5e6e391311c05c562560baa4cf7700c3511c6",
+    "src/equity_research/market_context/dataset.py": "76c025de233973f09d2edc4a176d3b588520516d54737ab51c56b8b92109ef9c",
+    "src/equity_research/market_context/model.py": "405b007cd2999b7075fc864c46d89cb661b0268eac2b2ed9ff907629958f7ee5",
+    "src/equity_research/providers/ibkr.py": "a024d0ff6eca02306d3eb81fbb3ef9d336fcc30700781eb47b38b63357b24fb2"
+  },
+  "interaction_audit": {
+    "account_identifiers_or_authentication_secrets_persisted": false,
+    "account_order_position_portfolio_balance_execution_requests": 0,
+    "audit": {
+      "blocked": [],
+      "completed_at": "2026-10-22T15:18:27.407826+00:00",
+      "connections": 7,
+      "counts": {
+        "20": 150,
+        "71": 7,
+        "9": 9
+      },
+      "disconnects": 7,
+      "messages": [
+        {
+          "at": "2026-10-22T14:57:27.270756+00:00",
+          "code": 71,
+          "phase": "qualification"
+        },
+        {
+          "at": "2026-10-22T14:57:27.282697+00:00",
+          "code": 9,
+          "phase": "qualification"
+        },
+        {
+          "at": "2026-10-22T14:57:27.537298+00:00",
+          "code": 9,
+          "phase": "qualification"
+        },
+        {
+          "at": "2026-10-22T14:57:27.645006+00:00",
+          "code": 9,
+          "phase": "qualification"
+        },
+        {
+          "at": "2026-10-22T14:57:28.866218+00:00",
+          "code": 71,
+          "phase": "smoke-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:28.867621+00:00",
+          "code": 9,
+          "phase": "smoke-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:28.869727+00:00",
+          "code": 20,
+          "phase": "smoke-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:29.593005+00:00",
+          "code": 71,
+          "phase": "smoke-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:57:29.594581+00:00",
+          "code": 9,
+          "phase": "smoke-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:57:30.870979+00:00",
+          "code": 20,
+          "phase": "smoke-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:57:31.195282+00:00",
+          "code": 71,
+          "phase": "smoke-RSP"
+        },
+        {
+          "at": "2026-10-22T14:57:31.196274+00:00",
+          "code": 9,
+          "phase": "smoke-RSP"
+        },
+        {
+          "at": "2026-10-22T14:57:32.872177+00:00",
+          "code": 20,
+          "phase": "smoke-RSP"
+        },
+        {
+          "at": "2026-10-22T14:57:33.390343+00:00",
+          "code": 71,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:33.392139+00:00",
+          "code": 9,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:34.873475+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:36.874530+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:38.876225+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:40.877098+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:42.878223+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:44.879319+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:46.880551+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:48.881792+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:50.882917+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:52.884101+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:54.885242+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:56.886439+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:57:58.887645+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:00.888831+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:02.890000+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:04.891132+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:06.892308+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:08.893967+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:10.895175+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:12.896215+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:14.897393+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:16.898559+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:18.899906+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:20.900929+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:22.902191+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:24.903552+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:26.904042+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:28.904380+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:30.906720+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:33.027679+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:35.006772+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:37.008696+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:39.009839+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:41.010854+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:43.012204+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:45.017707+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:47.018158+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:49.019479+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:51.020349+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:53.021624+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:55.022436+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:57.023693+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:58:59.024721+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:59:01.025916+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:59:03.026978+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:59:05.028072+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:59:07.029469+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:59:09.030602+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:59:11.031761+00:00",
+          "code": 20,
+          "phase": "full-SPY"
+        },
+        {
+          "at": "2026-10-22T14:59:11.571940+00:00",
+          "code": 71,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:11.574188+00:00",
+          "code": 9,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:13.032906+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:15.034033+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:17.039909+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:19.038686+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:21.039736+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:23.040793+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:25.042017+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T14:59:27.043460+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:28.872647+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:30.873262+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:32.879430+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:34.875594+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:36.878095+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:38.878995+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:40.880322+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:42.881631+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:44.882201+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:46.883863+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:48.884858+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:50.885886+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:52.887067+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:54.888463+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:56.889541+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:07:58.890388+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:00.891527+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:02.892730+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:04.894110+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:06.895373+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:08.896468+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:10.897642+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:12.898793+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:14.899989+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:16.901149+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:18.902634+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:20.903049+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:22.904210+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:24.905525+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:26.906323+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:28.907194+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:30.908705+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:33.007559+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:35.008807+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:37.010331+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:39.011971+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:41.012859+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:43.013488+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:45.018975+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:47.020217+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:49.021451+00:00",
+          "code": 20,
+          "phase": "full-QQQ"
+        },
+        {
+          "at": "2026-10-22T15:08:49.472875+00:00",
+          "code": 71,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:08:49.475773+00:00",
+          "code": 9,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:08:51.022635+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:08:53.023824+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:08:55.025254+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:08:57.026270+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:08:59.027641+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:01.028919+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:03.029609+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:05.030683+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:07.031013+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:09.032614+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:11.033844+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:13.035288+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:15.035454+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:17.039044+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:19.041194+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:21.042158+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:23.043525+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:25.046249+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:09:27.046716+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:28.846898+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:30.847372+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:32.848208+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:34.849185+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:36.851662+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:38.852857+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:40.854109+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:42.855327+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:44.856458+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:46.857600+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:48.858855+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:50.859928+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:52.861454+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:54.862775+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:56.863798+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:17:58.865005+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:00.866130+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:02.867266+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:04.868375+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:06.869567+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:08.870057+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:10.871194+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:12.872391+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:14.873602+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:16.874642+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:18.875898+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:20.877189+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:22.878457+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:24.879398+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        },
+        {
+          "at": "2026-10-22T15:18:26.880449+00:00",
+          "code": 20,
+          "phase": "full-RSP"
+        }
+      ],
+      "server_versions": [
+        178,
+        178,
+        178,
+        178,
+        178,
+        178,
+        178
+      ],
+      "started_at": "2026-10-22T14:57:26.764037+00:00"
+    },
+    "audit_hashes": {
+      "algorithm": "sha256",
+      "bundle_sha256": "76cacd389a1a3bf1bd4c8cde92012aee928a5c8322a3c131663d6150a9629f1c",
+      "files": {
+        "audit.json": "7b823222d9f532c5cbe170796539c1721cfbdbd6de31e6c647523016a21f3ad1",
+        "reports.json": "33db6071751a8a0921029f08c0aeebc28e8d389e157cfea12502888099ea5e0d"
+      },
+      "schema_version": "artifact_hashes_v1"
+    },
+    "message_meanings": {
+      "20": "HISTORICAL_DATA",
+      "25": "CANCEL_HISTORICAL_ALLOWED_TIMEOUT_CLEANUP",
+      "71": "START_API",
+      "9": "CONTRACT_DETAILS"
+    },
+    "server_version_source": "Handshake protocol version, no account/portfolio requests"
+  },
+  "limitations": [
+    "Historical dissemination and revision completeness unknown; latest-vintage reconstruction only",
+    "Native IBKR price/volume basis not independently verified, not dividend-adjusted total returns",
+    "No PIT constituent/universe data, true breadth or leadership observations",
+    "Descriptive state is project-defined, not an official named framework or trading permission",
+    "Current qualification does not independently reconstruct historical ETF legal structure, listings or holdings"
+  ],
+  "market_context": {
+    "core_feature_count": 26,
+    "definitions": {
+      "QQQ.atr14_close": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "shared simple ATR14[t]/Close[t]; 14 true ranges, 15 bars",
+        "group": "volatility_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 15,
+        "operation": "atr",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.close_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-199:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 200,
+        "operation": "close_sma",
+        "parameters": [
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.close_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-49:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 50,
+        "operation": "close_sma",
+        "parameters": [
+          50
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.realized_volatility20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "population stddev of 20 simple Close[d]/Close[d-1]-1 returns; not annualized",
+        "group": "volatility_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 21,
+        "operation": "volatility",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.return20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 21,
+        "operation": "return",
+        "parameters": [
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.return60": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-60]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 61,
+        "operation": "return",
+        "parameters": [
+          60
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.sma200_slope20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA200[t]/SMA200[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 220,
+        "operation": "slope",
+        "parameters": [
+          200,
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "QQQ.sma50_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA50[t]/SMA200[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "QQQ"
+        ],
+        "observations": 200,
+        "operation": "sma_ratio",
+        "parameters": [
+          50,
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP.close_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-199:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "RSP"
+        ],
+        "observations": 200,
+        "operation": "close_sma",
+        "parameters": [
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP.close_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-49:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "RSP"
+        ],
+        "observations": 50,
+        "operation": "close_sma",
+        "parameters": [
+          50
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP.return20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "RSP"
+        ],
+        "observations": 21,
+        "operation": "return",
+        "parameters": [
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP_SPY.change20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Ratio[t]/Ratio[t-20]-1",
+        "group": "participation_proxies",
+        "inputs": [
+          "RSP",
+          "SPY"
+        ],
+        "observations": 21,
+        "operation": "ratio_change",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP_SPY.level": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "RSP_Close[t]/SPY_Close[t]",
+        "group": "participation_proxies",
+        "inputs": [
+          "RSP",
+          "SPY"
+        ],
+        "observations": 1,
+        "operation": "ratio",
+        "parameters": [],
+        "units": "native_price_ratio",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "RSP_SPY.relative_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Ratio[t]/mean(Ratio[t-49:t])-1",
+        "group": "participation_proxies",
+        "inputs": [
+          "RSP",
+          "SPY"
+        ],
+        "observations": 50,
+        "operation": "ratio_sma",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.atr14_close": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "shared simple ATR14[t]/Close[t]; 14 true ranges, 15 bars",
+        "group": "volatility_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 15,
+        "operation": "atr",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.close_sma150": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-149:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 150,
+        "operation": "close_sma",
+        "parameters": [
+          150
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.close_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-199:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 200,
+        "operation": "close_sma",
+        "parameters": [
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.close_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/mean(Close[t-49:t])-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 50,
+        "operation": "close_sma",
+        "parameters": [
+          50
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.range20_close": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "(max(High[t-19:t])-min(Low[t-19:t]))/Close[t]",
+        "group": "volatility_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 20,
+        "operation": "range",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.realized_volatility20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "population stddev of 20 simple Close[d]/Close[d-1]-1 returns; not annualized",
+        "group": "volatility_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 21,
+        "operation": "volatility",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.return20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 21,
+        "operation": "return",
+        "parameters": [
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.return60": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Close[t]/Close[t-60]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 61,
+        "operation": "return",
+        "parameters": [
+          60
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma150_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA150[t]/SMA200[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 200,
+        "operation": "sma_ratio",
+        "parameters": [
+          150,
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma200_slope20": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA200[t]/SMA200[t-20]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 220,
+        "operation": "slope",
+        "parameters": [
+          200,
+          20
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma50_sma150": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA50[t]/SMA150[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 150,
+        "operation": "sma_ratio",
+        "parameters": [
+          50,
+          150
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "SPY.sma50_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "SMA50[t]/SMA200[t]-1",
+        "group": "trend_features",
+        "inputs": [
+          "SPY"
+        ],
+        "observations": 200,
+        "operation": "sma_ratio",
+        "parameters": [
+          50,
+          200
+        ],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.above_sma200": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.above_sma50": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.advance_decline": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.new_high52w": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.new_low52w": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_constituents.trend_template": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe, constituent prices and explicit inclusion rules",
+        "group": "breadth_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      },
+      "historical_universe.valid_setup_share": {
+        "availability": "inherits_row_available_at_and_interpretation",
+        "formula": "Not calculated without PIT universe and versioned setup definition",
+        "group": "leadership_features",
+        "inputs": [],
+        "observations": 0,
+        "operation": "unavailable",
+        "parameters": [],
+        "units": "fraction",
+        "version": "market_features_v1",
+        "window": "consecutive_expected_sessions_including_current_completed_session"
+      }
+    },
+    "optional_unavailable_features": 7,
+    "participation": "Native ETF price ratio; differing distributions/bases can affect it. Not literal constituent breadth, pure concentration, or total return.",
+    "required_history_observations": 220,
+    "rv": "20 simple daily close returns, population stddev, unannualized, includes current completed session, requires21 consecutive expected closes",
+    "schema": {
+      "assumed_availability": {
+        "availability": "RECONSTRUCTED_CLOSE_PLUS_DELAY",
+        "availability_interpretation": "MODEL_ASSUMPTION_NOT_VERIFIED_VENDOR_PUBLICATION",
+        "delay_minutes": 60,
+        "describe_state": true,
+        "descriptor_rule": "Both SPY/QQQ close_sma200 and sma200_slope20 positive: UPTREND; all negative: DOWNTREND; otherwise MIXED; missing inputs: UNCLASSIFIED",
+        "descriptor_version": "spy_qqq_long_trend_v1",
+        "trading_permission_rule": "NONE",
+        "version": "market_configuration_v1"
+      },
+      "evaluation_end": "2026-10-20",
+      "evaluation_start": "2024-01-02",
+      "execution_admission": "UNCHANGED_NOT_GRANTED",
+      "feature_definition_version": "market_features_v1",
+      "historical_price_vintage_availability": "UNKNOWN",
+      "market_reference_set_id": "52924a3c9b66059021e527867b32929079a3b96d46322f7817e8b09e633632cb",
+      "participation_interpretation": "NATIVE_ETF_RELATIVE_PRICE_PROXY_NOT_CONSTITUENT_BREADTH_OR_TOTAL_RETURN",
+      "required_observations_including_evaluation_session": 220,
+      "required_preceding_sessions": 219,
+      "schema_version": "market_context_v1",
+      "source_dataset_hashes": {
+        "QQQ": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+        "RSP": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+        "SPY": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52"
+      }
+    },
+    "shared_dependency": {
+      "indicators_sha256": "660c7654ac59ac5c51738a34b9264e5c1d9b751b514b8e4b55030759b8242c29",
+      "source_commit": "57fc6c30836d13a7fcfc3c1a9b6b496fe472d555",
+      "version": "0.2.0",
+      "wheel_sha256": "e425124219d7be06ff8b82f2e0b7bcda2f293c6c26825ece19347e9316083df7"
+    },
+    "timing": "Strictly before decision, regular-session close plus60 modeled minutes; not verified vendor dissemination; unknown mode never admits as-of rows."
+  },
+  "offline_tests": {
+    "broker_sdk_required": false,
+    "command": ".venv/bin/python -m pytest -q",
+    "elapsed_seconds": 34.75,
+    "failed": 0,
+    "network_required": false,
+    "new_regressions": 30,
+    "passed": 284,
+    "prior_regressions": 254,
+    "production_code_changed_for_real_capture": false
+  },
+  "offline_verification": {
+    "as_of_checks": [
+      "first_before_close",
+      "strict_equality",
+      "next_session",
+      "early_close",
+      "holiday",
+      "weekend",
+      "DST"
+    ],
+    "availability": "RECONSTRUCTED_ASSUMPTION_NOT_VERIFIED_HISTORICAL_DISSEMINATION",
+    "cache_and_calendar_imports_denied": true,
+    "context_sha256": "d9a5547daf856364fdb398431ce17498d26c039ff926d44016bc4f5a9cddf271",
+    "existing_sma_and_shared_atr_conventions_reconciled_on_real_inputs": true,
+    "network_denied": true,
+    "optional_and_provider_imports_denied": true,
+    "origin": "REAL_IBKR_HISTORICAL",
+    "original_files_unchanged": 459,
+    "quality": {
+      "complete_core_rows": 703,
+      "complete_rows_by_group": {
+        "breadth_features": 0,
+        "leadership_features": 0,
+        "participation_proxies": 703,
+        "trend_features": 703,
+        "volatility_features": 703
+      },
+      "descriptive_state_counts": {
+        "DOWNTREND": 15,
+        "MIXED": 48,
+        "UPTREND": 640
+      },
+      "evaluation_rows": 703,
+      "first_complete_core_session": "2024-01-02",
+      "historical_availability_verified": false,
+      "incomplete_core_rows": 0,
+      "last_complete_core_session": "2026-10-20",
+      "missing_feature_counts": {
+        "historical_constituents.above_sma200": 703,
+        "historical_constituents.above_sma50": 703,
+        "historical_constituents.advance_decline": 703,
+        "historical_constituents.new_high52w": 703,
+        "historical_constituents.new_low52w": 703,
+        "historical_constituents.trend_template": 703,
+        "historical_universe.valid_setup_share": 703
+      },
+      "rows_with_missing_optional_features": 703,
+      "schema_version": "market_feature_quality_v1",
+      "trading_policy": "NONE"
+    },
+    "result": "PASS",
+    "self_contained": true,
+    "source_dataset_hashes": {
+      "QQQ": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+      "RSP": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+      "SPY": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52"
+    }
+  },
+  "operating_boundaries": {
+    "account_order_position_portfolio_balance_execution_requests": 0,
+    "automatic_yahoo_fallback": false,
+    "broker_settings_changed": false,
+    "execution_accounting_changes": false,
+    "finwhaling_modified": false,
+    "new_tws_session_started": false,
+    "optimization": false,
+    "pr7b_started": false,
+    "trade_policy_added": false
+  },
+  "pr6b_merged_in_base": true,
+  "preflight": {
+    "account_mode": "NON_PAPER_USER_ASSERTED",
+    "acquisition_start": "2022-11-01",
+    "base_commit": "9e03cff0374c35b67fb3acca36cc77ea99636c3b",
+    "bounded_acquisition_authorized": true,
+    "client_id": 51971,
+    "confirmation_source": "Current reply to explicit TWS/authentication/socket/read-only/port/bounded-history question: Now the non-paper account with port 7496. Read-only.",
+    "confirmed_at": "2026-10-22T14:57:22.817411+00:00",
+    "end": "2026-10-20",
+    "evaluation_start": "2024-01-02",
+    "host": "127.0.0.1",
+    "implementation_commit": "b22413a3237abe16d1b6ab1ab5ae7c58defb87b7",
+    "paper_mode_override": "Explicit user correction authorizes this historical-only workflow on the non-paper read-only session rather than paper mode; never order/account activity.",
+    "port": 7496,
+    "prerequisite_evidence": "User current-session assertion in response to the preflight question; socket reachability and historical access checked by permitted connection and data requests, not account queries.",
+    "read_only_api": true,
+    "session_authenticated": true,
+    "socket_clients_enabled": true
+  },
+  "preservation": {
+    "all_byte_unchanged": true,
+    "historical_pr5_pr6_reports_unchanged": true,
+    "pre_existing_research_cache_files": 297,
+    "pre_real_acquisition_research_cache_files": 459,
+    "synthetic_artifacts_and_original_evidence_unchanged": true
+  },
+  "prior_evidence": {
+    "commit": "b22413a3237abe16d1b6ab1ab5ae7c58defb87b7",
+    "interpretation": "Preserved synthetic-only result while current preflight was pending; superseded for live status, not revised",
+    "path": "docs/evidence/market-context-v1.json",
+    "sha256": "447417c33257aa74e0a23bee01dd24df42403d95cf0144b68f5cd925f71974bd"
+  },
+  "publication": {
+    "committed_evidence": "Safe counts, schema/formulas, references and hashes only",
+    "real_licensed_rows_or_restricted_derivatives_committed": false
+  },
+  "real_acquisition": {
+    "account_mode": "NON_PAPER_USER_ASSERTED_READ_ONLY_API",
+    "acquisition_start": "2022-11-01",
+    "actual": {
+      "QQQ": {
+        "basis": {
+          "data_type": "TRADES_RTH",
+          "limitation": "TRADES documented split-adjusted, not dividend-adjusted; filtered feed; units unverified",
+          "price_basis": "IBKR_TRADES_SPLIT_ADJUSTED_DOCUMENTED",
+          "verified": false,
+          "volume_basis": "IBKR_NATIVE_UNITS_UNVERIFIED"
+        },
+        "canonical_issues": 0,
+        "duplicate_sessions": [],
+        "evaluation_rows": 703,
+        "first": "2022-11-01",
+        "last": "2026-10-20",
+        "missing_sessions": [],
+        "off_calendar_sessions": [],
+        "outside_listing_sessions": [],
+        "quality_status": "PASS",
+        "required_preceding": 219,
+        "rows": 995,
+        "source_capture_issues": 0,
+        "warmup_complete": true,
+        "warmup_preceding_evaluation": 292
+      },
+      "RSP": {
+        "basis": {
+          "data_type": "TRADES_RTH",
+          "limitation": "TRADES documented split-adjusted, not dividend-adjusted; filtered feed; units unverified",
+          "price_basis": "IBKR_TRADES_SPLIT_ADJUSTED_DOCUMENTED",
+          "verified": false,
+          "volume_basis": "IBKR_NATIVE_UNITS_UNVERIFIED"
+        },
+        "canonical_issues": 0,
+        "duplicate_sessions": [],
+        "evaluation_rows": 703,
+        "first": "2022-11-01",
+        "last": "2026-10-20",
+        "missing_sessions": [],
+        "off_calendar_sessions": [],
+        "outside_listing_sessions": [],
+        "quality_status": "PASS",
+        "required_preceding": 219,
+        "rows": 995,
+        "source_capture_issues": 0,
+        "warmup_complete": true,
+        "warmup_preceding_evaluation": 292
+      },
+      "SPY": {
+        "basis": {
+          "data_type": "TRADES_RTH",
+          "limitation": "TRADES documented split-adjusted, not dividend-adjusted; filtered feed; units unverified",
+          "price_basis": "IBKR_TRADES_SPLIT_ADJUSTED_DOCUMENTED",
+          "verified": false,
+          "volume_basis": "IBKR_NATIVE_UNITS_UNVERIFIED"
+        },
+        "canonical_issues": 0,
+        "duplicate_sessions": [],
+        "evaluation_rows": 703,
+        "first": "2022-11-01",
+        "last": "2026-10-20",
+        "missing_sessions": [],
+        "off_calendar_sessions": [],
+        "outside_listing_sessions": [],
+        "quality_status": "PASS",
+        "required_preceding": 219,
+        "rows": 995,
+        "source_capture_issues": 0,
+        "warmup_complete": true,
+        "warmup_preceding_evaluation": 292
+      }
+    },
+    "actual_feature_quality": {
+      "complete_core_rows": 703,
+      "complete_rows_by_group": {
+        "breadth_features": 0,
+        "leadership_features": 0,
+        "participation_proxies": 703,
+        "trend_features": 703,
+        "volatility_features": 703
+      },
+      "descriptive_state_counts": {
+        "DOWNTREND": 15,
+        "MIXED": 48,
+        "UPTREND": 640
+      },
+      "evaluation_rows": 703,
+      "first_complete_core_session": "2024-01-02",
+      "historical_availability_verified": false,
+      "incomplete_core_rows": 0,
+      "last_complete_core_session": "2026-10-20",
+      "missing_feature_counts": {
+        "historical_constituents.above_sma200": 703,
+        "historical_constituents.above_sma50": 703,
+        "historical_constituents.advance_decline": 703,
+        "historical_constituents.new_high52w": 703,
+        "historical_constituents.new_low52w": 703,
+        "historical_constituents.trend_template": 703,
+        "historical_universe.valid_setup_share": 703
+      },
+      "rows_with_missing_optional_features": 703,
+      "schema_version": "market_feature_quality_v1",
+      "trading_policy": "NONE"
+    },
+    "actual_state_counts": {
+      "DOWNTREND": 15,
+      "MIXED": 48,
+      "UPTREND": 640
+    },
+    "actual_warmup_complete": true,
+    "broker_connections": 7,
+    "end": "2026-10-20",
+    "entitlement_evidence": "All explicitly requested daily historical windows succeeded; no subscription/account queries were made",
+    "evaluation_end": "2026-10-20",
+    "evaluation_start": "2024-01-02",
+    "expected_evaluation_sessions": 703,
+    "expected_sessions_per_instrument": 995,
+    "first_complete_actual_feature_session": "2024-01-02",
+    "historical_requests": 150,
+    "last_complete_actual_feature_session": "2026-10-20",
+    "origin": "REAL_IBKR_HISTORICAL",
+    "pacing": "One existing Pacer across smoke and full phases and all instruments; 2s serial, 15s identical, 60/600s. No quota reset between symbols.",
+    "phases": {
+      "full-QQQ": {
+        "acquisition_status": "SUCCESS",
+        "cache_status": "HIT",
+        "completed_at": "2026-10-22T15:08:49.106239+00:00",
+        "coverage": {
+          "first": "2022-11-01",
+          "last": "2026-10-20",
+          "native_rows": 1450,
+          "rows": 995
+        },
+        "duplicate_sessions": [],
+        "error_observation_counts": [
+          {
+            "category": "INFORMATION",
+            "code": 2104,
+            "count": 4
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2106,
+            "count": 1
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2158,
+            "count": 1
+          }
+        ],
+        "missing_sessions": [],
+        "noninformational_error_observations": 0,
+        "off_calendar_sessions": [],
+        "out_of_chunk_exclusions": 455,
+        "qualified_contract": {
+          "conId": 320227571,
+          "currency": "USD",
+          "exchange": "SMART",
+          "localSymbol": "QQQ",
+          "primaryExchange": "NASDAQ",
+          "secType": "STK",
+          "symbol": "QQQ",
+          "tradingClass": "NMS"
+        },
+        "request_parameters": {
+          "barSizeSetting": "1 day",
+          "chunk_calendar_days": 30,
+          "client_id": 51971,
+          "exchange": "SMART",
+          "formatDate": 1,
+          "keepUpToDate": false,
+          "local_endpoint": true,
+          "market_data_type_requested": "historical_TRADES",
+          "max_attempts": 3,
+          "persistent_failure_chunk_limit": 2,
+          "port": 7496,
+          "startup_account_sync": false,
+          "streaming_market_data_type_observed": "unknown_not_requested",
+          "timeout": 30,
+          "useRTH": true,
+          "whatToShow": "TRADES"
+        },
+        "requested_interval": {
+          "end": "2026-10-20",
+          "start": "2022-11-01"
+        },
+        "requests": [
+          {
+            "attempt": 1,
+            "end": "2022-11-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20221201-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-11-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2022-12-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20221231-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-12-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-01-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230130-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-12-31",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-02-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230301-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-01-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-03-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230331-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-03-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-04-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230430-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-03-31",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-05-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230530-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-04-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-06-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230629-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-05-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-07-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230729-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-06-29",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-08-27",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230828-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-07-29",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-09-26",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230927-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-08-28",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-10-26",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231027-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-09-27",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-11-25",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231126-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-10-27",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-12-25",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231226-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-11-26",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-01-24",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240125-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-12-26",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-02-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240224-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-01-25",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-03-24",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240325-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-02-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-04-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240424-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-03-25",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-05-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240524-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-04-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-06-22",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240623-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-05-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-07-22",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240723-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-06-23",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-08-21",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240822-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-07-23",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-09-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240921-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-08-22",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-09-21",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-11-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241120-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-10-21",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-12-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241220-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-11-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-01-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250119-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-12-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-02-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250218-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-01-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-03-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250320-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-02-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-04-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250419-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-03-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-05-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250519-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-04-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-06-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250618-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-05-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-07-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250718-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-06-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-08-16",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250817-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-07-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-09-15",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250916-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-08-17",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-10-15",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251016-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-09-16",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-11-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251115-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-10-16",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-12-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251215-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-11-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-01-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260114-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-12-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-02-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260213-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-01-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-03-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260315-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-02-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-04-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260414-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-03-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-05-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260514-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-04-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-06-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260613-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-05-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-07-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260713-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-06-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-08-11",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260812-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-07-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-09-10",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260911-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-08-12",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-10-10",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20261011-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-09-11",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "10 D",
+              "endDateTime": "20261021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 10,
+            "start": "2026-10-11",
+            "status": "SUCCESS"
+          }
+        ],
+        "requests_count": 49,
+        "retries": 0,
+        "snapshot_hashes": {
+          "algorithm": "sha256",
+          "bundle_sha256": "a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da",
+          "files": {
+            "acquisition.json": "6c24573cb8970c654a4ef565e7a46548bba88148e1a9f0212644eb2bc0f3f8e6",
+            "request.json": "e2519017cd0d6890bf2a707ef8150f61346c082d56a832138f1d84fde5fc4c27",
+            "returned_bars.json": "a01106c782ced2d25b2bf7ebe8f6d13dd9ccf8b63cc52f57ce21e92721f81633",
+            "returned_frame.json": "b5810972ee1f8023feec08b6adad3dec60eceeba4eed2b5313af81d0a4b2d366"
+          },
+          "schema_version": "artifact_hashes_v1"
+        },
+        "snapshot_path": "data/history_cache/pr7a-market-jfyafm7i/snapshots/ibkr/9b665ac1d5044346936db18ccbebce97",
+        "started_at": "2026-10-22T14:59:11.564187+00:00",
+        "status": "SUCCESS",
+        "termination": null
+      },
+      "full-RSP": {
+        "acquisition_status": "SUCCESS",
+        "cache_status": "HIT",
+        "completed_at": "2026-10-22T15:18:27.055239+00:00",
+        "coverage": {
+          "first": "2022-11-01",
+          "last": "2026-10-20",
+          "native_rows": 1450,
+          "rows": 995
+        },
+        "duplicate_sessions": [],
+        "error_observation_counts": [
+          {
+            "category": "INFORMATION",
+            "code": 2104,
+            "count": 4
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2106,
+            "count": 1
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2158,
+            "count": 1
+          }
+        ],
+        "missing_sessions": [],
+        "noninformational_error_observations": 0,
+        "off_calendar_sessions": [],
+        "out_of_chunk_exclusions": 455,
+        "qualified_contract": {
+          "conId": 319359375,
+          "currency": "USD",
+          "exchange": "SMART",
+          "localSymbol": "RSP",
+          "primaryExchange": "ARCA",
+          "secType": "STK",
+          "symbol": "RSP",
+          "tradingClass": "RSP"
+        },
+        "request_parameters": {
+          "barSizeSetting": "1 day",
+          "chunk_calendar_days": 30,
+          "client_id": 51971,
+          "exchange": "SMART",
+          "formatDate": 1,
+          "keepUpToDate": false,
+          "local_endpoint": true,
+          "market_data_type_requested": "historical_TRADES",
+          "max_attempts": 3,
+          "persistent_failure_chunk_limit": 2,
+          "port": 7496,
+          "startup_account_sync": false,
+          "streaming_market_data_type_observed": "unknown_not_requested",
+          "timeout": 30,
+          "useRTH": true,
+          "whatToShow": "TRADES"
+        },
+        "requested_interval": {
+          "end": "2026-10-20",
+          "start": "2022-11-01"
+        },
+        "requests": [
+          {
+            "attempt": 1,
+            "end": "2022-11-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20221201-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-11-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2022-12-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20221231-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-12-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-01-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230130-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-12-31",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-02-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230301-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-01-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-03-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230331-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-03-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-04-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230430-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-03-31",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-05-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230530-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-04-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-06-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230629-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-05-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-07-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230729-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-06-29",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-08-27",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230828-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-07-29",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-09-26",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230927-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-08-28",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-10-26",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231027-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-09-27",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-11-25",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231126-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-10-27",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-12-25",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231226-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-11-26",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-01-24",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240125-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-12-26",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-02-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240224-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-01-25",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-03-24",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240325-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-02-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-04-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240424-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-03-25",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-05-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240524-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-04-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-06-22",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240623-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-05-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-07-22",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240723-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-06-23",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-08-21",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240822-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-07-23",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-09-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240921-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-08-22",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-09-21",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-11-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241120-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-10-21",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-12-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241220-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-11-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-01-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250119-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-12-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-02-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250218-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-01-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-03-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250320-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-02-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-04-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250419-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-03-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-05-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250519-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-04-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-06-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250618-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-05-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-07-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250718-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-06-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-08-16",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250817-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-07-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-09-15",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250916-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-08-17",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-10-15",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251016-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-09-16",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-11-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251115-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-10-16",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-12-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251215-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-11-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-01-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260114-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-12-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-02-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260213-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-01-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-03-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260315-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-02-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-04-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260414-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-03-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-05-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260514-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-04-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-06-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260613-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-05-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-07-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260713-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-06-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-08-11",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260812-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-07-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-09-10",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260911-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-08-12",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-10-10",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20261011-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-09-11",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "10 D",
+              "endDateTime": "20261021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 10,
+            "start": "2026-10-11",
+            "status": "SUCCESS"
+          }
+        ],
+        "requests_count": 49,
+        "retries": 0,
+        "snapshot_hashes": {
+          "algorithm": "sha256",
+          "bundle_sha256": "0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848",
+          "files": {
+            "acquisition.json": "d99a80795f2ee2756531cc0b44ab47d68b9a63e807d70b384d6b72d780f504e7",
+            "request.json": "f875551bcef83b2680101c767c654461fa208d038c9e20b9c96034b09fce9cfe",
+            "returned_bars.json": "2306256edab4e08ad3bb90832a3f257c367795c606e9bf83a42aed316c340497",
+            "returned_frame.json": "ed57e20f312ab1d28898d239e28e6f6c40ee60d1c69d5543fa55b117f7eb9204"
+          },
+          "schema_version": "artifact_hashes_v1"
+        },
+        "snapshot_path": "data/history_cache/pr7a-market-jfyafm7i/snapshots/ibkr/1c68526bfdce4607a5553f28ff7e6e5f",
+        "started_at": "2026-10-22T15:08:49.458329+00:00",
+        "status": "SUCCESS",
+        "termination": null
+      },
+      "full-SPY": {
+        "acquisition_status": "SUCCESS",
+        "cache_status": "HIT",
+        "completed_at": "2026-10-22T14:59:11.202399+00:00",
+        "coverage": {
+          "first": "2022-11-01",
+          "last": "2026-10-20",
+          "native_rows": 1450,
+          "rows": 995
+        },
+        "duplicate_sessions": [],
+        "error_observation_counts": [
+          {
+            "category": "INFORMATION",
+            "code": 2104,
+            "count": 4
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2106,
+            "count": 1
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2158,
+            "count": 1
+          }
+        ],
+        "missing_sessions": [],
+        "noninformational_error_observations": 0,
+        "off_calendar_sessions": [],
+        "out_of_chunk_exclusions": 455,
+        "qualified_contract": {
+          "conId": 756733,
+          "currency": "USD",
+          "exchange": "SMART",
+          "localSymbol": "SPY",
+          "primaryExchange": "ARCA",
+          "secType": "STK",
+          "symbol": "SPY",
+          "tradingClass": "SPY"
+        },
+        "request_parameters": {
+          "barSizeSetting": "1 day",
+          "chunk_calendar_days": 30,
+          "client_id": 51971,
+          "exchange": "SMART",
+          "formatDate": 1,
+          "keepUpToDate": false,
+          "local_endpoint": true,
+          "market_data_type_requested": "historical_TRADES",
+          "max_attempts": 3,
+          "persistent_failure_chunk_limit": 2,
+          "port": 7496,
+          "startup_account_sync": false,
+          "streaming_market_data_type_observed": "unknown_not_requested",
+          "timeout": 30,
+          "useRTH": true,
+          "whatToShow": "TRADES"
+        },
+        "requested_interval": {
+          "end": "2026-10-20",
+          "start": "2022-11-01"
+        },
+        "requests": [
+          {
+            "attempt": 1,
+            "end": "2022-11-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20221201-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-11-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2022-12-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20221231-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-12-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-01-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230130-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2022-12-31",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-02-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230301-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-01-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-03-30",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230331-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-03-01",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-04-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230430-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-03-31",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-05-29",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230530-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-04-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-06-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230629-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-05-30",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-07-28",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230729-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-06-29",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-08-27",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230828-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-07-29",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-09-26",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20230927-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-08-28",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-10-26",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231027-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-09-27",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-11-25",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231126-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-10-27",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2023-12-25",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20231226-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-11-26",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-01-24",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240125-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2023-12-26",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-02-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240224-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-01-25",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-03-24",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240325-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-02-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-04-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240424-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-03-25",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-05-23",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240524-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-04-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-06-22",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240623-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-05-24",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-07-22",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240723-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-06-23",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-08-21",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240822-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-07-23",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-09-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20240921-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-08-22",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-09-21",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-11-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241120-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-10-21",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2024-12-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20241220-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-11-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-01-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250119-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2024-12-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-02-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250218-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-01-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-03-19",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250320-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-02-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-04-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250419-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-03-20",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-05-18",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250519-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-04-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-06-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250618-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-05-19",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-07-17",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250718-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-06-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-08-16",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250817-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-07-18",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-09-15",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20250916-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-08-17",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-10-15",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251016-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-09-16",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-11-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251115-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-10-16",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2025-12-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20251215-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-11-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-01-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260114-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2025-12-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-02-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260213-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-01-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-03-14",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260315-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-02-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-04-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260414-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-03-15",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-05-13",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260514-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-04-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-06-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260613-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-05-14",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-07-12",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260713-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-06-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-08-11",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260812-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-07-13",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-09-10",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20260911-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-08-12",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-10-10",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "30 D",
+              "endDateTime": "20261011-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 30,
+            "start": "2026-09-11",
+            "status": "SUCCESS"
+          },
+          {
+            "attempt": 1,
+            "end": "2026-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "10 D",
+              "endDateTime": "20261021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 10,
+            "start": "2026-10-11",
+            "status": "SUCCESS"
+          }
+        ],
+        "requests_count": 49,
+        "retries": 0,
+        "snapshot_hashes": {
+          "algorithm": "sha256",
+          "bundle_sha256": "383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e",
+          "files": {
+            "acquisition.json": "502141ac53a7f2cec89da2556953df62dc3e4712c0ef6f43d21118a3fdca07fd",
+            "request.json": "f32ebab6b67c230569afaa31ae56be6fe551c3022cc7f41e43536e0df499969d",
+            "returned_bars.json": "7082919f8138b83e5a0b1283c763fcfe1c5229e26dd15848a280f95e38901af6",
+            "returned_frame.json": "ca5dc1527f2bf22599bf685ed464827f326f41b6c841ab8e9a69c9bc183a5936"
+          },
+          "schema_version": "artifact_hashes_v1"
+        },
+        "snapshot_path": "data/history_cache/pr7a-market-jfyafm7i/snapshots/ibkr/f6bbc44a7ebd41a1a6b8139c45de70a8",
+        "started_at": "2026-10-22T14:57:33.387041+00:00",
+        "status": "SUCCESS",
+        "termination": null
+      },
+      "smoke-QQQ": {
+        "acquisition_status": "SUCCESS",
+        "cache_status": "HIT",
+        "completed_at": "2026-10-22T14:57:31.172050+00:00",
+        "coverage": {
+          "first": "2026-10-14",
+          "last": "2026-10-20",
+          "native_rows": 7,
+          "rows": 5
+        },
+        "duplicate_sessions": [],
+        "error_observation_counts": [
+          {
+            "category": "INFORMATION",
+            "code": 2104,
+            "count": 4
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2106,
+            "count": 1
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2158,
+            "count": 1
+          }
+        ],
+        "missing_sessions": [],
+        "noninformational_error_observations": 0,
+        "off_calendar_sessions": [],
+        "out_of_chunk_exclusions": 2,
+        "qualified_contract": {
+          "conId": 320227571,
+          "currency": "USD",
+          "exchange": "SMART",
+          "localSymbol": "QQQ",
+          "primaryExchange": "NASDAQ",
+          "secType": "STK",
+          "symbol": "QQQ",
+          "tradingClass": "NMS"
+        },
+        "request_parameters": {
+          "barSizeSetting": "1 day",
+          "chunk_calendar_days": 30,
+          "client_id": 51971,
+          "exchange": "SMART",
+          "formatDate": 1,
+          "keepUpToDate": false,
+          "local_endpoint": true,
+          "market_data_type_requested": "historical_TRADES",
+          "max_attempts": 3,
+          "persistent_failure_chunk_limit": 2,
+          "port": 7496,
+          "startup_account_sync": false,
+          "streaming_market_data_type_observed": "unknown_not_requested",
+          "timeout": 30,
+          "useRTH": true,
+          "whatToShow": "TRADES"
+        },
+        "requested_interval": {
+          "end": "2026-10-20",
+          "start": "2026-10-14"
+        },
+        "requests": [
+          {
+            "attempt": 1,
+            "end": "2026-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "7 D",
+              "endDateTime": "20261021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 7,
+            "start": "2026-10-14",
+            "status": "SUCCESS"
+          }
+        ],
+        "requests_count": 1,
+        "retries": 0,
+        "snapshot_hashes": {
+          "algorithm": "sha256",
+          "bundle_sha256": "0cf9a36a2e29cf20456d75a66271f484dcebedb07bb217208ca846f777e2aead",
+          "files": {
+            "acquisition.json": "5603a28bb4cb9d58cf834993bffd0d2f24a0d9aee23b94f9a6d2def1c46da666",
+            "request.json": "f3910d3a36f49670a4d1a28df8ed9130da34f0ce123f25ee6f58ee7bcbcaca76",
+            "returned_bars.json": "e84f27dc8def24bea8a6faae18605d6bd55bf760588f149eea61bfa3c118adf3",
+            "returned_frame.json": "0d564543dabe5edcd8e8ffe86e66b2dd2982634cf0d516c3270ff86bebcc1373"
+          },
+          "schema_version": "artifact_hashes_v1"
+        },
+        "snapshot_path": "data/history_cache/pr7a-market-jfyafm7i/snapshots/ibkr/37b456b4867f438c86da190dfbfcc27b",
+        "started_at": "2026-10-22T14:57:29.589924+00:00",
+        "status": "SUCCESS",
+        "termination": null
+      },
+      "smoke-RSP": {
+        "acquisition_status": "SUCCESS",
+        "cache_status": "HIT",
+        "completed_at": "2026-10-22T14:57:33.149815+00:00",
+        "coverage": {
+          "first": "2026-10-14",
+          "last": "2026-10-20",
+          "native_rows": 7,
+          "rows": 5
+        },
+        "duplicate_sessions": [],
+        "error_observation_counts": [
+          {
+            "category": "INFORMATION",
+            "code": 2104,
+            "count": 4
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2106,
+            "count": 1
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2158,
+            "count": 1
+          }
+        ],
+        "missing_sessions": [],
+        "noninformational_error_observations": 0,
+        "off_calendar_sessions": [],
+        "out_of_chunk_exclusions": 2,
+        "qualified_contract": {
+          "conId": 319359375,
+          "currency": "USD",
+          "exchange": "SMART",
+          "localSymbol": "RSP",
+          "primaryExchange": "ARCA",
+          "secType": "STK",
+          "symbol": "RSP",
+          "tradingClass": "RSP"
+        },
+        "request_parameters": {
+          "barSizeSetting": "1 day",
+          "chunk_calendar_days": 30,
+          "client_id": 51971,
+          "exchange": "SMART",
+          "formatDate": 1,
+          "keepUpToDate": false,
+          "local_endpoint": true,
+          "market_data_type_requested": "historical_TRADES",
+          "max_attempts": 3,
+          "persistent_failure_chunk_limit": 2,
+          "port": 7496,
+          "startup_account_sync": false,
+          "streaming_market_data_type_observed": "unknown_not_requested",
+          "timeout": 30,
+          "useRTH": true,
+          "whatToShow": "TRADES"
+        },
+        "requested_interval": {
+          "end": "2026-10-20",
+          "start": "2026-10-14"
+        },
+        "requests": [
+          {
+            "attempt": 1,
+            "end": "2026-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "7 D",
+              "endDateTime": "20261021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 7,
+            "start": "2026-10-14",
+            "status": "SUCCESS"
+          }
+        ],
+        "requests_count": 1,
+        "retries": 0,
+        "snapshot_hashes": {
+          "algorithm": "sha256",
+          "bundle_sha256": "3e31aec2e54c3d097514cff1606ebda473902e9074f4726db670ba65dd95e496",
+          "files": {
+            "acquisition.json": "633afd1a74ff58acb900e77784384cf2e21661425aa641d7d68fde8e462c56df",
+            "request.json": "fa136e042d62cf32ba082ec22c5db2f59897001456dedf6201c087d781b763ca",
+            "returned_bars.json": "94001ba1557bd87f3ef484c18fe88a17e1deacc409afdbb16d3904ff5ce2ad5b",
+            "returned_frame.json": "d71a91441513466aecbcff330019cd78ace9989a20dacf8d5b7328b8d3e9f540"
+          },
+          "schema_version": "artifact_hashes_v1"
+        },
+        "snapshot_path": "data/history_cache/pr7a-market-jfyafm7i/snapshots/ibkr/f15bc102a0184468aab77c73476075d3",
+        "started_at": "2026-10-22T14:57:31.191998+00:00",
+        "status": "SUCCESS",
+        "termination": null
+      },
+      "smoke-SPY": {
+        "acquisition_status": "SUCCESS",
+        "cache_status": "HIT",
+        "completed_at": "2026-10-22T14:57:29.139702+00:00",
+        "coverage": {
+          "first": "2026-10-14",
+          "last": "2026-10-20",
+          "native_rows": 7,
+          "rows": 5
+        },
+        "duplicate_sessions": [],
+        "error_observation_counts": [
+          {
+            "category": "INFORMATION",
+            "code": 2104,
+            "count": 4
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2106,
+            "count": 1
+          },
+          {
+            "category": "INFORMATION",
+            "code": 2158,
+            "count": 1
+          }
+        ],
+        "missing_sessions": [],
+        "noninformational_error_observations": 0,
+        "off_calendar_sessions": [],
+        "out_of_chunk_exclusions": 2,
+        "qualified_contract": {
+          "conId": 756733,
+          "currency": "USD",
+          "exchange": "SMART",
+          "localSymbol": "SPY",
+          "primaryExchange": "ARCA",
+          "secType": "STK",
+          "symbol": "SPY",
+          "tradingClass": "SPY"
+        },
+        "request_parameters": {
+          "barSizeSetting": "1 day",
+          "chunk_calendar_days": 30,
+          "client_id": 51971,
+          "exchange": "SMART",
+          "formatDate": 1,
+          "keepUpToDate": false,
+          "local_endpoint": true,
+          "market_data_type_requested": "historical_TRADES",
+          "max_attempts": 3,
+          "persistent_failure_chunk_limit": 2,
+          "port": 7496,
+          "startup_account_sync": false,
+          "streaming_market_data_type_observed": "unknown_not_requested",
+          "timeout": 30,
+          "useRTH": true,
+          "whatToShow": "TRADES"
+        },
+        "requested_interval": {
+          "end": "2026-10-20",
+          "start": "2026-10-14"
+        },
+        "requests": [
+          {
+            "attempt": 1,
+            "end": "2026-10-20",
+            "parameters": {
+              "barSizeSetting": "1 day",
+              "durationStr": "7 D",
+              "endDateTime": "20261021-00:00:00",
+              "formatDate": 1,
+              "keepUpToDate": false,
+              "timeout": 30,
+              "useRTH": true,
+              "whatToShow": "TRADES"
+            },
+            "rows": 7,
+            "start": "2026-10-14",
+            "status": "SUCCESS"
+          }
+        ],
+        "requests_count": 1,
+        "retries": 0,
+        "snapshot_hashes": {
+          "algorithm": "sha256",
+          "bundle_sha256": "fbfe91bae48f7f7ad068b003ae6c006f6d3ce8d510934c727d8bdca7c5518263",
+          "files": {
+            "acquisition.json": "23bb41ab4c560c1b471b629834e5b2f26accd79c9fc892ea5d479ace5b303580",
+            "request.json": "4e958fe83472869daa448a909978c72040c4398279b8b85188a651d14a3cfad7",
+            "returned_bars.json": "5342c6a206f855ed145e79f8f511bc7b246f0e8b8a7f5efc2acdbea94bfe2297",
+            "returned_frame.json": "b3cde1475f9c8da82e39d67f21d5114b70f5a7cf65d1e40c83dc55edbde1a503"
+          },
+          "schema_version": "artifact_hashes_v1"
+        },
+        "snapshot_path": "data/history_cache/pr7a-market-jfyafm7i/snapshots/ibkr/fe92c7088e3d4ae590128f321c916517",
+        "started_at": "2026-10-22T14:57:28.857680+00:00",
+        "status": "SUCCESS",
+        "termination": null
+      }
+    },
+    "source_dataset_hashes": {
+      "QQQ": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+      "RSP": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+      "SPY": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52"
+    },
+    "status": "SUCCESS"
+  },
+  "real_artifacts": {
+    "audit": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "76cacd389a1a3bf1bd4c8cde92012aee928a5c8322a3c131663d6150a9629f1c",
+        "files": {
+          "audit.json": "7b823222d9f532c5cbe170796539c1721cfbdbd6de31e6c647523016a21f3ad1",
+          "reports.json": "33db6071751a8a0921029f08c0aeebc28e8d389e157cfea12502888099ea5e0d"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/history_cache/pr7a-market-jfyafm7i/live-audit"
+    },
+    "context": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "d9a5547daf856364fdb398431ce17498d26c039ff926d44016bc4f5a9cddf271",
+        "files": {
+          "calendar.json": "c078113b5d467733598cd9e35dc1cfbc09c28db0c9ea508c2e54ac90e0c4cb0b",
+          "configuration.json": "28f5de0cb401ec6a5dcf3e826e57a88f484ddaf8bc06e3afe280d09f09615fb2",
+          "feature_definitions.json": "39e77f0a03475245661eea5115e1e3508bf6a7c5de79f151fddb497ff7045e47",
+          "feature_quality.json": "136441e8a9137ec9aabc251cd25a50fbd66b24e388f78b970566201212974fc6",
+          "market_context_daily.json": "8cac3e531292037eb3dedb3953fa4890f6ce0c13f743f513473319682b4804ad",
+          "market_context_manifest.json": "3aadcd9bd4bfc1b5f555fc323cd91dbc6b910852e6da34b8fbc0066ca533653b",
+          "provenance.json": "5c70eb09b445379890665356947cccf82937c80b25db83a626c750e5f97f8856",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-bars-2e4e52c7fe8d52ea1ed245ac.json": "a1dd95f3148efb9a8acfbd2c83136e388bb91a39369268ab61a26db19c258f8a",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-bars-c2b00c5bd4598d75de383e48.json": "c8ec3dbf7aad6093e31b8f1c29389cce822719b8bc9a543d3d2d52de7a1887a5",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-bars-c2c67b7c5506d815d4ab4861.json": "73e91479704bbf9540b7206b30bdba1f46ec8a3985ca05b73a0793ce47a41b97",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-dataset.json": "e5bfd4ccf794b4787f50605f981ee42b52d331a8eaa27eca393f7f95cae04e4a",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-quality-2e4e52c7fe8d52ea1ed245ac.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-quality-c2b00c5bd4598d75de383e48.json": "97901ec95e4f63920e6fb19328388300d83992be75d165d0fbf619763ad0f901",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-quality-c2c67b7c5506d815d4ab4861.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-acquisition.json": "d99a80795f2ee2756531cc0b44ab47d68b9a63e807d70b384d6b72d780f504e7",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-request.json": "f875551bcef83b2680101c767c654461fa208d038c9e20b9c96034b09fce9cfe",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-returned_bars.json": "2306256edab4e08ad3bb90832a3f257c367795c606e9bf83a42aed316c340497",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-returned_frame.json": "ed57e20f312ab1d28898d239e28e6f6c40ee60d1c69d5543fa55b117f7eb9204",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-acquisition.json": "502141ac53a7f2cec89da2556953df62dc3e4712c0ef6f43d21118a3fdca07fd",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-request.json": "f32ebab6b67c230569afaa31ae56be6fe551c3022cc7f41e43536e0df499969d",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-returned_bars.json": "7082919f8138b83e5a0b1283c763fcfe1c5229e26dd15848a280f95e38901af6",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-returned_frame.json": "ca5dc1527f2bf22599bf685ed464827f326f41b6c841ab8e9a69c9bc183a5936",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-acquisition.json": "6c24573cb8970c654a4ef565e7a46548bba88148e1a9f0212644eb2bc0f3f8e6",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-request.json": "e2519017cd0d6890bf2a707ef8150f61346c082d56a832138f1d84fde5fc4c27",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-returned_bars.json": "a01106c782ced2d25b2bf7ebe8f6d13dd9ccf8b63cc52f57ce21e92721f81633",
+          "reference-6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52-source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-returned_frame.json": "b5810972ee1f8023feec08b6adad3dec60eceeba4eed2b5313af81d0a4b2d366",
+          "reference_dataset_lineage.json": "cdb3bb7c597244f70283079b95bf5fbc00835b62e8d6e348dad3e0f5d681b9db"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/research_datasets/pr7a-market-jfyafm7i-context-v1"
+    },
+    "prices": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+        "files": {
+          "bars-2e4e52c7fe8d52ea1ed245ac.json": "a1dd95f3148efb9a8acfbd2c83136e388bb91a39369268ab61a26db19c258f8a",
+          "bars-c2b00c5bd4598d75de383e48.json": "c8ec3dbf7aad6093e31b8f1c29389cce822719b8bc9a543d3d2d52de7a1887a5",
+          "bars-c2c67b7c5506d815d4ab4861.json": "73e91479704bbf9540b7206b30bdba1f46ec8a3985ca05b73a0793ce47a41b97",
+          "dataset.json": "e5bfd4ccf794b4787f50605f981ee42b52d331a8eaa27eca393f7f95cae04e4a",
+          "quality-2e4e52c7fe8d52ea1ed245ac.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "quality-c2b00c5bd4598d75de383e48.json": "97901ec95e4f63920e6fb19328388300d83992be75d165d0fbf619763ad0f901",
+          "quality-c2c67b7c5506d815d4ab4861.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-acquisition.json": "d99a80795f2ee2756531cc0b44ab47d68b9a63e807d70b384d6b72d780f504e7",
+          "source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-request.json": "f875551bcef83b2680101c767c654461fa208d038c9e20b9c96034b09fce9cfe",
+          "source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-returned_bars.json": "2306256edab4e08ad3bb90832a3f257c367795c606e9bf83a42aed316c340497",
+          "source-0d38254b2b1107d791556715f770ac359e20ab70b225d0fab57e634fae1c6848-returned_frame.json": "ed57e20f312ab1d28898d239e28e6f6c40ee60d1c69d5543fa55b117f7eb9204",
+          "source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-acquisition.json": "502141ac53a7f2cec89da2556953df62dc3e4712c0ef6f43d21118a3fdca07fd",
+          "source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-request.json": "f32ebab6b67c230569afaa31ae56be6fe551c3022cc7f41e43536e0df499969d",
+          "source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-returned_bars.json": "7082919f8138b83e5a0b1283c763fcfe1c5229e26dd15848a280f95e38901af6",
+          "source-383e6aac9d3be4215cb44727e70f0a230afff47da328b63ecd2591085e03569e-returned_frame.json": "ca5dc1527f2bf22599bf685ed464827f326f41b6c841ab8e9a69c9bc183a5936",
+          "source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-acquisition.json": "6c24573cb8970c654a4ef565e7a46548bba88148e1a9f0212644eb2bc0f3f8e6",
+          "source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-request.json": "e2519017cd0d6890bf2a707ef8150f61346c082d56a832138f1d84fde5fc4c27",
+          "source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-returned_bars.json": "a01106c782ced2d25b2bf7ebe8f6d13dd9ccf8b63cc52f57ce21e92721f81633",
+          "source-a58ef80898aa37412f5638ef24e3611830b9970f34e5049fa7412f4988af92da-returned_frame.json": "b5810972ee1f8023feec08b6adad3dec60eceeba4eed2b5313af81d0a4b2d366"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/research_datasets/pr7a-market-jfyafm7i-prices-v1"
+    },
+    "setup": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "3e18578b971a95191fd4e6962d7ef4a7b3b674d23c7e373375d378b429ef378e",
+        "files": {
+          "identity_sources.json": "538b8b3a01ac689af882714f7ff99e36c06cb2121fe5f66e01250b80b04de0ae",
+          "live.py": "c9fd09e307b3ef2954ad21f2f16add246a2a46f9d6783fcd8c5fe103cf69547a",
+          "mappings.json": "b5c91ea11e8b3a08f90216757fb6fa431818f47cac544d44af3cabf6784a6a67",
+          "preflight.json": "03257ee849a8f85813cb6a2fa58a9364897f73dabdf858c04b3e8527bfcd9aaf",
+          "qualification.json": "7abec23bb10c33702f0807202c11648fe7d534ba682946c961fb23bdcfcda14c"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/history_cache/pr7a-market-jfyafm7i/setup"
+    },
+    "verification": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "5d36a88244f5f0ddf66358edd69996a08ff36c69a1250a8b847d83d530e1760b",
+        "files": {
+          "evidence-real.py": "32aaa58d44c84cd23c191a862128f0a6bebb92ca5cec56ece8088814fb95a567",
+          "offline-verification-real.json": "59cd920009f1b8da8dbcc28093242d4ea2dd8972f279a039dd6a7896df4d48d6",
+          "pre-live-files.json": "c087fcc292f0381642ca24fb4855b9845ee2bf8395f526209d0c54e1104f2776",
+          "pytest-real.txt": "d66b523db878e20c7f6a5ac2f3380179cb9d27586576e467990ad3a5cba0f0e9",
+          "verify-real.py": "41bfdf5045011f8650ea746a5eee4a89587d8bd365a594d652d0b2fbb049b7fe"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/research_datasets/pr7a-real-evidence-jfyafm7i-v1"
+    }
+  },
+  "recorded_at": "2026-10-22T15:20:17.600857+00:00",
+  "result": "REAL_IBKR_REFERENCE_COVERAGE_AND_MARKET_CONTEXT_PASS",
+  "schema_version": "market_context_evidence_v2",
+  "synthetic_demonstration": {
+    "classification_counts_interpretation": "Synthetic engineering fixture frequencies, not actual historical market states",
+    "context": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "d7c3990fa0f3abd6927e5e069f3eb71433ecdb9dafc95246236adb7dba4b927e",
+        "files": {
+          "calendar.json": "c078113b5d467733598cd9e35dc1cfbc09c28db0c9ea508c2e54ac90e0c4cb0b",
+          "configuration.json": "28f5de0cb401ec6a5dcf3e826e57a88f484ddaf8bc06e3afe280d09f09615fb2",
+          "feature_definitions.json": "b82e1bafb36bdf9ced9aca83f54cc4115d0cfe0af2cb9dde3c7d41480aa8c305",
+          "feature_quality.json": "b37c5c63a58d9b5078f28ec25fc614d1b5a49a0a6438af5d238d394f1b102e60",
+          "market_context_daily.json": "b0f5d02cbded7e196cc4cf001fefd2f619f44112a2630e3a4456082587962683",
+          "market_context_manifest.json": "6ac2a2b081cca48cc6af827f3470523a97daa93520e8060032f3bf1d876d0efa",
+          "provenance.json": "19652dbd059c4bf317b231e7fec6f912dd9168d8d2a2c53ddb93b769bb1216e6",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-bars-2e4e52c7fe8d52ea1ed245ac.json": "b5ebdfaac58a04874c23adcb51a7ac1a6c0584ce5f2ddbbda756696fa63455b7",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-bars-c2b00c5bd4598d75de383e48.json": "fc0691b32d3b2e42dc9dad2b71d9a3e991ee893cb3afbb71dc084fcd1f5ac8b0",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-bars-c2c67b7c5506d815d4ab4861.json": "0a0ab8a6f6fe9dcd57d3d66db4de6fcaf62ab26de9e252c7afdfbeb563ffeead",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-dataset.json": "30333337ec22779a3274791576f7a23789f71c5bb56b8c1b74d66bcef9209e62",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-quality-2e4e52c7fe8d52ea1ed245ac.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-quality-c2b00c5bd4598d75de383e48.json": "97901ec95e4f63920e6fb19328388300d83992be75d165d0fbf619763ad0f901",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-quality-c2c67b7c5506d815d4ab4861.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-acquisition.json": "329b8ad9e220de1c6961e0538dd715bb8bb6c8e161154e9ee9ec6a9486c9a37b",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-request.json": "afcc3c656de78f2a745f9ba320a4fed76623c2754e97d2ee76d77196701672eb",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_bars.json": "4a15fdb85221ec030e3462ffdb525a3c90e7c4aa8e345f9327a00ee575a890a1",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_frame.json": "97ecc075e541cdbc9cfd14320b4063fc6ba8542d958cd7fda323b1a6b76a9756",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-acquisition.json": "75076b9c8450f3f35f7d060ff929ad0803e1d90ed6924a615702db42ddeb9905",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-request.json": "0b9de2be7655e27f2cde38b14f6ac67d82c5663efcd7562062818deeb655d639",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_bars.json": "7c56b389ec43abdfb511b4ab38d5b9ccfd93f23328f1f978ef060330ea18ff48",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_frame.json": "3f6c4bb28316025fe073765892a37d1c57681328d29d40a7b82cbf2eb2db15d3",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-acquisition.json": "2dbac1e1f3f1b7534a5498e14ed7871bbfb1c2ff71c84a609aefbe9235414504",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-request.json": "50c0f6823d484b44fa93e601d7880a77cef9ac8c9b503f0376a2336e866d729d",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_bars.json": "521e6d26af6f45691fb3243a4879504208c24a0aa1b607d7c4d551c47b4b6cad",
+          "reference-4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee-source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_frame.json": "b3450580741de4221513c59ae4af958ce2e5744304b11b9c4740939f7961b606",
+          "reference_dataset_lineage.json": "d26ff05e90554deadad821ddd34cb1f1a276e8fa23dcd533b2e0a5aefbd5651b"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/research_datasets/pr7a-synthetic-jfyafm7i-v2/context"
+    },
+    "live_requests": 0,
+    "origin": "SYNTHETIC_ONLY",
+    "quality": {
+      "complete_core_rows": 703,
+      "complete_rows_by_group": {
+        "breadth_features": 0,
+        "leadership_features": 0,
+        "participation_proxies": 703,
+        "trend_features": 703,
+        "volatility_features": 703
+      },
+      "descriptive_state_counts": {
+        "UPTREND": 703
+      },
+      "evaluation_rows": 703,
+      "first_complete_core_session": "2024-01-02",
+      "historical_availability_verified": false,
+      "incomplete_core_rows": 0,
+      "last_complete_core_session": "2026-10-20",
+      "missing_feature_counts": {
+        "historical_constituents.above_sma200": 703,
+        "historical_constituents.above_sma50": 703,
+        "historical_constituents.advance_decline": 703,
+        "historical_constituents.new_high52w": 703,
+        "historical_constituents.new_low52w": 703,
+        "historical_constituents.trend_template": 703,
+        "historical_universe.valid_setup_share": 703
+      },
+      "rows_with_missing_optional_features": 703,
+      "schema_version": "market_feature_quality_v1",
+      "trading_policy": "NONE"
+    },
+    "source_dataset": {
+      "hashes": {
+        "algorithm": "sha256",
+        "bundle_sha256": "4839030570c84aa2d015bad1919a18cd3879764b0d70524c4a49144c331579ee",
+        "files": {
+          "bars-2e4e52c7fe8d52ea1ed245ac.json": "b5ebdfaac58a04874c23adcb51a7ac1a6c0584ce5f2ddbbda756696fa63455b7",
+          "bars-c2b00c5bd4598d75de383e48.json": "fc0691b32d3b2e42dc9dad2b71d9a3e991ee893cb3afbb71dc084fcd1f5ac8b0",
+          "bars-c2c67b7c5506d815d4ab4861.json": "0a0ab8a6f6fe9dcd57d3d66db4de6fcaf62ab26de9e252c7afdfbeb563ffeead",
+          "dataset.json": "30333337ec22779a3274791576f7a23789f71c5bb56b8c1b74d66bcef9209e62",
+          "quality-2e4e52c7fe8d52ea1ed245ac.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "quality-c2b00c5bd4598d75de383e48.json": "97901ec95e4f63920e6fb19328388300d83992be75d165d0fbf619763ad0f901",
+          "quality-c2c67b7c5506d815d4ab4861.json": "4cdde68d7c56a013daa002e37a9ef47d755263c3df181192c4bb5842627f0d43",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-acquisition.json": "329b8ad9e220de1c6961e0538dd715bb8bb6c8e161154e9ee9ec6a9486c9a37b",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-request.json": "afcc3c656de78f2a745f9ba320a4fed76623c2754e97d2ee76d77196701672eb",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_bars.json": "4a15fdb85221ec030e3462ffdb525a3c90e7c4aa8e345f9327a00ee575a890a1",
+          "source-12f05b16913bea68c2e1290e49128704de16c2460b5db624335eef648c2e9fa9-returned_frame.json": "97ecc075e541cdbc9cfd14320b4063fc6ba8542d958cd7fda323b1a6b76a9756",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-acquisition.json": "75076b9c8450f3f35f7d060ff929ad0803e1d90ed6924a615702db42ddeb9905",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-request.json": "0b9de2be7655e27f2cde38b14f6ac67d82c5663efcd7562062818deeb655d639",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_bars.json": "7c56b389ec43abdfb511b4ab38d5b9ccfd93f23328f1f978ef060330ea18ff48",
+          "source-5396f5b782c0096e10f867ba7225987f78c43b4719ad0a257717679eac521997-returned_frame.json": "3f6c4bb28316025fe073765892a37d1c57681328d29d40a7b82cbf2eb2db15d3",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-acquisition.json": "2dbac1e1f3f1b7534a5498e14ed7871bbfb1c2ff71c84a609aefbe9235414504",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-request.json": "50c0f6823d484b44fa93e601d7880a77cef9ac8c9b503f0376a2336e866d729d",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_bars.json": "521e6d26af6f45691fb3243a4879504208c24a0aa1b607d7c4d551c47b4b6cad",
+          "source-79b90caaf6da2cc5156c37ca6095950e598ab601ad77035f48fa2dc99829a740-returned_frame.json": "b3450580741de4221513c59ae4af958ce2e5744304b11b9c4740939f7961b606"
+        },
+        "schema_version": "artifact_hashes_v1"
+      },
+      "path": "data/research_datasets/pr7a-synthetic-jfyafm7i-v2/prices"
+    },
+    "source_origin": [
+      "synthetic"
+    ],
+    "source_rows_per_instrument": {
+      "QQQ": 995,
+      "RSP": 995,
+      "SPY": 995
+    },
+    "strategy_edge_claim": false,
+    "warmup_observations_preceding_first_evaluation": 292
+  }
+}

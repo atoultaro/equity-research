@@ -229,5 +229,7 @@ PR 7A adds [historical MarketContext](docs/MARKET_CONTEXT_INFRASTRUCTURE.md):
 continuous SPY/QQQ trend and volatility features, RSP/SPY participation proxies,
 explicitly unavailable breadth, immutable offline bundles and an as-of reader.
 Availability is reconstructed under a declared completed-session timing assumption.
-The current demonstration is synthetic; fresh live preflight is pending. Context
-does not approve, reject, resize or execute trades.
+The real demonstration uses 995 IBKR sessions per ETF, including warmup, and
+703 complete evaluation observations. The user's non-paper/read-only TWS endpoint
+was used for historical requests only; earlier synthetic evidence is preserved.
+Context does not approve, reject, resize or execute trades.

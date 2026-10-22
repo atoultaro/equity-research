@@ -11,31 +11,43 @@ Branch: `feat/market-context-infrastructure-v1`. Base:
 `9e03cff0374c35b67fb3acca36cc77ea99636c3b`, latest main containing merged PR 6B.
 The authoritative PR 7A brief permits the specifically confirmed historical-only
 acquisition beyond the older AGENTS.md provider restriction, and requires a fresh
-paper/read-only preflight before broker access. Execution admission/accounting,
+paper/read-only preflight before broker access. For the real demonstration, the
+user explicitly changed the session to a **non-paper, Read-Only API connection on
+port 7496**. This current instruction replaces the paper-mode prerequisite for
+this historical-only run; no trading/account activity is authorized or implemented.
+Execution admission/accounting,
 event publication and corporate-action window policies remain unchanged.
 
 ## Current demonstration and live status
 
-**The current demonstration is synthetic, not actual historical market evidence.**
-PR 7A's fresh confirmation of paper authentication, enabled socket clients,
-Read-Only API, correct port and bounded acquisition authorization is pending.
-No PR 7A broker connection, qualification or historical request has occurred.
-Previous PR 5E/6A/6B successes are not treated as current-session confirmation.
+**Real reference acquisition and context generation passed.** SPY, QQQ and RSP
+each have 995 observed daily sessions, including 292 preceding the evaluation
+interval. The real MarketContext has 703 complete core rows. Results, exact
+request parameters, audits and hashes are in the
+[current real-data evidence](evidence/market-context-v2.json).
 
-The [aggregate evidence](evidence/market-context-v1.json) distinguishes planned
-coverage, synthetic observations and unavailable actual results. All real
-qualification IDs, real source hashes and real market-state counts are null.
-The normal tests and example require no TWS or IBKR SDK. If authorized later,
-the real capture can be added as new immutable inputs/context versions without
-replacing this synthetic demonstration or older AAPL/GOOG artifacts.
+The user replied to the explicit current-session/authorization check with:
+“Now the non-paper account with port 7496. Read-only.” The current endpoint is
+`127.0.0.1:7496`, client ID `51971`; a local TWS listener was observed before
+connecting. No paper-account claim is made. Session/settings evidence comes from
+the user's reply, not an account query or programmatic settings inspection.
+Successful guarded connections and smoke requests establish scoped connectivity
+and historical access. No TWS settings were changed, no new TWS session was
+started and no account identifier or authentication secret was persisted.
+
+The [initial evidence](evidence/market-context-v1.json) preserves the earlier
+synthetic-only outcome while preflight was pending. Real acquisitions and context
+outputs use new immutable paths; the synthetic demonstration and older AAPL/GOOG
+artifacts remain intact. Normal tests and the synthetic example still require no
+TWS or IBKR SDK. Previous PR 5E/6A/6B sessions were not treated as current proof.
 
 ## Reference instruments and identity
 
 | Role | Independently reviewed issuer description/source | Actual PR 7A IBKR identity |
 | --- | --- | --- |
-| SPY | [SPDR S&P 500 ETF Trust](https://www.ssga.com/us/en/institutional/etfs/state-street-spdr-sp-500-etf-trust-spy): large-cap US equity ETF proxy | Not yet qualified |
-| QQQ | [Invesco QQQ Trust, Series 1](https://www.invesco.com/us/en/financial-products/etfs/invesco-qqq-trust-series-1.html): Nasdaq-100 ETF proxy | Not yet qualified |
-| RSP | [Invesco S&P 500 Equal Weight ETF](https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-etf.html): equal-weight S&P 500 ETF proxy | Not yet qualified |
+| SPY | [SPDR S&P 500 ETF Trust](https://www.ssga.com/us/en/institutional/etfs/state-street-sp-500-etf-trust-spy): large-cap US equity ETF proxy | conId **756733**, primary **ARCA**, trading class SPY |
+| QQQ | [Invesco QQQ Trust, Series 1](https://www.invesco.com/us/en/financial-products/etfs/invesco-qqq-trust-series-1.html): Nasdaq-100 ETF proxy | conId **320227571**, primary **NASDAQ**, trading class NMS |
+| RSP | [Invesco S&P 500 Equal Weight ETF](https://www.invesco.com/us/en/financial-products/etfs/invesco-sp-500-equal-weight-etf.html): equal-weight S&P 500 ETF proxy | conId **319359375**, primary **ARCA**, trading class RSP |
 
 Issuer product descriptions were reviewed separately from broker qualification;
 the Invesco product bodies were dynamic, with indexed issuer descriptions supplying
@@ -44,23 +56,25 @@ legal-structure/listing continuity. SPY is an ETF, not the S&P 500 index itself;
 QQQ is not a technology-sector index. The synthetic mappings/contract IDs in the
 example are fixtures and are never represented as actual qualification.
 
-For live work, qualify only these three USD/STK symbols on SMART, initially without
-assuming a conId or primaryExchange. Require a unique exact-symbol result and
-retain the actual primary designation/conId, then supply those reviewed values
-to the existing strict historical adapter. Never guess the primary designation,
-reuse an old instrument's conId or accept a substitution. Context validation also
-checks distinct security/qualified-contract identities and exact role mappings.
+Discovery qualified exactly these USD/STK symbols on SMART, without supplying
+a conId or primaryExchange. Each returned one exact-symbol contract; actual
+primary designations and conIds then became explicit mappings for the existing
+strict historical adapter. The values above were observed, not guessed or copied
+from old instruments. Research identities are `research:SPY:ETF:USD:v1`,
+`research:QQQ:ETF:USD:v1` and `research:RSP:ETF:USD:v1`. Qualified long names,
+all contract fields and source identities are sealed in the acquisition setup.
+Context validation checks distinct qualified identities and exact role mappings.
 
 ## Acquisition and warmup
 
 Evaluation is fixed at **2024-01-02 through 2026-10-20**, the same 703 expected
-XNYS-convention sessions as AAPL and GOOG. Wider planned acquisition:
-**2022-11-01 through 2026-10-20**, 995 expected sessions per instrument. These are
-independently generated calendar counts, not claimed real observations.
+XNYS-convention sessions as AAPL and GOOG. Wider acquisition:
+**2022-11-01 through 2026-10-20**, 995 expected and **995 observed sessions per
+instrument**, independently reconciled to the pinned calendar.
 
 The exact largest window is **220 observations including the evaluation session**:
 SMA200 at t uses t−199…t; SMA200 at t−20 uses t−219…t−20. Therefore 219 preceding
-expected sessions are required. The planned buffer supplies 292 preceding
+expected sessions are required. The acquired buffer supplies 292 preceding
 sessions; the minimum start for the first evaluation session is February 16, 2023.
 `required_history_sessions()` derives the maximum from the versioned feature
 definitions. Warmup is counted in exchange sessions, not approximate calendar days.
@@ -72,9 +86,9 @@ history does not get a seeded SMA200 or a forward-filled session.
 
 The existing `IBKRDailyProvider`, normalization, native capture, cache and price
 freeze are reused. Live workflow: fresh explicit preflight; actual independent
-qualification; five completed sessions (October 14–20) for new instruments; then
-bounded 30-calendar-day chunks over the wider acquisition interval. One provider
-instance/pacer should cover all three instruments, preserving the two-second,
+qualification; five completed sessions (October 14–20) for all three instruments;
+then bounded 30-calendar-day chunks over the wider interval. One provider
+instance/pacer covered all instruments and both phases, using the existing two-second,
 15-second identical-request and 60/600-second limits. Do not run overlapping jobs.
 No Yahoo fallback, account/portfolio/position/balance/execution request or order
 operation is permitted. Raw historical responses remain ignored/local.
@@ -252,15 +266,91 @@ assert result["context"]["session_date"] == "2024-01-02"
 assert result["historical_dissemination_verified"] is False
 ```
 
-## Demonstration evidence, limits and next integration
+## Real demonstration and safety audit
+
+The acquisition ran October 22, 2026, approximately **10:57–11:18 EDT**, on the
+user-confirmed non-paper/read-only TWS endpoint. Python 3.12.9, ib_async 2.1.0
+and server protocol 178 are recorded. All three five-session smoke requests
+passed: seven native bars, five selected sessions and two exclusions each.
+
+| Instrument | Full requests | Native bars | Explicit exclusions | Selected / expected | Pre-evaluation sessions |
+| --- | --- | --- | --- | --- | --- |
+| SPY | 49 | 1,450 | 455 | 995 / 995 | 292 |
+| QQQ | 49 | 1,450 | 455 | 995 / 995 | 292 |
+| RSP | 49 | 1,450 | 455 | 995 / 995 | 292 |
+
+Each full capture passes calendar/numeric validation: no missing, duplicate,
+off-calendar or outside-listing sessions, and no canonical/source-capture issues.
+All selected rows retain distinct native indices; exclusions do not overlap those
+indices. The three-instrument price dataset passed strict freezing without
+`--allow-incomplete`. No forward fill, native-price repair, provider substitution
+or volume rescaling occurred. Full captures replaced the overlapping smoke rows
+in new cache versions; the original smoke snapshots/versions remain intact.
+
+There were **zero retries, failed chunks, noninformational errors or fail-fast
+terminations**. Informational codes 2104, 2106 and 2158 are retained. The historical
+access conclusion applies to these requests; subscription/account details were
+never queried. Sequential captures have different retrieval timestamps and are
+not a synchronized historical dissemination archive.
+
+The outgoing-message guard allowed only API start (71), contract details (9),
+historical data (20) and historical cancellation (25). Actual totals: **seven
+API connections/start handshakes, nine contract-details requests, 150 historical
+requests and seven disconnects**; zero cancellations or blocked messages. These
+were API handshakes to the user's existing TWS, not new TWS application sessions.
+No account, portfolio, position, balance, execution or order request occurred.
+Unsolicited handshake account identifiers and authentication secrets were not
+persisted/logged by this workflow. No settings were changed or access workaround
+used. Raw responses and feature rows remain in ignored local artifacts.
+
+All **703** evaluation observations, **2024-01-02 through 2026-10-20**, have all
+26 core features: complete trend rows 703, volatility rows 703 and participation
+rows 703; incomplete core rows **zero**. All seven optional breadth/leadership
+features remain unavailable on every row, so **703 rows have missing optional
+features**. This distinction does not certify historical breadth completeness.
+
+The optional rule gives **640 UPTREND, 15 DOWNTREND, 48 MIXED and zero
+UNCLASSIFIED** observations. These are descriptive counts reconstructed from the
+captured native prices under the declared timing assumption, not official market
+classifications, historical dissemination proof, strategy filters or performance.
+
+| Real immutable artifact | Local path | SHA-256 bundle identity |
+| --- | --- | --- |
+| SPY/QQQ/RSP prices | `data/research_datasets/pr7a-market-jfyafm7i-prices-v1` | `6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52` |
+| Self-contained MarketContext | `data/research_datasets/pr7a-market-jfyafm7i-context-v1` | `d9a5547daf856364fdb398431ce17498d26c039ff926d44016bc4f5a9cddf271` |
+
+All three roles reference the same combined price bundle; it faithfully embeds
+their three separate full native captures. Smoke captures, setup, qualification,
+preflight and the guarded audit remain under
+`data/history_cache/pr7a-market-jfyafm7i`. Exact source snapshot and file hashes,
+request windows/parameters and the verification bundle hash are in the v2 evidence.
+The verification helpers/test output and preservation hashes are sealed under
+`data/research_datasets/pr7a-real-evidence-jfyafm7i-v1`.
+
+Real loading, core features, strict as-of boundaries, next session, early close,
+holiday/weekend and DST checks passed with network sockets, provider/data SDKs,
+cache and calendar imports denied. Actual SMA50/200 and normalized ATR outputs
+also reconcile with the existing research-dataset indicators. For local real-data
+inspection use:
+
+```python
+from equity_research.market_context import load_market_context
+context = load_market_context("data/research_datasets/pr7a-market-jfyafm7i-context-v1")
+assert context.quality["complete_core_rows"] == 703
+assert context.quality["incomplete_core_rows"] == 0
+result = context.context_as_of("2024-01-03T09:30:00-05:00")
+assert result["context"]["session_date"] == "2024-01-02"
+assert result["historical_dissemination_verified"] is False
+```
+
+## Synthetic example, preservation and next integration
 
 The ignored deterministic example supplies 995 **synthetic** observations per
 instrument, 292 preceding evaluation sessions and 703 complete trend/volatility/
 participation rows, January 2, 2024–October 20, 2026. No core row is incomplete.
 All 703 rows lack the seven optional breadth/leadership fields. The synthetic
 UPTREND count is an engineering-fixture result, not actual market frequency.
-Actual acquisition, warmup completeness, complete feature bounds and real state
-counts remain unavailable while current broker preflight is pending.
+It remains distinct from the real demonstration and its observed state counts.
 
 | Synthetic local artifact | Path | SHA-256 bundle identity |
 | --- | --- | --- |
@@ -272,9 +362,11 @@ and preservation hashes are sealed under
 `data/research_datasets/pr7a-evidence-jfyafm7i-v1`. These paths are ignored by Git.
 
 The evidence records local paths, exact source/context hashes, the final regression
-result and offline verification. All 297 pre-existing research/cache files are
-unchanged, including all AAPL/GOOG versions. No finwhaling side effect occurred.
-Full offline regression: **284 passed in 76.89 seconds**, zero failures, using
+result and offline verification. All **459** files present before the live capture
+are byte-for-byte unchanged, including the 297 pre-existing historical files,
+all AAPL/GOOG versions and the synthetic examples. The initial evidence report is
+also unchanged. No finwhaling side effect occurred.
+Full offline regression after authorization: **284 passed in 34.75 seconds**, zero failures, using
 `.venv/bin/python -m pytest -q`. This includes all prior 254 tests and 30 new
 MarketContext/provider regressions. The actual frozen synthetic artifact was also
 loaded with optional/provider imports and network sockets denied.
