@@ -787,3 +787,38 @@ def test_misrouted_provider_capture_cannot_populate_another_provider_cache(tmp_p
     with pytest.raises(ValueError, match="source provider"):
         cache.update("yahoo", security, START, END, fresh)
     assert cache.load_cached_daily("yahoo", security, START, END)["cache_status"] == "MISS"
+
+
+def test_ibkr_aapl_overreturned_bars_are_captured_but_frame_is_explicitly_bounded(tmp_path):
+    aapl = Security("AAPL", "synthetic-AAPL", "synthetic reviewed common stock", "AAPL", "AAPL", "NASDAQ", "XNAS")
+    native = bars("2024-11-21", "2024-12-02", adjusted=False)
+    provider = ib_provider(MockIB(frame=native))
+    result = provider.fetch_daily(aapl, START, END, tmp_path / "snapshot")
+    acq = result["acquisition"]
+    assert acq["qualified_contract"]["primaryExchange"] == "NASDAQ"
+    assert acq["qualified_contract"]["symbol"] == "AAPL"
+    assert acq["status"] == "SUCCESS"
+    assert [r["session_date"] for r in result["rows"]] == [r["session_date"] for r in schedule(START, END)["sessions"]]
+    assert acq["native_row_indices"] == [2, 3, 4, 5]
+    assert [r["native_row"] for r in acq["excluded_native_rows"]] == [0, 1, 6]
+    files, hashes = read_bundle(tmp_path / "snapshot")
+    assert len(json.loads(files["returned_bars.json"])["bars"]) == 7
+    assert [r["source_row"]["native_row"] for r in result["rows"]] == [2, 3, 4, 5]
+    assert all(r["source_row"]["native_sha256"] == hashes["files"]["returned_bars.json"] for r in result["rows"])
+
+
+def test_ibkr_overreturned_chunks_keep_only_each_requested_interval(tmp_path, security):
+    class ChunkIB(MockIB):
+        async def historical(self, contract, params):
+            self.calls.append(("historical", contract, params))
+            # Deliberately return the whole interval on every chunk. Interior
+            # duplicates from distinct lookbacks must not contaminate the frame.
+            return [SimpleNamespace(date=d.date(), **{k.lower(): v for k, v in row.items()})
+                    for d, row in self.frame.iterrows()]
+    frame = bars("2024-10-01", "2024-12-02", adjusted=False)
+    result = ib_provider(ChunkIB(frame=frame)).fetch_daily(security, "2024-10-01", "2024-12-02", tmp_path / "capture")
+    assert len(result["acquisition"]["requests"]) == 3
+    assert result["acquisition"]["status"] == "SUCCESS"
+    assert len(result["rows"]) == len(frame)
+    assert len(set(r["session_date"] for r in result["rows"])) == len(frame)
+    assert len(result["acquisition"]["excluded_native_rows"]) == 2 * len(frame)

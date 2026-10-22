@@ -24,11 +24,16 @@ def register(commands):
     compare.add_argument("--output", type=Path, required=True)
     from ..history.cli import register as register_history
     register_history(operations)
+    from ..events.cli import register as register_events
+    register_events(operations)
 
 
 def dispatch(args):
     from .storage import encode, write_bundle
 
+    if args.operation in {"events-freeze", "event-study"}:
+        from ..events.cli import dispatch as dispatch_events
+        return dispatch_events(args)
     if args.operation in {"history", "freeze", "compare-providers"}:
         from ..history.cli import dispatch as dispatch_history
         return dispatch_history(args)

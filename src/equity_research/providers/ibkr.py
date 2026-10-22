@@ -179,7 +179,8 @@ class IBKRDailyProvider:
                "client_version": None, "expected_client_version": CLIENT_VERSION,
                "status": "REQUEST_FAILED", "errors": [], "requests": [], "qualification": [],
                "qualified_contract": None, "historical_availability": "unknown",
-               "capture_level": "client_return", "coverage": None}
+               "capture_level": "client_return_native_plus_bounded_daily_frame", "coverage": None,
+               "frame_selection": "per_chunk_requested_interval", "excluded_native_rows": []}
         records, native_bars, backend = [], [], None
         try:
             backend = self.backend_factory()
@@ -233,9 +234,24 @@ class IBKRDailyProvider:
                                     day = datetime.strptime(raw, "%Y%m%d").date().isoformat()
                                 else:
                                     day = str(raw)  # Invalid timestamps remain diagnostics.
+                                # IBKR can return a longer lookback than the
+                                # requested calendar chunk. Keep every native bar
+                                # above, but explicitly bound the analysis frame.
+                                # Do not deduplicate conflicting in-window rows.
+                                try:
+                                    valid_day = date.fromisoformat(day).isoformat() == day
+                                except ValueError:
+                                    valid_day = False
+                                native_index = len(native_bars) - 1
+                                if valid_day and not cursor.isoformat() <= day <= final.isoformat():
+                                    acq["excluded_native_rows"].append({"native_row": native_index,
+                                        "session_date": day, "chunk_start": cursor.isoformat(),
+                                        "chunk_end": final.isoformat(), "reason": "OUTSIDE_REQUESTED_CHUNK"})
+                                    continue
                                 records.append({"Date": day, **{name.title(): getattr(bar, name, None)
                                                                 for name in ("open", "high", "low", "close", "volume")},
-                                                "_chunk_start": cursor.isoformat(), "_chunk_end": final.isoformat()})
+                                                "_chunk_start": cursor.isoformat(), "_chunk_end": final.isoformat(),
+                                                "_native_row": native_index})
                             entry.update(status="SUCCESS" if bars else "EMPTY_RESPONSE", rows=len(bars))
                             success = True
                             break
@@ -272,6 +288,7 @@ class IBKRDailyProvider:
                     acq["errors"].append({"category": "DISCONNECT_ERROR", "exception_type": type(exc).__name__})
         # Chunk bounds are retained in native rows sidecar; no boundary dedup.
         acq["native_row_chunks"] = [{"start": r.pop("_chunk_start"), "end": r.pop("_chunk_end")} for r in records]
+        acq["native_row_indices"] = [r.pop("_native_row") for r in records]
         frame = pd.DataFrame(records, columns=["Date", "Open", "High", "Low", "Close", "Volume"]).set_index("Date")
         acq["completed_at"] = self.clock().astimezone(UTC).isoformat()
         files = {"request.json": encode(request), "returned_frame.json": capture_frame(frame),
@@ -285,7 +302,7 @@ class IBKRDailyProvider:
         dates = [r["session_date"] for r in canonical["rows"] if r["session_date"]]
         expected = schedule(start, end)["sessions"]
         acq["coverage"] = {"rows": len(records), "first": min(dates) if dates else None,
-                           "last": max(dates) if dates else None}
+                           "last": max(dates) if dates else None, "native_rows": len(native_bars)}
         if acq["status"] == "SUCCESS" and (any(i["status"] == "FAIL" for i in canonical["issues"]) or
                 set(dates) != {s["session_date"] for s in expected} or
                 any(datetime.fromisoformat(s["closes_at"]) > begun for s in expected)):
