@@ -42,6 +42,10 @@ def read_acquisition(path, security):
     for row in result["rows"]:
         row.update(symbol=security.symbol, provider=provider, price_basis=basis["price_basis"],
                    volume_basis=basis["volume_basis"])
+        if provider == "ibkr" and "native_row_indices" in acq:
+            row["source_row"].update(native_file="returned_bars.json",
+                native_sha256=hashes["files"]["returned_bars.json"],
+                native_row=acq["native_row_indices"][row["source_row"]["row"]])
     # Retain all native observations in the snapshot. Completed-session filtering is
     # explicit and only affects the reusable cache; it never edits the capture.
     sessions = {s["session_date"]: s for s in schedule(req["start"], req["end"])["sessions"]}

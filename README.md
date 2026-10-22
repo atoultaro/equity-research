@@ -4,8 +4,8 @@ One offline daily-bar equity swing research slice:
 candidate → qualification → buy-stop plan → replay → dollar risk/cost ledger →
 reproducible artifacts. Python3.12+, one security, one manual candidate, long only.
 The included SYNTH data is synthetic acceptance evidence, not a profitable-strategy
-claim. There is no broker or vendor-screen integration. Optional data preparation
-is separate from the fully offline replay engine; see the workflow below.
+claim. Replay is fully offline. Optional historical acquisition and data preparation
+are separate workflows; see below.
 
 ## Install
 
@@ -207,3 +207,12 @@ PR 5E subsequently verified one real, read-only paper-TWS historical request:
 five SPY sessions were captured, validated, cached, frozen and loaded offline.
 See [the live smoke-test record](docs/LIVE_IBKR_EQUITY_SMOKE_TEST.md) for the
 confirmed prerequisites, exact scope, local artifacts and remaining data limits.
+
+PR 6A adds the first actual AAPL individual-stock dataset: 703 IBKR daily sessions
+plus independently sourced earnings, dividend declarations and historical splits.
+[The AAPL event-aware study](docs/AAPL_EVENT_AWARE_RESEARCH.md) records acquisition
+hashes, source evidence, unresolved ex-dates, session alignment, historical
+knowledge safeguards and offline reproduction. `data events-freeze` and
+`data event-study` compose immutable event sidecars with existing price datasets;
+`equity_research.events.load_event_study` loads them offline. Actual payloads stay
+in ignored local storage; committed tests use deterministic synthetic evidence.
