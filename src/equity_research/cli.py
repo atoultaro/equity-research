@@ -16,8 +16,13 @@ def main(argv=None) -> int:
     run.add_argument("--source-commit", help="full source SHA for installed-wheel use outside a checkout")
     from .ingestion.cli import register
     register(commands)
+    from .swing.cli import register as register_swing
+    register_swing(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "swing":
+            from .swing.cli import dispatch as dispatch_swing
+            return dispatch_swing(args)
         if args.command == "data":
             from .ingestion.cli import dispatch
             return dispatch(args)
