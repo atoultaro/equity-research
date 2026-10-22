@@ -108,6 +108,7 @@ def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
                   "basis_verified": basis["verified"], "potential_corporate_action_effects": [],
                   "corporate_action_overlap_uncertainty": [], "corporate_action_window": None,
                   "previous_close": None, "first_post_open": None, "overnight_gap_pct": None,
+                  "first_post_close": None,
                   "session_high_low": None, "volume_relative20": None, "pre_event_atr14": None,
                   "subsequent_close_returns_pct": {str(h): None for h in (1, 5, 10)}}
         results.append(record)
@@ -141,6 +142,7 @@ def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
         pre, post = by_day[previous], by_day[reaction]
         pc, po = float(pre["close"]), float(post["open"])
         record.update(status="PARTIAL", previous_session=previous, previous_close=pc, first_post_open=po,
+                      first_post_close=float(post["close"]),
                       overnight_gap_pct=(po / pc - 1) * 100,
                       session_high_low=float(post["high"]) - float(post["low"]))
         volume_days = days[max(0, i - 20):i]
@@ -174,6 +176,7 @@ def diagnostics(dataset, symbol, event_dataset, alignments, calendar):
         if event["event_type"] == "DIVIDEND":
             record["cash_per_share_source_quote"] = event["payload"]["cash_per_share"]
             record["close_change_dollars"] = float(post["close"]) - pc
+            record["open_change_dollars"] = po - pc
             record["interpretation"] = "NATIVE_REPORTED_CLOSE_COMPARISON_NOT_MECHANICAL_DIVIDEND_ADJUSTMENT"
         if not record["issues"]:
             record["status"] = "AVAILABLE"
