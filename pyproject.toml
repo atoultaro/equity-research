@@ -11,6 +11,8 @@ dependencies = ["market-shared==0.2.0"]
 
 [project.optional-dependencies]
 test = ["pytest>=8,<10"]
+data = ["pandas==2.2.3", "numpy==2.2.4", "exchange-calendars==4.13.1", "tzdata==2025.2"]
+yahoo = ["yfinance==0.2.66"]
 
 [project.scripts]
 equity-research = "equity_research.cli:main"
