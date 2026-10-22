@@ -216,3 +216,10 @@ knowledge safeguards and offline reproduction. `data events-freeze` and
 `data event-study` compose immutable event sidecars with existing price datasets;
 `equity_research.events.load_event_study` loads them offline. Actual payloads stay
 in ignored local storage; committed tests use deterministic synthetic evidence.
+
+PR 6B applies the same framework to Alphabet Class C (`GOOG`).
+[The GOOG evidence study](docs/GOOG_EVENT_AWARE_RESEARCH.md) records a successful
+five-session IBKR capture, the subsequent error-162 block on the full target,
+independently sourced corporate events and an offline AAPL/GOOG completeness
+comparison. Missing prices, unresolved release clocks and unknown ex-dates remain
+explicit; the partial dataset supplies no trading conclusion.
