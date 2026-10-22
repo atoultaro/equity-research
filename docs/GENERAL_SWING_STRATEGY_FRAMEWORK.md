@@ -129,6 +129,8 @@ knowledge archive. This conservative known-event rule cannot guarantee absence o
 undiscovered discontinuities. Native IBKR split-adjusted price and volume semantics
 remain unresolved for execution; no new adjustment or event publication rule is
 introduced. See the existing AAPL/GOOG studies for source-specific limitations.
+Embedded studies also retain retrospective event/price-path diagnostics; detection
+does not consume those diagnostics or their future outcomes.
 
 ## Plans versus strict execution
 
@@ -164,6 +166,14 @@ security through an order's expiry or a position's exit session; competing plans
 are retained as explicit rejections. There is no same-session re-entry. Each
 replay uses the declared fixed initial capital/risk budget; per-trade final cash
 is not a compounded portfolio account or aggregate NAV.
+
+`--execution-config` reuses PR 4's validated Config record for sizing, price grid,
+costs, target and holding settings. Legacy qualification, entry-buffer and
+planner-stop fields in that record do not redefine the new strategy; its stop
+and expiry come from `swing_strategy_config_v1`. Defaults retain initial capital
+10,000 dollars, risk budget 1%, 2R target, ten-session maximum holding, one-cent
+price increment and adverse per-share slippage, 0.005-dollar per-share commission,
+and 0.50-dollar fees per order.
 
 ## Actual local inventories
 
@@ -272,6 +282,42 @@ calendar regeneration, provider SDK, network, TWS or fallback is required. Given
 the same input paths/bytes, configuration and implementation, repeated bundles
 are byte-identical. Stable IDs hash security, price input, config, setup and trigger,
 not wall-clock run times. No existing frozen input/run is overwritten.
+
+## Hashes and verification
+
+The implementation commit is `3be17386aef83f0f195ba92bd094e3d20699f2b2`.
+Final research outputs use local root
+`data/research_datasets/pr7b-swing-6k_eq8qj-v2`; v1 remains preserved and has
+identical semantic records. Final synthetic replay is
+`data/research_datasets/pr7b-swing-synthetic-6k_eq8qj-replay-v2`; v1 also remains.
+Each output embeds exact dependencies, so original paths are not required to load it.
+
+| Input | Bundle SHA256 |
+| --- | --- |
+| AAPL prices | `e32427f6db1c0cf6bbb21104a460c4d7f4f4bb29274b28144606facec056ecdf` |
+| GOOG prices | `2d6d7dcc22183a80de0c87af6897b29171f118b0ce829d491429292132cd2f81` |
+| AAPL study v4 | `d967ba2ce3da7f04816486bc737c69f34199fd3aa0ccb384e637fac1a7f9ca4f` |
+| GOOG study v2 | `caaf0c79b18ee75fb927d230c5a66ffb3c285df797cf953bcb91c1e3dbdd1560` |
+| MarketContext | `d9a5547daf856364fdb398431ce17498d26c039ff926d44016bc4f5a9cddf271` |
+| Synthetic input | `1c152be12a804c676d14b61aa4fd964a3e67cb7637fcfb9b529c95ce66b274b8` |
+
+| Final output | Bundle SHA256 |
+| --- | --- |
+| AAPL continuation | `4c499694c32d69b367a198dc7668936ae437e21be93d881a05dc26875e23a40a` |
+| AAPL failed breakout | `97da500b27f13380902b487e4996d871fb4497fde389f3f4b2e755288138dcd7` |
+| GOOG continuation | `0368acdf9268020dece37e859d75099ec5f5c322007ed5e63abb34bec3e4f3e9` |
+| GOOG failed breakout | `78c054ac03ef2c95278876974fd852c0abda2d8ef04947a0535afe15bc86aefe` |
+| Synthetic strict replay | `f9acf458525cda14e803dec96df642ce14d53ed7c2a30bb644a9ca82a8e1141f` |
+
+Complete offline command: `.venv/bin/python -m pytest -q`.
+Result: **336 passed in 329.08s (0:05:29)**, zero failures or skips, including
+52 new strategy regression cases and all 284 existing cases. Core-only clean
+installation and optional-SDK-free frozen loading passed. `git diff --check` passed.
+All 597 pre-existing cache/research files retained their starting SHA256s.
+All 128 actual signals were independently checked against the latest strictly
+eligible context row, with unique identities and provisional plan sizing.
+Complete input, output, component and baseline-preservation hashes appear in the
+linked aggregate evidence JSON; no licensed row-level observations are committed.
 
 ## Limits and later work
 
