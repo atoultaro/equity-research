@@ -57,3 +57,31 @@ def test_standard_results_use_actual_initial_risk_and_engine_fees():
 def test_experimental_result_paths_are_immutable(tmp_path):
     write_result(tmp_path/'result.json',{'synthetic':True})
     with pytest.raises(FileExistsError):write_result(tmp_path/'result.json',{'synthetic':False})
+
+
+def test_native_cost_audit_separates_rounding_and_actual_risk():
+    from experiments.backtest_engines.analyze import cost_audit
+    case={'intent':{'stop':'125.50','trigger':'130.60','initial_cash':'10000'},
+          'rows':[{'session_date':'2026-03-11','open':'132'},{'session_date':'2026-03-13','open':'136'}]}
+    result={'final_cash':'10245.99','final_equity':'10245.99','fills':[
+        {'side':'BUY','quantity':'19','price':'132.01','total_fee':'0.60','at':'2026-03-11T20:00:00Z','order_id':'ENTRY'},
+        {'side':'SELL','quantity':'19','price':'145.02','total_fee':'0.60','at':'2026-03-13T20:00:00Z','order_id':'TARGET'}]}
+    audit=cost_audit(case,result,'nautilus','common')
+    assert Decimal(audit['gross_before_slippage_dollars'])==Decimal('247.57')
+    assert Decimal(audit['modeled_slippage_dollars'])==Decimal('0.38')
+    assert Decimal(audit['fee_rounding_residual_dollars'])==Decimal('0.01')
+    assert audit['native_equity_reconciles'] and audit['gross_to_net_reconciles']
+    result['fills'].append(result['fills'][1])
+    assert cost_audit(case,result,'nautilus','common')['status']=='INVALID_LONG_BRACKET_OVERCLOSE'
+    assert cost_audit(case,result,'nautilus','common')['net_realized_r'] is None
+
+
+def test_repeatability_comparison_preserves_state_differences():
+    from copy import deepcopy
+    from experiments.backtest_engines.analyze import repeat_summary
+    a={'final_cash':'100','fills':[{'at':'2022-01-03T20:00:00Z','instrument_id':s,'side':'BUY','price':'1','quantity':'1'} for s in ('a','b')]}
+    b=deepcopy(a);b['fills'].reverse()
+    result=repeat_summary(a,b)
+    assert not result['ordered_content_equal'] and result['economic_content_equal']
+    b['final_cash']='99'
+    assert not repeat_summary(a,b)['economic_content_equal']

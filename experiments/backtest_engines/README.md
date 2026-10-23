@@ -108,3 +108,61 @@ The comparative analysis and results are in `docs/BACKTEST_ENGINE_EVALUATION.md`
 Raw execution results, costs, repetitions, environment manifests and hashes are
 published with the report. This is an evaluation adapter, not a production engine
 migration or an alteration of PR7C signal-outcome analysis.
+
+## Additional identity probe and publication
+
+The identity probe projects the actual PR8A pilot master at three historical
+cutoffs, separately from the invented lifecycle control. Use unused paths:
+
+```sh
+PYTHONPATH=src:. .venv/bin/python -m experiments.backtest_engines.identity_probe \
+  --master data/research_datasets/pr8a-pilot-8xc4tbfk-v1/security_master \
+  --output NEW_IDENTITY_INPUTS
+/usr/bin/sandbox-exec -p '(version 1)(allow default)(deny network*)' \
+  runs/backtest-engine-spike-v1/nt-env/bin/python -m experiments.backtest_engines.identity_probe \
+  --inputs NEW_IDENTITY_INPUTS --output NEW_NT_IDENTITY_RESULT.json
+```
+
+For LEAN, reuse the **configuration and synthetic BANCH input files** produced by
+the compatibility run; change only the algorithm and output paths. This is the
+zero-order identity control used to isolate the shutdown failure:
+
+```python
+# Execute with core Python from the repository root, after the compatibility run.
+import json, os, pathlib, subprocess
+root = pathlib.Path.cwd()
+work = root / 'NEW_LEAN_IDENTITY_RUN'
+work.mkdir(exist_ok=False)
+config = json.loads((root / 'NEW_COMPATIBILITY_RUNS/lean-compatibility/config.json').read_text())
+config.update({
+    'algorithm-type-name': 'SpikeIdentity',
+    'algorithm-location': str(root / 'experiments/backtest_engines/lean_identity_algorithm.py'),
+    'results-destination-folder': str(work / 'native-results'),
+    'object-store-root': str(work / 'object-store'),
+})
+(work / 'config.json').write_text(json.dumps(config))
+toolchain = root / 'runs/backtest-engine-spike-v1/toolchain'
+binary = toolchain / 'Lean/Launcher/bin/Release/QuantConnect.Lean.Launcher.dll'
+env = dict(os.environ, SPIKE_CODE_ROOT=str(root),
+           SPIKE_IDENTITY_INPUTS=str(root / 'NEW_IDENTITY_INPUTS'),
+           SPIKE_OUTPUT=str(work / 'result.json'), DOTNET_CLI_TELEMETRY_OPTOUT='1',
+           PYTHONNET_PYDLL='/Library/Frameworks/Python.framework/Versions/3.11/lib/libpython3.11.dylib')
+with (work / 'launcher.log').open('x') as log:
+    run = subprocess.run(['/usr/bin/sandbox-exec', '-p', '(version 1)(allow default)(deny network*)',
+        str(toolchain / 'dotnet/dotnet'), str(binary), '--config', str(work / 'config.json')],
+        env=env, cwd=binary.parent, stdout=log, stderr=subprocess.STDOUT, timeout=120)
+(work / 'process.json').write_text(json.dumps({'returncode': run.returncode,
+                                            'network_denied': True, 'orders': 0}))
+```
+
+An output file does not override that process return code. These probes test
+native identifiers; they do not claim trading across a venue transfer or reused
+ticker has been validated.
+
+`publish.py --help` describes freezing all three main run groups. The publisher
+used for the checked-in evidence also expects the recorded toolchain installation
+reports, original preservation inventory, core-regression log and identity results
+under the evaluated run root. It is an audit of that recorded run layout, rather
+than an installer. Analysis can be inspected directly in `analyze.py`; no native
+engine is imported by the core offline tests. Never regenerate the committed
+evidence in place; use a new version and report its new hash.

@@ -93,6 +93,11 @@ effect of an ordinary run.
 
 ## Research and execution boundaries
 
+The isolated [LEAN versus NautilusTrader evaluation](docs/BACKTEST_ENGINE_EVALUATION.md)
+records actual synthetic engine runs, historical-universe compatibility probes
+and bounded 1,000-stock measurements. It recommends retaining PR4 temporarily;
+the experimental frameworks are not core dependencies.
+
 See [MVP specification](docs/MVP_SPEC.md) for exact data, qualification, sizing,
 cost, gap, expiration and same-day ambiguity contracts, and
 [research conventions](docs/RESEARCH_CONVENTIONS.md) for acceptance evidence and

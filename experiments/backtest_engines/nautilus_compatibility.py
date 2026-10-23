@@ -37,11 +37,15 @@ def main():
     rows=control['rows']
     if args.split_adjusted:
         rows=[{**r,**({k:str(Decimal(r[k])*Decimal('0.5')) for k in ('open','high','low','close')} if r['session_date']<control['split_date'] else {})} for r in rows]
+    if args.split_adjusted:
+        for obj in (inst,renamed):obj.info.update(price_basis='SPLIT_ADJUSTED',volume_basis='SPLIT_ADJUSTED_SHARES')
+        rows=[{**r,'volume':str(Decimal(r['volume'])*2)} if r['session_date']<control['split_date'] else r for r in rows]
     e.add_data(make_bars(inst,rows))
     status=InstrumentStatus(inst.id,MarketStatusAction.HALT,ns('2022-04-19T13:30:00Z'),ns('2022-04-19T13:30:00Z'),reason='SYNTHETIC_HALT',is_trading=False)
-    e.add_data([status]);strategy=Probe(inst);e.add_strategy(strategy);e.run()
+    ended=InstrumentStatus(inst.id,MarketStatusAction.NOT_AVAILABLE_FOR_TRADING,ns('2022-04-22T20:00:00Z'),ns('2022-04-22T20:00:00Z'),reason='DELISTED_TERMINAL_UNKNOWN',is_trading=False)
+    e.add_data([status,ended]);strategy=Probe(inst);e.add_strategy(strategy);e.run()
     result={'split_adjusted_view':args.split_adjusted,'engine':'nautilus','version':nautilus_trader.__version__,'input_bundle_sha256':sha,'control':control,
-        'identity_count':len(e.cache.instruments()),'identity_map':{str(i.id):str(i.raw_symbol) for i in e.cache.instruments()},
+        'feed_basis':{'price':'SPLIT_ADJUSTED' if args.split_adjusted else 'RAW_TRADED','volume':'SPLIT_ADJUSTED_SHARES' if args.split_adjusted else 'RAW_SHARES'},'delisting_status_horizon':'2022-04-22T20:00:00Z','identity_count':len(e.cache.instruments()),'identity_map':{str(i.id):str(i.raw_symbol) for i in e.cache.instruments()},
         'native_bars':strategy.rows,'fills':strategy.fills,'rejected':strategy.rejected,
         'positions':[{'instrument':str(p.instrument_id),'quantity':str(p.quantity.as_decimal()),'unrealized_pnl_at_49':str(p.unrealized_pnl(Price.from_str('49.00')).as_decimal())} for p in e.cache.positions_open()],
         'final_cash':str(e.cache.account_for_venue(Venue('XNAS')).balance_total(USD).as_decimal()),
