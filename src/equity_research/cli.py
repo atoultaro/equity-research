@@ -18,8 +18,13 @@ def main(argv=None) -> int:
     register(commands)
     from .swing.cli import register as register_swing
     register_swing(commands)
+    from .outcomes.cli import register as register_outcomes
+    register_outcomes(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "outcomes":
+            from .outcomes.cli import dispatch as dispatch_outcomes
+            return dispatch_outcomes(args)
         if args.command == "swing":
             from .swing.cli import dispatch as dispatch_swing
             return dispatch_swing(args)
