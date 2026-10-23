@@ -353,6 +353,40 @@ test results are recorded in
 Licensed row-level prices, original signals, window endpoints and outcomes remain
 local in ignored research storage. Committed tables contain aggregates only.
 
+## Final artifact and verification
+
+Implementation commit: `7ccec23c17091ded432cf360e7ff92aef530a00f`.
+The final self-contained bundle is
+`data/research_datasets/pr7c-outcomes-cy8dhfxk-v2`. The preliminary v1 bundle
+remains preserved; all outcome, signal, context, cluster, comparison, definition
+and summary records are semantically identical. Only implementation provenance
+changed after final identity-validation checks were committed.
+
+| Source or output | Bundle SHA256 |
+| --- | --- |
+| AAPL continuation signals | `4c499694c32d69b367a198dc7668936ae437e21be93d881a05dc26875e23a40a` |
+| AAPL failed-breakout signals | `97da500b27f13380902b487e4996d871fb4497fde389f3f4b2e755288138dcd7` |
+| GOOG continuation signals | `0368acdf9268020dece37e859d75099ec5f5c322007ed5e63abb34bec3e4f3e9` |
+| GOOG failed-breakout signals | `78c054ac03ef2c95278876974fd852c0abda2d8ef04947a0535afe15bc86aefe` |
+| Final combined outcomes v2 | `adc2f662c42b5199ff01c7810d205794a9e8418c19496b1f1660144e30fb978a` |
+
+Exact stock-price, event-study, context, configuration, component and baseline
+hashes accompany the aggregate evidence. The captured MarketContext hash remains
+`d9a5547daf856364fdb398431ce17498d26c039ff926d44016bc4f5a9cddf271`.
+All 1,045 pre-existing cache/research files retain their starting hashes; original
+PR 4–7B execution, history, event, market-context and strategy modules are unchanged.
+
+Final command: `.venv/bin/python -m pytest -q`.
+Result: **400 passed in 74.47s (0:01:14)**, zero failures/skips, including all 336
+prior cases and 64 new outcome cases. Core-only installation, SDK/provider/swing
+import-denied frozen loading, no-regeneration/no-context-lookup spies, immutable
+byte reproduction, input-order independence and semantic tamper rejection passed.
+`git diff --check` passed. An independent source-price Fraction calculation
+checked every available return, excursion and ATR unit (1,147 rows), all 36
+stock/strategy/reference/horizon return means/medians and excursion medians; it
+also verified all five unavailable paths and the independent overlap graph.
+All 128 original signals and captured context links compare exactly with inputs.
+
 ## Scope and next research requirements
 
 The initial population is AAPL and Alphabet Class C GOOG in roughly three years,
