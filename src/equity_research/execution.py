@@ -53,6 +53,25 @@ def _simulate(dataset: Dataset, candidate: Candidate, config: Config) -> dict:
     if decision["status"] != "ELIGIBLE":
         return result
     order = plan_order(dataset, candidate, decision, config)
+    return replay_order(dataset, order, config, result=result)
+
+
+def replay_order(dataset: Dataset, order: dict, config: Config, *, result=None) -> dict:
+    """Replay one already planned long stop using the original PR4 fill engine.
+
+    Admission and causal order construction belong to the calling adapter. This
+    primitive is also used by the unchanged legacy qualification/planning path.
+    """
+    from copy import deepcopy
+    with localcontext(Context(prec=28)):
+        return _replay_order(dataset, deepcopy(order), config, result=result)
+
+
+def _replay_order(dataset, order, config, *, result=None):
+    if order["side"] != "buy" or order["order_type"] != "stop":
+        raise ValueError("only long buy-stop replay is supported")
+    result = result if result is not None else {
+        "status": "CREATED", "reason_codes": [], "fills": [], "trade": None}
     result["order"] = order
     if not 0 < order["initial_stop"] < order["trigger"]:
         order["status"] = result["status"] = "REJECTED"

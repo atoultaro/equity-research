@@ -1,0 +1,368 @@
+{
+  "base_commit": "c5a8b649783d44d2cd6c2919c6cc8e0e22ab7772",
+  "branch": "feat/general-swing-strategies-v1",
+  "context_reference_set_id": "52924a3c9b66059021e527867b32929079a3b96d46322f7817e8b09e633632cb",
+  "context_source_price_hashes": {
+    "QQQ": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+    "RSP": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52",
+    "SPY": "6b15fa426119634f34b5469654853593d405318909bf103bfbcd650d0d4a9d52"
+  },
+  "implementation_commit": "3be17386aef83f0f195ba92bd094e3d20699f2b2",
+  "implementation_sha256": {
+    "scripts/make_swing_strategy_example.py": "a49410ad0048b1f559bc8b02a0d08afb5fbca059a83ab79d99fdf885a0b9ce78",
+    "scripts/run_frozen_swing_study.py": "3854feda4db3e9d990cfe300b34c1c1098d91f341865d79ca2176cfe64952404",
+    "src/equity_research/cli.py": "80bf862817baae4a4fbabd9cc1befb1a98e194787acb1eee98a0fb18524510e0",
+    "src/equity_research/execution.py": "3990f114290aa9ee0b2e58601560caf7b3e65e0be9f2ca2d744385bbefb19389",
+    "src/equity_research/swing/__init__.py": "d2df4cc3a4f4c1381eb47b1158046be19e6083940e554a1549668278b7c47bbe",
+    "src/equity_research/swing/cli.py": "847dab50136aecaf411bf3c2942bace16224be8a9e2b2d646d0f0ea0e84e8f7e",
+    "src/equity_research/swing/dataset.py": "ba298a0aa37077e63429e581598d50d102a53783edeb0cd29d0ea31ec8642ca2",
+    "src/equity_research/swing/engine.py": "508b6aa6eb55ea225144095ac4d24c763cbe1114c11373bb845e073fc86fe725",
+    "src/equity_research/swing/execution.py": "567dc3c13bf46222f3436562adfc3b198b257ebf1f6f650a4d068770f2705bcf",
+    "src/equity_research/swing/model.py": "92fcb6c9f2768db498e7a718502e045d03f80f4947a73372bc2e4445e06cce7a"
+  },
+  "interaction_audit": {
+    "account_position_balance_execution_queries": 0,
+    "broker_connections": 0,
+    "broker_setting_changes": 0,
+    "finwhaling_changes": 0,
+    "merged": false,
+    "optimization": false,
+    "order_submissions_modifications_cancellations": 0,
+    "pr7c_started": false,
+    "real_price_or_signal_rows_redistributed": false,
+    "vendor_fetches": 0
+  },
+  "preservation": {
+    "baseline_inventory_sha256": "dc3f366b6855940bbe79a5c2e34105f65c0023593cff96feebb515e168a68812",
+    "changed_or_missing": 0,
+    "preexisting_files": 597,
+    "previous_and_intermediate_immutable_outputs_retained": true
+  },
+  "research": {
+    "context": {
+      "historical_dissemination_verified": false,
+      "path": "data/research_datasets/pr7a-market-jfyafm7i-context-v1",
+      "quality": {
+        "complete_core_rows": 703,
+        "complete_rows_by_group": {
+          "breadth_features": 0,
+          "leadership_features": 0,
+          "participation_proxies": 703,
+          "trend_features": 703,
+          "volatility_features": 703
+        },
+        "descriptive_state_counts": {
+          "DOWNTREND": 15,
+          "MIXED": 48,
+          "UPTREND": 640
+        },
+        "evaluation_rows": 703,
+        "first_complete_core_session": "2024-01-02",
+        "historical_availability_verified": false,
+        "incomplete_core_rows": 0,
+        "last_complete_core_session": "2026-10-20",
+        "missing_feature_counts": {
+          "historical_constituents.above_sma200": 703,
+          "historical_constituents.above_sma50": 703,
+          "historical_constituents.advance_decline": 703,
+          "historical_constituents.new_high52w": 703,
+          "historical_constituents.new_low52w": 703,
+          "historical_constituents.trend_template": 703,
+          "historical_universe.valid_setup_share": 703
+        },
+        "rows_with_missing_optional_features": 703,
+        "schema_version": "market_feature_quality_v1",
+        "trading_policy": "NONE"
+      },
+      "sha256": "d9a5547daf856364fdb398431ce17498d26c039ff926d44016bc4f5a9cddf271"
+    },
+    "end": "2026-10-20",
+    "inputs": {
+      "AAPL": {
+        "basis": {
+          "data_type": "TRADES_RTH",
+          "limitation": "TRADES documented split-adjusted, not dividend-adjusted; filtered feed; units unverified",
+          "price_basis": "IBKR_TRADES_SPLIT_ADJUSTED_DOCUMENTED",
+          "verified": false,
+          "volume_basis": "IBKR_NATIVE_UNITS_UNVERIFIED"
+        },
+        "price_dataset_sha256": "e32427f6db1c0cf6bbb21104a460c4d7f4f4bb29274b28144606facec056ecdf",
+        "security_id": "research:AAPL:common:USD:v1",
+        "sessions": 703,
+        "study_path": "data/research_datasets/pr6b-aapl-5b2nlv7-study-v4",
+        "study_sha256": "d967ba2ce3da7f04816486bc737c69f34199fd3aa0ccb384e637fac1a7f9ca4f"
+      },
+      "GOOG": {
+        "basis": {
+          "data_type": "TRADES_RTH",
+          "limitation": "TRADES documented split-adjusted, not dividend-adjusted; filtered feed; units unverified",
+          "price_basis": "IBKR_TRADES_SPLIT_ADJUSTED_DOCUMENTED",
+          "verified": false,
+          "volume_basis": "IBKR_NATIVE_UNITS_UNVERIFIED"
+        },
+        "price_dataset_sha256": "2d6d7dcc22183a80de0c87af6897b29171f118b0ce829d491429292132cd2f81",
+        "security_id": "research:GOOG:ClassC:USD:v1",
+        "sessions": 703,
+        "study_path": "data/research_datasets/pr6b-goog-5b2nlv7-study-v2",
+        "study_sha256": "caaf0c79b18ee75fb927d230c5a66ffb3c285df797cf953bcb91c1e3dbdd1560"
+      }
+    },
+    "interpretation": "COUNTS_ONLY_NO_EDGE_OR_EXECUTION_CLAIM; correlated overlapping signals not independent samples",
+    "inventories": {
+      "AAPL:breakout_continuation_v1": {
+        "bundle_sha256": "4c499694c32d69b367a198dc7668936ae437e21be93d881a05dc26875e23a40a",
+        "configuration_sha256": "ae67b66842aa63d7ae972a0d47bc122525fc2489e1e87f45de599e7be9d8448f",
+        "context_strict_cutoff_verified_for_every_signal": true,
+        "corporate_event_counts": {
+          "DIVIDEND": 11,
+          "EARNINGS": 11,
+          "SPLIT": 2
+        },
+        "output_path": "data/research_datasets/pr7b-swing-6k_eq8qj-v2/aapl-breakout_continuation_v1",
+        "quality": {
+          "breakout_attempts": 95,
+          "confirmed_triggers": 42,
+          "context_available": 42,
+          "context_state_counts": {
+            "UPTREND": 42
+          },
+          "context_unavailable": 0,
+          "evaluable_sessions": 504,
+          "evaluation_sessions": 703,
+          "excluded_observations": 443,
+          "failed_break_confirmations": 0,
+          "fills": "NOT_COMPUTED_RESEARCH_MODE",
+          "incomplete_unavailable_observations": 199,
+          "lifecycle_outcomes": {},
+          "performance": "NOT_COMPUTED",
+          "setup_observations": 260
+        },
+        "unresolved_ex_dates": 11
+      },
+      "AAPL:failed_breakout_v1": {
+        "bundle_sha256": "97da500b27f13380902b487e4996d871fb4497fde389f3f4b2e755288138dcd7",
+        "configuration_sha256": "bfb7229208527b0b2d39b85887855e1ad5b27b00102b14e22914b4b977c5e399",
+        "context_strict_cutoff_verified_for_every_signal": true,
+        "corporate_event_counts": {
+          "DIVIDEND": 11,
+          "EARNINGS": 11,
+          "SPLIT": 2
+        },
+        "output_path": "data/research_datasets/pr7b-swing-6k_eq8qj-v2/aapl-failed_breakout_v1",
+        "quality": {
+          "breakout_attempts": 126,
+          "confirmed_triggers": 29,
+          "context_available": 29,
+          "context_state_counts": {
+            "UPTREND": 29
+          },
+          "context_unavailable": 0,
+          "evaluable_sessions": 683,
+          "evaluation_sessions": 703,
+          "excluded_observations": 20,
+          "failed_break_confirmations": 29,
+          "fills": "NOT_COMPUTED_RESEARCH_MODE",
+          "incomplete_unavailable_observations": 20,
+          "lifecycle_outcomes": {
+            "CONFIRMED": 29,
+            "EXPIRED": 37,
+            "IMMEDIATE_FAILURE_OBSERVATION_ONLY": 60
+          },
+          "performance": "NOT_COMPUTED",
+          "setup_observations": 126
+        },
+        "unresolved_ex_dates": 11
+      },
+      "GOOG:breakout_continuation_v1": {
+        "bundle_sha256": "0368acdf9268020dece37e859d75099ec5f5c322007ed5e63abb34bec3e4f3e9",
+        "configuration_sha256": "ae67b66842aa63d7ae972a0d47bc122525fc2489e1e87f45de599e7be9d8448f",
+        "context_strict_cutoff_verified_for_every_signal": true,
+        "corporate_event_counts": {
+          "DIVIDEND": 10,
+          "EARNINGS": 11,
+          "SPLIT": 1
+        },
+        "output_path": "data/research_datasets/pr7b-swing-6k_eq8qj-v2/goog-breakout_continuation_v1",
+        "quality": {
+          "breakout_attempts": 90,
+          "confirmed_triggers": 37,
+          "context_available": 37,
+          "context_state_counts": {
+            "MIXED": 1,
+            "UPTREND": 36
+          },
+          "context_unavailable": 0,
+          "evaluable_sessions": 504,
+          "evaluation_sessions": 703,
+          "excluded_observations": 423,
+          "failed_break_confirmations": 0,
+          "fills": "NOT_COMPUTED_RESEARCH_MODE",
+          "incomplete_unavailable_observations": 199,
+          "lifecycle_outcomes": {},
+          "performance": "NOT_COMPUTED",
+          "setup_observations": 280
+        },
+        "unresolved_ex_dates": 9
+      },
+      "GOOG:failed_breakout_v1": {
+        "bundle_sha256": "78c054ac03ef2c95278876974fd852c0abda2d8ef04947a0535afe15bc86aefe",
+        "configuration_sha256": "bfb7229208527b0b2d39b85887855e1ad5b27b00102b14e22914b4b977c5e399",
+        "context_strict_cutoff_verified_for_every_signal": true,
+        "corporate_event_counts": {
+          "DIVIDEND": 10,
+          "EARNINGS": 11,
+          "SPLIT": 1
+        },
+        "output_path": "data/research_datasets/pr7b-swing-6k_eq8qj-v2/goog-failed_breakout_v1",
+        "quality": {
+          "breakout_attempts": 110,
+          "confirmed_triggers": 20,
+          "context_available": 20,
+          "context_state_counts": {
+            "UPTREND": 20
+          },
+          "context_unavailable": 0,
+          "evaluable_sessions": 683,
+          "evaluation_sessions": 703,
+          "excluded_observations": 20,
+          "failed_break_confirmations": 20,
+          "fills": "NOT_COMPUTED_RESEARCH_MODE",
+          "incomplete_unavailable_observations": 20,
+          "lifecycle_outcomes": {
+            "CONFIRMED": 20,
+            "EXPIRED": 34,
+            "IMMEDIATE_FAILURE_OBSERVATION_ONLY": 56
+          },
+          "performance": "NOT_COMPUTED",
+          "setup_observations": 110
+        },
+        "unresolved_ex_dates": 9
+      }
+    },
+    "schema_version": "pr7b_real_inventory_v1",
+    "start": "2024-01-02"
+  },
+  "research_audit": {
+    "actual_stock_fills_or_realized_pnl_computed": false,
+    "all_plans_have_provisional_quantity_and_dollar_risk": true,
+    "context_filter_applied": false,
+    "future_context_rows_attached": 0,
+    "latest_strictly_eligible_context_verified": 128,
+    "native_basis_rejection_regression": "test_native_basis_and_corporate_actions_rejected_by_unchanged_strict_loader",
+    "real_datasets_strict_execution_admitted": false,
+    "same_close_fills": 0,
+    "signals": 128,
+    "unique_signal_ids": 128
+  },
+  "research_summary_bundle_sha256": "c3af7af148af720f0f878b5749d4544856001d9a57321b4b16677b524c5abf46",
+  "schema_version": "pr7b_aggregate_evidence_v1",
+  "semantic_reproduction": {
+    "compared_components": [
+      "strategy_config.json",
+      "strategy_manifest.json",
+      "setup_observations.json",
+      "triggers.json",
+      "signals.json",
+      "trade_plans.json",
+      "market_context_links.json",
+      "exclusions.json",
+      "setup_outcomes.json",
+      "quality_report.json",
+      "corporate_action_inventory.json"
+    ],
+    "comparisons": {
+      "AAPL:breakout_continuation_v1": {
+        "preserved_v1_bundle_sha256": "96fb14e4d838cfe678e1aa78a61ca9ccd4eb9c106d561ea9c17785c2d829add0",
+        "same_semantic_outputs": true
+      },
+      "AAPL:failed_breakout_v1": {
+        "preserved_v1_bundle_sha256": "279ad213519e800755e607cdf684db49128c1959d0c55543b5624892927708f6",
+        "same_semantic_outputs": true
+      },
+      "GOOG:breakout_continuation_v1": {
+        "preserved_v1_bundle_sha256": "2e298eef29fa9ff44b0e20c1c824792119056a7ad55061a87f700feef25e1f99",
+        "same_semantic_outputs": true
+      },
+      "GOOG:failed_breakout_v1": {
+        "preserved_v1_bundle_sha256": "78c054ac03ef2c95278876974fd852c0abda2d8ef04947a0535afe15bc86aefe",
+        "same_semantic_outputs": true
+      }
+    },
+    "version_note": "v1 preserved; v2 frozen after implementation commit, including final admission/dependency guards. Identical semantic outputs."
+  },
+  "shared_source_commit": "57fc6c30836d13a7fcfc3c1a9b6b496fe472d555",
+  "synthetic": {
+    "cancellation": "UNSUPPORTED_NO_EXTERNAL_CANCEL_EVENTS",
+    "capital_policy": "FIXED_INITIAL_CAPITAL_PER_REPLAY; NO_COMPOUNDED_PORTFOLIO_NAV",
+    "completed_trades": 2,
+    "data_sha256": "44eacbb0d6625cae39bbbf8f807c2e36092ac9b89dd3f3d6e339189e88791fcc",
+    "input_bundle_sha256": "1c152be12a804c676d14b61aa4fd964a3e67cb7637fcfb9b529c95ce66b274b8",
+    "input_path": "/private/tmp/equity-pr7b-synthetic-6k_eq8qj-v1",
+    "interpretation": "SYNTHETIC_ENGINEERING_ARITHMETIC_ONLY_NO_EDGE_OR_HISTORICAL_PERFORMANCE_CLAIM",
+    "output_bundle_sha256": "f9acf458525cda14e803dec96df642ce14d53ed7c2a30bb644a9ca82a8e1141f",
+    "output_path": "data/research_datasets/pr7b-swing-synthetic-6k_eq8qj-replay-v2",
+    "preserved_v1_output_sha256": "1033b79aee82bf68f5e68969ef29a6ec75de6fd5fae58a6b402f584ee2ecb591",
+    "selected": 2,
+    "short_execution": "UNSUPPORTED",
+    "signals": 2,
+    "trades": [
+      {
+        "commission_dollars": "0.150",
+        "entry_exit_order_ambiguous": false,
+        "entry_price": "146.01",
+        "entry_session": "2026-02-05",
+        "exit_price": "158.68",
+        "exit_reason": "target",
+        "exit_session": "2026-02-05",
+        "fees_dollars": "1.00",
+        "final_cash_dollars": "10188.900",
+        "gross_pnl_dollars": "190.35",
+        "gross_price_r": "1.998422712933753943217665615",
+        "holding_sessions": 1,
+        "initial_risk_dollars": "95.10",
+        "initial_stop": "139.67",
+        "modeled_slippage_dollars": "0.30",
+        "net_pnl_dollars": "188.900",
+        "price_pnl_after_slippage_dollars": "190.05",
+        "quantity": 15,
+        "realized_r": "1.986330178759200841219768665",
+        "stop_target_ambiguous": false
+      },
+      {
+        "commission_dollars": "0.200",
+        "entry_exit_order_ambiguous": true,
+        "entry_price": "150.01",
+        "entry_session": "2026-02-06",
+        "exit_price": "145.06",
+        "exit_reason": "stop",
+        "exit_session": "2026-02-06",
+        "fees_dollars": "1.00",
+        "final_cash_dollars": "9899.800",
+        "gross_pnl_dollars": "-98.60",
+        "gross_price_r": "-1.002024291497975708502024291",
+        "holding_sessions": 1,
+        "initial_risk_dollars": "98.80",
+        "initial_stop": "145.07",
+        "modeled_slippage_dollars": "0.40",
+        "net_pnl_dollars": "-100.200",
+        "price_pnl_after_slippage_dollars": "-99.00",
+        "quantity": 20,
+        "realized_r": "-1.014170040485829959514170040",
+        "stop_target_ambiguous": true
+      }
+    ]
+  },
+  "tests": {
+    "clean_core_only_installation_test_passed": true,
+    "command": ".venv/bin/python -m pytest -q",
+    "duration_seconds": 329.08,
+    "exact_result": "336 passed in 329.08s (0:05:29)",
+    "failed": 0,
+    "network_denied_by_autouse_fixture": true,
+    "new_strategy_regression_cases": 52,
+    "passed": 336,
+    "pytest": "9.0.2",
+    "python": "3.12.9",
+    "skipped": 0
+  }
+}

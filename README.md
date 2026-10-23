@@ -233,3 +233,14 @@ The real demonstration uses 995 IBKR sessions per ETF, including warmup, and
 703 complete evaluation observations. The user's non-paper/read-only TWS endpoint
 was used for historical requests only; earlier synthetic evidence is preserved.
 Context does not approve, reject, resize or execute trades.
+
+PR 7B adds the [general swing strategy framework](docs/GENERAL_SWING_STRATEGY_FRAMEWORK.md):
+typed setup, trigger, signal and provisional plan records; prior-N-session High
+boundaries; continuation LONG and failed-breakout SHORT research inventories;
+strictly eligible MarketContext links without a regime filter; and immutable,
+self-contained offline bundles. `swing research` uses existing frozen studies.
+`swing replay` admits raw/no-action inputs through the existing strict loader and
+reuses PR 4's long buy-stop engine and actual-fill risk accounting. Actual AAPL/GOOG
+signals have no fictional fills or P&L; SHORT execution remains unsupported.
+See the framework document for fixed-window aggregate inventories, synthetic
+arithmetic evidence, CLI examples, source hashes and limitations.
