@@ -167,11 +167,12 @@ def run_portfolio(panel,count,feed_only=False):
     stocks,batches=portfolio_schedule(panel,count)
     e=engine(Decimal(panel['initial_cash']));instruments={}
     initialized=perf_counter()
-    expected_bars=0
+    expected_bars=0;all_bars=[]
     for i,stock in enumerate(stocks):
         inst=instrument(f'E{i:05d}',stock['symbol'],stock['security_id']);instruments[stock['security_id']]=inst
-        e.add_instrument(inst);bars=make_bars(inst,stock['rows'],panel['calendar']);e.add_data(bars)
+        e.add_instrument(inst);bars=make_bars(inst,stock['rows'],panel['calendar']);all_bars.extend(bars)
         expected_bars+=len(bars)
+    e.add_data(all_bars)  # One global stable sort, rather than re-sorting per ID.
     strategy=Portfolio(instruments,batches,feed_only);e.add_strategy(strategy)
     loaded=perf_counter();e.run();finished=perf_counter()
     result={'feed_only':feed_only,'active_members':count,'distinct_security_ids':len(stocks),'expected_bars':expected_bars,'bars_seen':strategy.bars_seen,

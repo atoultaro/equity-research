@@ -81,6 +81,6 @@ class SpikePortfolio(QCAlgorithm):
             'input_bundle_sha256':self.input_sha,'fills':self.fills,'actions':self.actions,'bars_seen':self.bars_seen,
             'expected_bars':sum(len(s['rows']) for s in self.stocks),'feed_only':self.feed_only,'simulation_and_accounting_seconds':perf_counter()-self.simulation_started if self.simulation_started else None,'native_universe_probe':self.native_universe,'native_selections':self.selections,
             'rejected':self.rejected,'final_cash':str(self.portfolio.cash),'final_equity':str(self.portfolio.total_portfolio_value),
-            'account_type':str(self.brokerage_model.account_type),'unsettled_cash':str(self.portfolio.unsettled_cash_book.total_value),'open_positions':sum(1 for security in self.securities.values() if security.holdings.invested),
+            'account_type':str(self.brokerage_model.account_type),'unsettled_cash':str(self.portfolio.unsettled_cash),'open_positions':sum(1 for security in self.securities.values() if security.holdings.invested),
             'identity_map':{sid:str(symbol.id) for sid,symbol in self.symbols.items()},
             'initialization_seconds':self.initialization_seconds,'peak_rss_bytes':rss_bytes()})

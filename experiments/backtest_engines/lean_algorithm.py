@@ -85,7 +85,7 @@ class SpikeAlgorithm(QCAlgorithm):
 
     def on_end_of_algorithm(self):
         result={'source_security_id':self.case['security_id'],'source_signal_id':self.case.get('source_signal_id'),'peak_rss_bytes':rss_bytes(),'engine':'lean','input_bundle_sha256':self.input_sha,'case':self.case['case'],'events':self.records,'fills':self.fills,
-            'bars_seen':self.bars_seen,'final_cash':str(self.portfolio.cash),'unsettled_cash':str(self.portfolio.unsettled_cash_book.total_value),'final_equity':str(self.portfolio.total_portfolio_value),
+            'bars_seen':self.bars_seen,'final_cash':str(self.portfolio.cash),'unsettled_cash':str(self.portfolio.unsettled_cash),'final_equity':str(self.portfolio.total_portfolio_value),
             'holdings_quantity':str(self.portfolio[self.symbol].quantity),'account_type':str(self.brokerage_model.account_type),'open_positions':int(self.portfolio.invested),'native_security_identifier':str(self.symbol.id),
             'native_settings':{'cost_mode':'ENGINE_DEFAULT' if self.native_costs else 'COMMON_COST_CONFIGURATION','fills':'UNMODIFIED EquityFillModel','slippage':'engine default' if self.native_costs else 'fixed absolute 0.01 ISlippageModel cost configuration',
                 'fees':'engine default' if self.native_costs else '0.50 + 0.005/share FeeModel','data':'native daily US equity RAW, fill_forward=False, precise_end_time=True'}}
