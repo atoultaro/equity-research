@@ -20,8 +20,13 @@ def main(argv=None) -> int:
     register_swing(commands)
     from .outcomes.cli import register as register_outcomes
     register_outcomes(commands)
+    from .universe.cli import register as register_universe
+    register_universe(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "universe":
+            from .universe.cli import dispatch as dispatch_universe
+            return dispatch_universe(args)
         if args.command == "outcomes":
             from .outcomes.cli import dispatch as dispatch_outcomes
             return dispatch_outcomes(args)
