@@ -446,3 +446,87 @@ def test_exact_clock_cutoff_and_very_late_monthly_decision(tmp_path, calendar, i
     assert query(u, "2023-01-03", "2023-01-03T09:20:00-05:00")["reason"] == "OUTSIDE_FROZEN_CALENDAR"
     with pytest.raises(ValueError, match="after next scheduled"):
         freeze(tmp_path, calendar, inputs, name="too_late", decisions={"2022-04": "2022-06-10T12:00:00Z"})
+
+
+@pytest.mark.parametrize("filename,path,value", [
+    ("universe_membership_snapshots.json", (0, "members", 0, "security_id"), "synthetic:00003"),
+    ("universe_membership_snapshots.json", (0, "members", 0, "identity", "issuer_id"), "invented-issuer"),
+    ("universe_membership_snapshots.json", (0, "members", 0, "rank"), 2),
+    ("universe_membership_snapshots.json", (0, "members", 0, "rank"), True),
+    ("universe_membership_snapshots.json", (0, "members", 0, "liquidity_score"), "999999"),
+    ("universe_membership_snapshots.json", (0, "members"), []),
+    ("universe_membership_snapshots.json", (0, "selection_date"), "2022-04-28"),
+    ("universe_membership_snapshots.json", (0, "effective_start"), "2022-05-03"),
+    ("universe_membership_snapshots.json", (0, "effective_end"), "2022-06-02"),
+    ("universe_membership_snapshots.json", (0, "observation_cutoff"), "2022-05-02"),
+    ("universe_membership_snapshots.json", (0, "candidates", 2, "rejection_reasons"), ["BELOW_MINIMUM_PRICE"]),
+    ("universe_membership_snapshots.json", (0, "pit_quality"), "PIT_VERIFIED"),
+    ("universe_membership_snapshots.json", (0, "members", 0, "pit_quality"), "PIT_VERIFIED"),
+    ("universe_changes.json", (0, "entrants"), []),
+    ("universe_changes.json", (1, "exits"), ["synthetic:00000"]),
+    ("universe_changes.json", (1, "persisting"), []),
+    ("universe_changes.json", (1, "turnover_fraction"), "1.0"),
+    ("quality_report.json", ("master", "security_count"), 999),
+    ("quality_report.json", ("monthly", 0, "pit_quality"), "PIT_VERIFIED"),
+    ("quality_report.json", ("monthly", 0, "eligible_count"), 999),
+    ("quality_report.json", ("price_panel_quality_sha256",), "f"*64),
+    ("universe_manifest.json", ("execution_admission",), "GRANTED"),
+])
+def test_resealed_universe_rejects_semantic_output_tampering(tmp_path, calendar, inputs, filename, path, value):
+    u = freeze(tmp_path, calendar, inputs, months=("2022-04", "2022-05"))
+    files, _ = read_bundle(tmp_path / "run" / "universe")
+    data = json.loads(files[filename])
+    target = data
+    for key in path[:-1]:
+        target = target[key]
+    target[path[-1]] = value
+    files[filename] = encode(data)
+    sealed = write_bundle(tmp_path / "resealed", files)
+    # Ordinary byte integrity succeeds. Only recomputing from the declared
+    # immutable dependencies reveals that the outputs no longer reproduce.
+    assert read_bundle(tmp_path / "resealed")[1] == sealed
+    with pytest.raises(ValueError, match=f"universe semantic result mismatch: {filename}"):
+        HistoricalUniverse(tmp_path / "resealed", master=u.master.path, panel=u.panel.path)
+
+
+def test_resealed_coherent_members_and_candidates_must_match_source_prices(tmp_path, calendar, inputs):
+    u = freeze(tmp_path, calendar, inputs)
+    files, _ = read_bundle(tmp_path / "run" / "universe")
+    snapshots = json.loads(files["universe_membership_snapshots.json"])
+    snapshot = snapshots[0]
+    for row in snapshot["members"] + snapshot["candidates"]:
+        if row["security_id"] == "synthetic:00000": row["liquidity_score"] = "20000"
+    snapshot["summary"].update(median_liquidity="15000", mean_liquidity="15000")
+    quality = json.loads(files["quality_report.json"])
+    quality["monthly"][0].update(median_liquidity="15000", mean_liquidity="15000")
+    files["universe_membership_snapshots.json"] = encode(snapshots)
+    files["quality_report.json"] = encode(quality)
+    write_bundle(tmp_path / "resealed", files)
+    with pytest.raises(ValueError, match="universe semantic result mismatch"):
+        HistoricalUniverse(tmp_path / "resealed", master=u.master.path, panel=u.panel.path)
+
+
+def test_universe_recomputes_once_on_load_and_never_on_member_query(tmp_path, calendar, inputs, monkeypatch):
+    import equity_research.universe.selection as selection
+    u = freeze(tmp_path, calendar, inputs, months=("2022-04", "2022-05"),
+               decisions={"2022-04": "2022-05-02T16:00:00Z"})
+    calls = []
+    original = selection._selection
+
+    def counted(*args):
+        calls.append(args[-2])
+        return original(*args)
+
+    monkeypatch.setattr(selection, "_selection", counted)
+    loaded = HistoricalUniverse(tmp_path / "run" / "universe", master=u.master.path, panel=u.panel.path)
+    assert calls == ["2022-04", "2022-05"]
+    expected = query(loaded, "2022-05-03", "2022-05-03T09:20:00-04:00")
+
+    def forbidden(*args, **kwargs):
+        raise AssertionError("member queries must not recompute selections or read price partitions")
+
+    monkeypatch.setattr(selection, "_universe_records", forbidden)
+    monkeypatch.setattr(loaded.panel, "rows_as_of", forbidden)
+    for _ in range(3):
+        assert query(loaded, "2022-05-03", "2022-05-03T09:20:00-04:00") == expected
+    assert calls == ["2022-04", "2022-05"]

@@ -123,3 +123,23 @@ Reproduce with the commands in [the infrastructure guide](POINT_IN_TIME_HISTORIC
 Use the pinned implementation commit for exact source identity and unused output
 directories. Data hashes are reproducible; resource measurements and report metadata
 are environment-dependent.
+
+## PR #12 semantic-load review fix
+
+The loader now recomputes all derived universe records from frozen dependencies
+and compares canonical JSON before accepting the bundle. Valid byte hashes alone
+are insufficient. Regression coverage includes 22 resealed-output mutation cases,
+a coherently forged liquidity score with matching candidate/summary records, and
+proof that repeated member queries do not recompute selection. Full regression:
+**480 passed in 67.54s (0:01:07)**; focused universe suite: **80 passed in 19.28s**.
+
+The original pilot and both scale universe bundles pass the stronger semantic
+validation with their original hashes. All **3,614 frozen local files** present
+before this amendment remain unchanged, including earlier development snapshots.
+No price/master/universe artifacts were regenerated. The measurements and original
+456-test output above remain evidence of their pinned earlier implementation;
+universe loading now additionally incurs one full semantic recomputation.
+
+[Review-fix evidence](evidence/pr8a-semantic-load-v1/hashes.json), including exact
+test output, validated bundle hashes, preservation and validation-source hashes.
+Evidence bundle SHA256: `c2c75831bfb0b038e838fb2cbe87fb862a5c3db1927fc288c707dba2b5799dba`.

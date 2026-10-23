@@ -140,11 +140,11 @@ def _selection(master, panel, definition, month, decision):
                         "mean_liquidity": str(mean([number(r["liquidity_score"]) for r in members])) if members else None}}
 
 
-def build_universe(master_path, panel_path, definition, months, output, *, decisions=None):
+def _universe_records(master, panel, definition, months, *, decisions=None):
+    """Derive all semantic outputs from frozen inputs and declared selection clocks."""
     validate_definition(definition)
     if not months or list(months) != sorted(set(months)):
         raise ValueError("unique ascending selection months required")
-    master, panel = SecurityMaster(master_path), ResearchPanel(panel_path)
     unknown_ids = set(panel.index) - set(master.by_id)
     if unknown_ids:
         raise ValueError("panel contains securities absent from master")
@@ -180,12 +180,19 @@ def build_universe(master_path, panel_path, definition, months, output, *, decis
                 "availability_interpretation": definition["unknown_knowledge_policy"],
                 "last_snapshot_end": "EXPIRES_AT_NEXT_SCHEDULED_RECONSTITUTION; gaps are unavailable",
                 "execution_admission": "NOT_GRANTED", "candidate_coverage": master.manifest["source"].get("coverage_evidence", "UNKNOWN")}
-    return write_bundle(Path(output), {"universe_manifest.json": encode(manifest), "universe_definition.json": encode(definition),
-            "universe_membership_snapshots.json": encode(snapshots), "universe_changes.json": encode(changes),
-            "quality_report.json": encode({"master": master.quality, "monthly": [{"selection_date": s["selection_date"],
+    quality = {"master": master.quality, "monthly": [{"selection_date": s["selection_date"],
                 "pit_quality": s["pit_quality"], **s["summary"]} for s in snapshots],
                 "price_panel_quality_sha256": panel.hashes["files"]["quality_report.json"],
-                "historical_validity": "Synthetic fixtures and reconstructed vintages do not establish real survivorship-free coverage"})})
+                "historical_validity": "Synthetic fixtures and reconstructed vintages do not establish real survivorship-free coverage"}
+    return {"universe_manifest.json": manifest, "universe_definition.json": definition,
+            "universe_membership_snapshots.json": snapshots, "universe_changes.json": changes,
+            "quality_report.json": quality}
+
+
+def build_universe(master_path, panel_path, definition, months, output, *, decisions=None):
+    master, panel = SecurityMaster(master_path), ResearchPanel(panel_path)
+    records = _universe_records(master, panel, definition, months, decisions=decisions)
+    return write_bundle(Path(output), {name: encode(record) for name, record in records.items()})
 
 
 class HistoricalUniverse:
@@ -204,6 +211,18 @@ class HistoricalUniverse:
         self.snapshots = json.loads(files["universe_membership_snapshots.json"])
         self.changes = json.loads(files["universe_changes.json"])
         self.quality = json.loads(files["quality_report.json"])
+        # Months and decision clocks are the v1 run inputs. Every other field,
+        # including derived dates, candidate evidence and aggregate QA, must be
+        # reproduced from the declared immutable master, panel and definition.
+        # Do this once at load; members_as_of only reads the validated inventory.
+        months = [s["selection_month"] for s in self.snapshots]
+        decisions = {s["selection_month"]: s["decision_timestamp"] for s in self.snapshots}
+        expected = _universe_records(self.master, self.panel, self.definition, months, decisions=decisions)
+        for name, record in expected.items():
+            # Canonical bytes also distinguish JSON booleans from integers;
+            # Python equality alone would accept rank=True in place of rank=1.
+            if encode(json.loads(files[name])) != encode(record):
+                raise ValueError(f"universe semantic result mismatch: {name}")
 
     def members_as_of(self, effective_date, *, decision_timestamp):
         day(effective_date)

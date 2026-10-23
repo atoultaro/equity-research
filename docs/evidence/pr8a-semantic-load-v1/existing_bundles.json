@@ -1,0 +1,20 @@
+[
+  {
+    "artifact": "data/research_datasets/pr8a-pilot-8xc4tbfk-v1/universe",
+    "bundle_sha256": "a1cfec4dc56f68fb2052d9277feb1fcd4ccad42f78edb360c3b25fbfccf6900e",
+    "monthly_snapshots": 10,
+    "status": "SEMANTICALLY_VALID"
+  },
+  {
+    "artifact": "data/research_datasets/pr8a-scale100-8xc4tbfk-v1/universe",
+    "bundle_sha256": "66c983bf0029aad5fbb32024aef257f5ef9f1d36e2214ab2f57f5ad86beb1a24",
+    "monthly_snapshots": 2,
+    "status": "SEMANTICALLY_VALID"
+  },
+  {
+    "artifact": "data/research_datasets/pr8a-scale1000-8xc4tbfk-v1/universe",
+    "bundle_sha256": "3d7b6c00e1b0a152f5fb1866fa3210d3cf56e83c8e4505ca2ec45799ecb839f3",
+    "monthly_snapshots": 2,
+    "status": "SEMANTICALLY_VALID"
+  }
+]

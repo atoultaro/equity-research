@@ -192,6 +192,25 @@ its manifest lists the exact master and panel bundle hashes; both dependency pat
 are required on load and all member bytes are verified. There are no mutable cache
 pointers. The integration bundle records those lineage hashes; using it for a
 new experiment requires loading and verifying its referenced universe/panel.
+`HistoricalUniverse` also recomputes the complete selection inventory once during
+loading, using the frozen master, panel, definition and v1's declared selection
+months/decision timestamps. It compares all derived membership and candidate
+records, ranks, liquidity scores, effective dates, exclusions, PIT classifications,
+changes, manifest metadata and quality summaries against the frozen JSON. A
+resealed bundle with valid byte hashes but inconsistent results is rejected.
+Canonical JSON comparison also rejects type substitutions such as `true` for an
+integer rank. Selection months and decision clocks are run inputs; this check
+establishes consistency with those declared inputs, not authenticity of the
+bundle's author or authorization to choose a different experiment.
+
+This adds full reconstitution work to **each universe load**, including price
+partition reads for the requested windows. It is deterministic and offline.
+`members_as_of` uses the already validated inventory; repeated queries on one
+loaded instance do not rerun selection or read price partitions. Reuse a loaded
+instance for repeated queries. Existing frozen bundles require no migration or
+rewrite. Original pilot/scale timings predate this semantic-load safeguard and
+are historical measurements of their pinned implementation.
+
 Source hashes are byte integrity, not signatures or proof of economic correctness.
 
 ## Quality audit
