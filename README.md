@@ -244,3 +244,12 @@ reuses PR 4's long buy-stop engine and actual-fill risk accounting. Actual AAPL/
 signals have no fictional fills or P&L; SHORT execution remains unsupported.
 See the framework document for fixed-window aggregate inventories, synthetic
 arithmetic evidence, CLI examples, source hashes and limitations.
+
+PR 7C adds [signal-outcome research](docs/SIGNAL_OUTCOME_RESEARCH.md).
+The offline `outcomes` command consumes original frozen signals and captured
+context links, measuring separate signal-Close and next-eligible-Open paths,
+direction-normalized returns, MFE/MAE and original signal-ATR units. Every signal
+and incomplete horizon remains represented. Immutable self-contained bundles
+include descriptive context summaries and overlap-cluster diagnostics. The actual
+AAPL/GOOG demonstration preserves all 128 signals; it does not regenerate detection,
+fetch prices or imply fills, short sales, realized R or portfolio P&L.
