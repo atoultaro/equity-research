@@ -22,6 +22,7 @@ search boundary and windows of up to five years. This is a search boundary, not
 an assertion that every instrument existed in 1980. Optional explicit listing
 boundaries require the existing `Security` mapping's source reference.
 
+Each run accepts 1–20 distinct mappings through the existing security contract.
 Each mapping requires an explicit research identity, primary exchange and
 currency. The example's `operator-map:*` keys are local labels, not historical
 identity evidence. An optional reviewed `con_id` further constrains resolution.
@@ -243,12 +244,113 @@ throttling and zero connections. The committed [sample report](evidence/ibkr-dep
 is self-contained and replays offline. Its bundle SHA256 is
 `62447af19bd19b838938c8bec9d1dd88eb4843633213a5b49c43b651c37b31e6`.
 
-Validation: `.venv/bin/python -m pytest -q` → **426 passed in 44.99s**, no skips.
-The 26 new tests use mocked responses and virtual clocks; sockets are denied by
+Validation: `.venv/bin/python -m pytest -q` → **428 passed in 52.77s**, no skips.
+The 28 new tests use mocked responses and virtual clocks; sockets are denied by
 the existing offline test harness. They cover backward windows, overlap/conflict,
 chronology/duplicates, calendar holidays/gaps, empty/no-data/permission/timeout
 outcomes, head-versus-observation disagreement, truncated tails, native request
 cancellation, budgets, identity ambiguity/change, pacing restoration, resumable
-checkpoints, interrupted writes and report regeneration without IBKR installed.
+checkpoints, interrupted writes, rejection of resealed false completion and
+report regeneration without IBKR installed. Failed calls can retain native rows
+for diagnostics without those rows contributing successful coverage.
 Native qualification and low-level no-account synchronization tests remain intact.
 There is no canonical lint command; `git diff --check` is run separately.
+
+## Actual local TWS audit — October 26, 2026
+
+The operator explicitly authorized the real audit on the existing non-paper
+read-only TWS endpoint `127.0.0.1:7496`. A five-session SPY check first captured
+October 19–23 without gaps. The main audit then ran from **22:26:18 to 22:47:01
+UTC** (6:26–6:47 p.m. New York time), with a frozen completed-session end of
+**2026-10-26** and search boundary **1980-01-01**. All 17 contracts qualified and
+returned bars. There were **141** paced requests including qualification/head
+metadata, **104** successful historical windows and three explicit no-data
+responses for GOOG. No permission or timeout failure was observed in this run.
+
+The capture has **114,923 unique dated observations**, **20 internal missing
+session observations** and **five off-calendar date observations** across
+instruments, with **zero conflicting overlap values**. Counts include flagged
+off-calendar dates as described above. All instruments' latest observed bar is
+October 26. The main invocation finished normally, returning exit **3** because
+14 instruments have partial-data findings; three meet the conservative exhausted
+criterion. It did not stop because of an overall runtime/request budget.
+
+| Symbol | Qualified conId | Observed first bar | Dated observations | Internal gaps | Off-calendar | Status |
+| --- | ---: | --- | ---: | ---: | ---: | --- |
+| AAPL | 265598 | 1980-12-12 | 11,559 | 3 | 2 | partial |
+| MSFT | 272093 | 1986-03-13 | 10,235 | 0 | 1 | partial |
+| GOOG | 208813720 | 2014-03-27 | 3,165 | 0 | 0 | partial |
+| NVDA | 4815747 | 1999-01-22 | 6,984 | 0 | 1 | partial |
+| AMZN | 3691937 | 1997-05-15 | 7,409 | 0 | 1 | partial |
+| META | 107113386 | 2012-05-18 | 3,630 | 0 | 0 | exhausted |
+| SPY | 756733 | 1993-01-29 | 8,491 | 2 | 0 | partial |
+| QQQ | 320227571 | 1999-03-10 | 6,951 | 0 | 0 | exhausted |
+| IWM | 9579970 | 2000-05-26 | 6,642 | 1 | 0 | partial |
+| RSP | 319359375 | 2003-04-30 | 5,909 | 2 | 0 | partial |
+| XLK | 4215230 | 1998-12-22 | 7,001 | 2 | 0 | partial |
+| XLF | 4215220 | 1998-12-22 | 7,001 | 2 | 0 | partial |
+| XLE | 4215217 | 1998-12-22 | 7,001 | 2 | 0 | partial |
+| XLI | 4215227 | 1998-12-22 | 7,000 | 3 | 0 | partial |
+| XLV | 4215205 | 1998-12-22 | 7,001 | 2 | 0 | partial |
+| SMH | 229725622 | 2011-12-21 | 3,732 | 0 | 0 | exhausted |
+| XBI | 45540828 | 2006-02-06 | 5,212 | 1 | 0 | partial |
+
+GOOG's head timestamp reports **2014-01-13**, but the earliest actual daily bar
+was **2014-03-27**. Three older-window attempts returned explicit no-data code
+162. This remains an **unconfirmed older boundary**, with resume cursor
+2014-03-26; it is not labeled exhausted. Large price discontinuities also remain
+warnings, without inferred actions. SMH's observed 2011 boundary describes the
+qualified current IBKR contract; it is not an independently established ETF
+inception date or proof that no differently identified earlier history exists.
+
+AAPL's internal gaps are 1981-08-10, 1983-09-23 and 1986-12-11. The common ETF
+gaps include 2004-07-12 and 2007-07-02; XLI also lacks 1999-01-26. Four stock
+captures include zero-volume 2005-02-21 rows outside the reference calendar;
+AAPL also has a 1985-09-27 off-calendar observation. These are **findings relative
+to the pinned XNYS reference**, not independently proven errors in the historical
+listing venue's schedule. No row was silently dropped or manufactured to make
+the capture pass. Source-specific listing/venue calendars need review before
+expert-trade reconstruction.
+
+The [published coverage evidence](evidence/ibkr-depth-live-20261026-v1/coverage_summary.json)
+includes exact contracts, gaps, warnings and diagnostics; the
+[machine-readable summary](evidence/ibkr-depth-live-20261026-v1/audit_summary.json)
+links the full local reports and hashes. Metadata-only evidence bundle SHA256:
+`0ea5342ee2b071b42c32904c38df15775416f472916de32f218c5735f928bd45`.
+
+The full native journal and self-contained OHLCV report remain in ignored local
+storage at `runs/ibkr-depth-20261026-v1/`. Frozen reports are:
+
+| Local report | Bundle SHA256 |
+| --- | --- |
+| `probe-report-v1` | `3a6761c11ac21ac9596e051262198f2f70314b42de1e00ba4c5609880224bf57` |
+| `report-checkpoint-v1` (intermediate, preserved) | `cd189a5b25a816fe0dca845bf14cc047a991c5eab82cf5e6a032b70891773854` |
+| `report-final-v1` | `b2b8f5a15856a9ed4521b2c07f270e269501835b35ca3383305260c568b26043` |
+
+The acquisition started from an uncommitted working tree. Its frozen source
+hashes independently match implementation commit
+`9c91187d89d9a6f93ceec3f94f18b2ec439800f7`; the acquisition/report modules did not
+change during the live run. Subsequent test/documentation/evidence commits are
+separate. The preservation audit rehashed **3,618** preexisting cache, research
+and fixture files: **all unchanged**. No cache pointer, execution/strategy code,
+existing research bundle, account setting or broker order was modified. Raw
+error codes/categories and request parameters are retained; unrestricted error
+text is omitted to avoid retaining account identifiers or other private strings.
+
+### Bounded follow-up checks of representative gaps
+
+After the main audit disconnected, three separately checkpointed one-day checks
+used the already qualified conIds: AAPL 1981-08-10, SPY 2004-07-12 and SPY
+2007-07-02. Each made two bounded TRADES/RTH attempts and returned code 162,
+classified `NO_DATA`, with no bar. Each result remains **inconclusive**, with no
+exhaustion evidence. This corroborates those observed gaps under a shorter
+request; it does not prove permanent absence or establish the cause. Other gaps
+were not individually retested. None of these checks modifies or backfills the
+original capture.
+
+[Follow-up request diagnostics and report hashes](evidence/ibkr-depth-gap-checks-20261026-v1/gap_checks.json)
+have their own immutable evidence seal:
+`2580aa97fb2ae739c784bfc1d9851ef520047b729271ea6af5d29b4ed3cd7daa`.
+The three full local report hashes are recorded there. The five-session probe,
+main walk, intermediate report and follow-ups all remain preserved as separate
+artifacts.

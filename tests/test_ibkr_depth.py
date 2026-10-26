@@ -362,3 +362,39 @@ def test_committed_offline_fixture_replays_without_ibkr_package(tmp_path, monkey
     fixture = Path(__file__).parents[1] / "docs/evidence/ibkr-depth-offline-v1"
     freeze_report(fixture, tmp_path / "replayed")
     assert read_bundle(fixture) == read_bundle(tmp_path / "replayed")
+
+
+def test_failed_request_keeps_native_rows_without_crediting_coverage(tmp_path):
+    class CallbackFailure(Fake):
+        async def historical(self, contract, params):
+            rows = await super().historical(contract, params)
+            self.errors.append({"code": 354, "category": "DATA_PERMISSION"})
+            return rows
+    auditor(CallbackFailure()).run(config(), tmp_path / "audit")
+    journal = Journal(tmp_path / "audit")
+    item = next(i for i in journal.events if i["event"]["kind"] == "window")
+    assert json.loads(item["files"]["returned_bars.json"])["bars"]
+    r = report(tmp_path / "audit")
+    assert r["observed_sessions"] == 0 and r["status"] == "failed"
+    assert r["request_status_counts"] == {"DATA_PERMISSION": 1}
+
+
+def test_resealed_early_completion_checkpoint_is_rejected_semantically(tmp_path):
+    from equity_research.ingestion.storage import encode, write_bundle
+    import shutil
+    auditor(Fake()).run(config(max_windows_per_instrument=1), tmp_path / "original")
+    original = Journal(tmp_path / "original")
+    target = tmp_path / "resealed"
+    shutil.copytree(tmp_path / "original/plan", target / "plan")
+    (target / "events").mkdir()
+    previous = original.plan_hashes["bundle_sha256"]
+    for item in original.events:
+        files = dict(item["files"])
+        event = {**item["event"], "previous_sha256": previous}
+        if event["kind"] == "window":
+            event.update(decision="BOUNDARY", next_cursor=None)
+        files["event.json"] = encode(event)
+        previous = write_bundle(target / "events" / item["path"], files)["bundle_sha256"]
+    Journal(target)  # All byte seals and the chain are valid.
+    with pytest.raises(ValueError, match="progress disagrees"):
+        summarize(Journal(target))
