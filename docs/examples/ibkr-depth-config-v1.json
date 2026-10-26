@@ -1,0 +1,253 @@
+{
+  "schema_version": "ibkr_depth_config_v1",
+  "start": "1980-01-01",
+  "end": null,
+  "window_days": 1825,
+  "overlap_days": 5,
+  "max_attempts": 3,
+  "max_windows_per_instrument": 64,
+  "max_requests": 800,
+  "max_runtime_seconds": 3600,
+  "max_consecutive_empty": 3,
+  "head_timestamp": true,
+  "instruments": [
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "AAPL",
+        "security_id": "operator-map:AAPL",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "AAPL",
+        "ibkr_symbol": "AAPL",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "MSFT",
+        "security_id": "operator-map:MSFT",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "MSFT",
+        "ibkr_symbol": "MSFT",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "GOOG",
+        "security_id": "operator-map:GOOG",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "GOOG",
+        "ibkr_symbol": "GOOG",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "NVDA",
+        "security_id": "operator-map:NVDA",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "NVDA",
+        "ibkr_symbol": "NVDA",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "AMZN",
+        "security_id": "operator-map:AMZN",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "AMZN",
+        "ibkr_symbol": "AMZN",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "META",
+        "security_id": "operator-map:META",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "META",
+        "ibkr_symbol": "META",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "market_etf",
+      "security": {
+        "symbol": "SPY",
+        "security_id": "operator-map:SPY",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "SPY",
+        "ibkr_symbol": "SPY",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "market_etf",
+      "security": {
+        "symbol": "QQQ",
+        "security_id": "operator-map:QQQ",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "QQQ",
+        "ibkr_symbol": "QQQ",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "market_etf",
+      "security": {
+        "symbol": "IWM",
+        "security_id": "operator-map:IWM",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "IWM",
+        "ibkr_symbol": "IWM",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "market_etf",
+      "security": {
+        "symbol": "RSP",
+        "security_id": "operator-map:RSP",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "RSP",
+        "ibkr_symbol": "RSP",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "sector_etf",
+      "security": {
+        "symbol": "XLK",
+        "security_id": "operator-map:XLK",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "XLK",
+        "ibkr_symbol": "XLK",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "sector_etf",
+      "security": {
+        "symbol": "XLF",
+        "security_id": "operator-map:XLF",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "XLF",
+        "ibkr_symbol": "XLF",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "sector_etf",
+      "security": {
+        "symbol": "XLE",
+        "security_id": "operator-map:XLE",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "XLE",
+        "ibkr_symbol": "XLE",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "sector_etf",
+      "security": {
+        "symbol": "XLI",
+        "security_id": "operator-map:XLI",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "XLI",
+        "ibkr_symbol": "XLI",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "sector_etf",
+      "security": {
+        "symbol": "XLV",
+        "security_id": "operator-map:XLV",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "XLV",
+        "ibkr_symbol": "XLV",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "industry_etf",
+      "security": {
+        "symbol": "SMH",
+        "security_id": "operator-map:SMH",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "SMH",
+        "ibkr_symbol": "SMH",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "XNAS",
+        "currency": "USD",
+        "con_id": null
+      }
+    },
+    {
+      "kind": "industry_etf",
+      "security": {
+        "symbol": "XBI",
+        "security_id": "operator-map:XBI",
+        "reference": "Operator-selected current instrument; resolve and pin IBKR conId before requesting bars; historical listing identity not independently verified",
+        "yahoo_symbol": "XBI",
+        "ibkr_symbol": "XBI",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCX",
+        "currency": "USD",
+        "con_id": null
+      }
+    }
+  ]
+}

@@ -208,6 +208,12 @@ five SPY sessions were captured, validated, cached, frozen and loaded offline.
 See [the live smoke-test record](docs/LIVE_IBKR_EQUITY_SMOKE_TEST.md) for the
 confirmed prerequisites, exact scope, local artifacts and remaining data limits.
 
+The [IBKR historical-depth audit](docs/IBKR_HISTORICAL_DEPTH_AUDIT.md) adds an
+explicit operator-started backward daily-history walk with contract identities,
+bounded retries/pacing, immutable resumable checkpoints and offline coverage
+reports. Automated tests use mocks; the live command requires explicit local
+connection and read-only confirmations. It does not query accounts or place orders.
+
 PR 6A adds the first actual AAPL individual-stock dataset: 703 IBKR daily sessions
 plus independently sourced earnings, dividend declarations and historical splits.
 [The AAPL event-aware study](docs/AAPL_EVENT_AWARE_RESEARCH.md) records acquisition
