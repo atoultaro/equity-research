@@ -1,0 +1,1 @@
+{"kind":"request_started","operation":"head_timestamp","parameters":{"conId":102,"formatDate":2,"useRTH":true,"whatToShow":"TRADES"},"previous_sha256":"7fa0e6f768d5c75710e8f40ba1acbdfe3763c2b5da673da83c638705fe3ec827","sequence":10,"signature":"e67fbc5b3587cc8323fd3c6b00cef6213556d9d5cc9dd3f554e317a5ba9075fe","started_at":"2024-11-30T00:00:00+00:00","symbol":"GAPPED"}
