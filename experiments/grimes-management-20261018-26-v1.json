@@ -1,0 +1,50 @@
+{
+  "commentary_synopses": [
+    {
+      "alert_id": "alert-1",
+      "attribution": "AGENT_PARAPHRASE_OF_OPERATOR_SUPPLIED_COMMENTARY",
+      "source_reference": "Original alert and separate verbatim preamble preserved in immutable PR16 parent; operator seven-alert reply corroborates source",
+      "synopsis": "Operator-supplied commentary describes energy leadership, technology weakness and a Dow bear-flag short idea."
+    },
+    {
+      "alert_id": "alert-2",
+      "attribution": "AGENT_PARAPHRASE_OF_OPERATOR_SUPPLIED_COMMENTARY",
+      "source_reference": "Original alert and separate verbatim preamble preserved in immutable PR16 parent; operator seven-alert reply corroborates source",
+      "synopsis": "Operator-supplied commentary describes an S&P/Nasdaq bounce weakening the short setup while the Dow bear flag remains attractive."
+    },
+    {
+      "alert_id": "alert-3",
+      "attribution": "AGENT_PARAPHRASE_OF_OPERATOR_SUPPLIED_COMMENTARY",
+      "source_reference": "Original alert and separate verbatim preamble preserved in immutable PR16 parent; operator seven-alert reply corroborates source",
+      "synopsis": "Operator-supplied commentary describes a Nasdaq inside day, muted Russell bounce and weekly Dow bear flag, with earnings risk noted."
+    },
+    {
+      "alert_id": "alert-4",
+      "attribution": "AGENT_PARAPHRASE_OF_OPERATOR_SUPPLIED_COMMENTARY",
+      "source_reference": "Original alert and separate verbatim preamble preserved in immutable PR16 parent; operator seven-alert reply corroborates source",
+      "synopsis": "Operator-supplied commentary favors the Nasdaq short context over Dow/Russell and discusses technology-heavy candidates."
+    },
+    {
+      "alert_id": "alert-5",
+      "attribution": "AGENT_PARAPHRASE_OF_OPERATOR_SUPPLIED_COMMENTARY",
+      "source_reference": "Original alert and separate verbatim preamble preserved in immutable PR16 parent; operator seven-alert reply corroborates source",
+      "synopsis": "Operator-supplied commentary describes Nasdaq weakness versus a drifting Dow."
+    },
+    {
+      "alert_id": "alert-6",
+      "attribution": "AGENT_PARAPHRASE_OF_OPERATOR_SUPPLIED_COMMENTARY",
+      "source_reference": "Original alert and separate verbatim preamble preserved in immutable PR16 parent; operator seven-alert reply corroborates source",
+      "synopsis": "Operator-supplied weekly commentary describes bearish pressure across stock indexes; exact publication date remains unresolved."
+    },
+    {
+      "alert_id": "alert-7",
+      "attribution": "AGENT_PARAPHRASE_OF_OPERATOR_SUPPLIED_COMMENTARY",
+      "source_reference": "Original alert and separate verbatim preamble preserved in immutable PR16 parent; operator seven-alert reply corroborates source",
+      "synopsis": "Operator-supplied commentary describes the S&P in a wide range and cleaner Russell/Dow short setups; crude/futures remarks are kept separate from computed equity context."
+    }
+  ],
+  "inspected_main_commit": "35f0a4b1f138b3606180a1b3ec29a049422f530e",
+  "inspected_pr16_commit": "3a2fd4757a7bc81166b005dcbb1a5ffabf8d03b5",
+  "parent_bundle_sha256": "4ce1b1f021d666bb870983cf894628c665992f97186e6e2740ccd2f4e69b2604",
+  "schema_version": "grimes_management_config_v1"
+}

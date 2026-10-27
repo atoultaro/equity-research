@@ -24,8 +24,13 @@ def main(argv=None) -> int:
     register_expert(commands)
     from .lifecycle.cli import register as register_lifecycle
     register_lifecycle(commands)
+    from .management.cli import register as register_management
+    register_management(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "management":
+            from .management.cli import dispatch as dispatch_management
+            return dispatch_management(args)
         if args.command == "lifecycle":
             from .lifecycle.cli import dispatch as dispatch_lifecycle
             return dispatch_lifecycle(args)

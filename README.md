@@ -234,6 +234,14 @@ documents EBAY's old-stop crossing versus its later source revision, unresolved
 weekly publication time, conditional price-basis scenarios and right censoring.
 Actual fills, position sizes and profitability remain unknown.
 
+PR17 adds [empirical Grimes management and decision analysis](docs/GRIMES_MANAGEMENT_DECISIONS.md)
+using the unchanged PR16 captures. The [complete research report](docs/reports/grimes-management-20261018-26/report.md)
+compares all stop revisions, underway transitions and source closures, with
+counterexamples, matched ENTERABLE observations and explicit primary/conditional
+evidence. `management study` and `management replay` are offline and produce
+immutable studies and 26 individual summaries. They do not infer actual fills,
+exit causes or a trading edge.
+
 PR 6A adds the first actual AAPL individual-stock dataset: 703 IBKR daily sessions
 plus independently sourced earnings, dividend declarations and historical splits.
 [The AAPL event-aware study](docs/AAPL_EVENT_AWARE_RESEARCH.md) records acquisition
