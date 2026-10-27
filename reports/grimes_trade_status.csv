@@ -1,0 +1,27 @@
+symbol,direction,opened_alert_date,initial_stop,latest_reported_stop,setup_status,reported_position_status,last_alert_date,last_reported_action,dropped_alert_date,notes
+AAOI,SHORT,2026-10-21,89.82,70.70,UNDERWAY,CLOSED,UNKNOWN,DROPPED,UNKNOWN,Source episode AAOI-001; last action alert-6:line-27; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM
+AAPL,LONG,2026-10-18,339.00,344.70,UNDERWAY,CLOSED,2026-10-26,DROPPED,2026-10-26,Source episode AAPL-001; last action alert-7:line-21; actual fills unknown
+ABBV,LONG,UNKNOWN,276.30,276.30,ENTERABLE,OPEN,UNKNOWN,OPEN_NEW_POSITION,,Source episode ABBV-001; last action alert-6:line-7; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM; No source-reported DROPPED action by study end
+AMD,SHORT,2026-10-21,569.90,519.35,UNDERWAY,CLOSED,UNKNOWN,DROPPED,UNKNOWN,Source episode AMD-001; last action alert-6:line-28; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM
+ANET,SHORT,2026-10-21,191.25,175.20,UNDERWAY,CLOSED,2026-10-26,DROPPED,2026-10-26,Source episode ANET-001; last action alert-7:line-23; actual fills unknown
+ASST,SHORT,2026-10-20,28.45,28.45,ENTERABLE,CLOSED,2026-10-21,DROPPED,2026-10-21,Source episode ASST-001; last action alert-4:line-22; actual fills unknown
+CAT,SHORT,2026-10-18,748.75,748.75,ENTERABLE,CLOSED,2026-10-20,DROPPED,2026-10-20,Source episode CAT-001; last action alert-3:line-21; actual fills unknown
+CDE,SHORT,2026-10-18,16.40,13.90,UNDERWAY,OPEN,UNKNOWN,STOP_CHANGED,,Source episode CDE-001; last action alert-6:line-20; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM; No source-reported DROPPED action by study end
+CLMT,LONG,2026-10-18,55.25,53.02,ENTERABLE,CLOSED,2026-10-21,DROPPED,2026-10-21,Source episode CLMT-001; last action alert-4:line-21; actual fills unknown
+CNQ,LONG,UNKNOWN,53.30,53.30,ENTERABLE,OPEN,UNKNOWN,OPEN_NEW_POSITION,,Source episode CNQ-001; last action alert-6:line-8; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM; No source-reported DROPPED action by study end
+EBAY,LONG,UNKNOWN,119.20,117.50,ENTERABLE,OPEN,2026-10-26,STOP_CHANGED,,Source episode EBAY-001; last action alert-7:line-13; actual fills unknown; No source-reported DROPPED action by study end
+ELF,LONG,2026-10-20,110.50,109.20,ENTERABLE,OPEN,UNKNOWN,STOP_CHANGED,,Source episode ELF-001; last action alert-6:line-15; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM; No source-reported DROPPED action by study end
+GE,SHORT,2026-10-26,295.80,295.80,ENTERABLE,OPEN,2026-10-26,OPEN_NEW_POSITION,,Source episode GE-001; last action alert-7:line-9; actual fills unknown; No source-reported DROPPED action by study end
+GME,LONG,2026-10-21,25.01,24.40,ENTERABLE,CLOSED,2026-10-26,DROPPED,2026-10-26,Source episode GME-001; last action alert-7:line-20; actual fills unknown
+GTLB,LONG,UNKNOWN,51.60,52.10,ENTERABLE,OPEN,2026-10-26,STOP_CHANGED,,Source episode GTLB-001; last action alert-7:line-14; actual fills unknown; No source-reported DROPPED action by study end
+HUM,LONG,2026-10-20,404.00,408.10,ENTERABLE,OPEN,2026-10-22,STOP_CHANGED,,Source episode HUM-001; last action alert-5:line-12; actual fills unknown; No source-reported DROPPED action by study end
+MMM,LONG,UNKNOWN,169.90,169.90,ENTERABLE,OPEN,UNKNOWN,OPEN_NEW_POSITION,,Source episode MMM-001; last action alert-6:line-11; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM; No source-reported DROPPED action by study end
+OMER,SHORT,2026-10-20,17.20,17.35,ENTERABLE,OPEN,2026-10-22,STOP_CHANGED,,Source episode OMER-001; last action alert-5:line-15; actual fills unknown; No source-reported DROPPED action by study end
+SAIL,LONG,2026-10-26,20.90,20.90,ENTERABLE,OPEN,2026-10-26,OPEN_NEW_POSITION,,Source episode SAIL-001; last action alert-7:line-7; actual fills unknown; No source-reported DROPPED action by study end
+SCCO,SHORT,2026-10-26,191.70,191.70,ENTERABLE,OPEN,2026-10-26,OPEN_NEW_POSITION,,Source episode SCCO-001; last action alert-7:line-10; actual fills unknown; No source-reported DROPPED action by study end
+SIG,LONG,2026-10-20,111.80,112.50,ENTERABLE,OPEN,UNKNOWN,STOP_CHANGED,,Source episode SIG-001; last action alert-6:line-17; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM; No source-reported DROPPED action by study end
+SLB,LONG,2026-10-26,51.10,51.10,ENTERABLE,OPEN,2026-10-26,OPEN_NEW_POSITION,,Source episode SLB-001; last action alert-7:line-8; actual fills unknown; No source-reported DROPPED action by study end
+SNDK,SHORT,2026-10-21,1458.00,1296.00,UNDERWAY,CLOSED,UNKNOWN,DROPPED,UNKNOWN,Source episode SNDK-001; last action alert-6:line-29; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM
+SNOW,SHORT,UNKNOWN,330.70,330.70,ENTERABLE,CLOSED,2026-10-26,DROPPED,2026-10-26,Source episode SNOW-001; last action alert-7:line-22; actual fills unknown
+T,SHORT,2026-10-18,24.00,22.20,UNDERWAY,CLOSED,2026-10-22,DROPPED,2026-10-22,Source episode T-001; last action alert-5:line-31; actual fills unknown
+TEVA,LONG,2026-10-18,40.40,39.05,ENTERABLE,CLOSED,UNKNOWN,DROPPED,UNKNOWN,Source episode TEVA-001; last action alert-6:line-26; actual fills unknown; Unresolved source publication: Yesterday at 8:57 AM

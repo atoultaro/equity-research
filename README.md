@@ -304,3 +304,10 @@ and [pilot evidence](docs/PR8A_PILOT_EVIDENCE.md) for access blockers, hashes,
 performance and offline regression results. `universe --help` lists offline import,
 freeze, build, query, audit and validation operations. Existing datasets and strict
 execution admission remain unchanged.
+
+PR8B adds an [existing-source real-data pilot](docs/PR8B_EXISTING_SOURCE_RESEARCH.md)
+using frozen IBKR captures: 31 observed stock contracts, two dated cohort views,
+native-unit/identity exclusions and cycle-by-cycle coverage. Strict historical
+universe admission remains unverified; the observed cohort is not a complete
+historical population. The [readable Grimes trade-status CSV](reports/grimes_trade_status.csv)
+preserves all 26 source-reported episodes, independently of modeled outcomes.
