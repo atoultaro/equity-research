@@ -1,0 +1,30 @@
+{
+  "schema_version": "expert_methodology_v1",
+  "methodology_id": "grimes_operator_reported_1r_v1",
+  "expert": "Adam Grimes",
+  "source_status": "OPERATOR_REPORTED",
+  "source_reference": "Operator clarification in PR15 amendment: Correct Trade Interpretation, Market Returns, and Grimes 1R Management",
+  "independently_verified": false,
+  "effective_date": null,
+  "application": "Operator states this current convention applies to the four 2026-10-26 new-position recommendations; no trade-specific exit instruction independently observed",
+  "LONG": {
+    "trigger": "PLUS_1_ORIGINAL_R",
+    "minimum_exit_fraction_of_original": "1/3",
+    "exact_exit_fraction_of_original": null,
+    "remaining_fraction": null,
+    "runner_policy": "ALLOW_REMAINING_POSITION_TO_RUN",
+    "subsequent_stop_adjustments": null,
+    "final_exit_rules": null,
+    "remaining_exit_timing": null
+  },
+  "SHORT": {
+    "trigger": "PLUS_1_ORIGINAL_R",
+    "minimum_exit_fraction_of_original": "1",
+    "exact_exit_fraction_of_original": "1",
+    "remaining_fraction": "0",
+    "runner_policy": "NO_RUNNER",
+    "subsequent_stop_adjustments": null,
+    "final_exit_rules": null,
+    "remaining_exit_timing": null
+  }
+}

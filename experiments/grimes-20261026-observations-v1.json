@@ -1,0 +1,17 @@
+{
+  "schema_version": "expert_observations_v1",
+  "expert": "Adam Grimes",
+  "recommendation_date": "2026-10-26",
+  "analysis_cutoff": "2026-10-26T17:00:00-04:00",
+  "cutoff_evidence": "Explicit research after-close assumption; not evidence of publication or execution time",
+  "source_reference": "Operator-provided Grimes recommendations in this research session",
+  "source_verification": "OPERATOR_REPORTED_NOT_INDEPENDENTLY_VERIFIED",
+  "original_source_text": "SAIL added long with stop 20.90 SLB added long with stop 51.10 GE added short with stop 295.80 SCCO added short with stop 191.70",
+  "action_interpretation": "Authoritative operator interpretation: added long/short means OPEN_NEW_POSITION, never increasing an existing position",
+  "recommendations": [
+    {"symbol":"SAIL","action":"OPEN_NEW_POSITION","direction":"LONG","reported_stop":"20.90","original_recommendation":"SAIL added long with stop 20.90","publication_timestamp":null,"execution_timestamp":null,"entry_price":null,"quantity":null,"profit_targets":null},
+    {"symbol":"SLB","action":"OPEN_NEW_POSITION","direction":"LONG","reported_stop":"51.10","original_recommendation":"SLB added long with stop 51.10","publication_timestamp":null,"execution_timestamp":null,"entry_price":null,"quantity":null,"profit_targets":null},
+    {"symbol":"GE","action":"OPEN_NEW_POSITION","direction":"SHORT","reported_stop":"295.80","original_recommendation":"GE added short with stop 295.80","publication_timestamp":null,"execution_timestamp":null,"entry_price":null,"quantity":null,"profit_targets":null},
+    {"symbol":"SCCO","action":"OPEN_NEW_POSITION","direction":"SHORT","reported_stop":"191.70","original_recommendation":"SCCO added short with stop 191.70","publication_timestamp":null,"execution_timestamp":null,"entry_price":null,"quantity":null,"profit_targets":null}
+  ]
+}

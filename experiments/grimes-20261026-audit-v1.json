@@ -1,0 +1,121 @@
+{
+  "schema_version": "ibkr_depth_config_v1",
+  "start": "2022-01-03",
+  "end": "2026-10-26",
+  "instruments": [
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "SAIL",
+        "security_id": "grimes-20261026-SAIL",
+        "reference": "https://www.sec.gov/Archives/edgar/data/2030781/000203078126000003/sail-20260131.htm",
+        "yahoo_symbol": "SAIL",
+        "ibkr_symbol": "SAIL",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "NASDAQ",
+        "first_session": "2025-02-13",
+        "listing_reference": "https://www.sec.gov/Archives/edgar/data/2030781/000203078125000011/spparent-20250131x10k.htm"
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "SLB",
+        "security_id": "grimes-20261026-SLB",
+        "reference": "https://investorcenter.slb.com/",
+        "yahoo_symbol": "SLB",
+        "ibkr_symbol": "SLB",
+        "primary_exchange": "NYSE",
+        "listing_venue": "NYSE"
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "GE",
+        "security_id": "grimes-20261026-GE",
+        "reference": "https://www.geaerospace.com/",
+        "yahoo_symbol": "GE",
+        "ibkr_symbol": "GE",
+        "primary_exchange": "NYSE",
+        "listing_venue": "NYSE"
+      }
+    },
+    {
+      "kind": "stock",
+      "security": {
+        "symbol": "SCCO",
+        "security_id": "grimes-20261026-SCCO",
+        "reference": "https://southerncoppercorp.com/eng/",
+        "yahoo_symbol": "SCCO",
+        "ibkr_symbol": "SCCO",
+        "primary_exchange": "NYSE",
+        "listing_venue": "NYSE"
+      }
+    },
+    {
+      "kind": "industry_etf",
+      "security": {
+        "symbol": "CIBR",
+        "security_id": "grimes-20261026-CIBR",
+        "reference": "https://www.ftportfolios.com/retail/etf/EtfSummary.aspx?Ticker=CIBR",
+        "yahoo_symbol": "CIBR",
+        "ibkr_symbol": "CIBR",
+        "primary_exchange": "NASDAQ",
+        "listing_venue": "NASDAQ"
+      }
+    },
+    {
+      "kind": "industry_etf",
+      "security": {
+        "symbol": "OIH",
+        "security_id": "grimes-20261026-OIH",
+        "reference": "https://www.vaneck.com/us/en/investments/oil-services-etf-oih/",
+        "yahoo_symbol": "OIH",
+        "ibkr_symbol": "OIH",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCA"
+      }
+    },
+    {
+      "kind": "industry_etf",
+      "security": {
+        "symbol": "ITA",
+        "security_id": "grimes-20261026-ITA",
+        "reference": "https://www.cboe.com/us/equities/listings/listed_products/symbols/ITA",
+        "yahoo_symbol": "ITA",
+        "ibkr_symbol": "ITA",
+        "primary_exchange": "BATS",
+        "listing_venue": "BATS"
+      }
+    },
+    {
+      "kind": "sector_etf",
+      "security": {
+        "symbol": "XLB",
+        "security_id": "grimes-20261026-XLB",
+        "reference": "https://www.ssga.com/us/en/individual/etfs/state-street-materials-select-sector-spdr-etf-xlb",
+        "yahoo_symbol": "XLB",
+        "ibkr_symbol": "XLB",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCA"
+      }
+    },
+    {
+      "kind": "industry_etf",
+      "security": {
+        "symbol": "COPX",
+        "security_id": "grimes-20261026-COPX",
+        "reference": "https://www.globalxetfs.com/funds/copx/",
+        "yahoo_symbol": "COPX",
+        "ibkr_symbol": "COPX",
+        "primary_exchange": "ARCA",
+        "listing_venue": "ARCA"
+      }
+    }
+  ],
+  "window_days": 1825,
+  "max_runtime_seconds": 1800,
+  "max_requests": 60,
+  "max_windows_per_instrument": 5
+}
