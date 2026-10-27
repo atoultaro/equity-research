@@ -213,6 +213,40 @@ five SPY sessions were captured, validated, cached, frozen and loaded offline.
 See [the live smoke-test record](docs/LIVE_IBKR_EQUITY_SMOKE_TEST.md) for the
 confirmed prerequisites, exact scope, local artifacts and remaining data limits.
 
+The [IBKR historical-depth audit](docs/IBKR_HISTORICAL_DEPTH_AUDIT.md) adds an
+explicit operator-started backward daily-history walk with contract identities,
+bounded retries/pacing, immutable resumable checkpoints and offline coverage
+reports. Automated tests use mocks; the live command requires explicit local
+connection and read-only confirmations. It does not query accounts or place orders.
+
+The [expert trade-comprehension pilot](docs/EXPERT_TRADE_COMPREHENSION.md) preserves
+four operator-reported Grimes new positions and builds immutable, descriptive
+daily-price, market/sector, stop and event-evidence dossiers. `expert freeze-inputs`,
+`expert study` and `expert replay` are offline; actual acquisition reuses the
+separately invoked depth audit. Reference closes are not assumed entries. The
+[October 26 report](docs/reports/GRIMES_20261026.md) separates reported facts,
+observed prices and competing research hypotheses, with explicit daily/5/20/60-session
+return horizons. A versioned operator-reported 1R convention and optional hypothetical
+closing-reference targets preserve unknown actual entries/exits, without simulated
+fills or P&L.
+
+PR16 adds [Grimes source/model lifecycle reconstruction](docs/GRIMES_TRADE_LIFECYCLES.md)
+for exactly 26 stocks across seven October 18–26 alerts. The offline `lifecycle`
+commands preserve source positions, stop histories and underway transitions,
+reconcile separate modeled triggers/1R outcomes, and produce immutable event-context
+tables and one dossier per stock. The [research report](docs/reports/GRIMES_LIFECYCLES_20261018_26.md)
+documents EBAY's old-stop crossing versus its later source revision, unresolved
+weekly publication time, conditional price-basis scenarios and right censoring.
+Actual fills, position sizes and profitability remain unknown.
+
+PR17 adds [empirical Grimes management and decision analysis](docs/GRIMES_MANAGEMENT_DECISIONS.md)
+using the unchanged PR16 captures. The [complete research report](docs/reports/grimes-management-20261018-26/report.md)
+compares all stop revisions, underway transitions and source closures, with
+counterexamples, matched ENTERABLE observations and explicit primary/conditional
+evidence. `management study` and `management replay` are offline and produce
+immutable studies and 26 individual summaries. They do not infer actual fills,
+exit causes or a trading edge.
+
 PR 6A adds the first actual AAPL individual-stock dataset: 703 IBKR daily sessions
 plus independently sourced earnings, dividend declarations and historical splits.
 [The AAPL event-aware study](docs/AAPL_EVENT_AWARE_RESEARCH.md) records acquisition

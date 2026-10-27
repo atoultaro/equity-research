@@ -24,6 +24,8 @@ def register(commands):
     compare.add_argument("--output", type=Path, required=True)
     from ..history.cli import register as register_history
     register_history(operations)
+    from ..history.depth_cli import register as register_depth
+    register_depth(operations)
     from ..events.cli import register as register_events
     register_events(operations)
     from ..market_context.cli import register as register_context
@@ -32,6 +34,10 @@ def register(commands):
 
 def dispatch(args):
     from .storage import encode, write_bundle
+
+    if args.operation in {"ibkr-depth-audit", "ibkr-depth-report"}:
+        from ..history.depth_cli import dispatch as dispatch_depth
+        return dispatch_depth(args)
 
     if args.operation == "market-context":
         from ..market_context.cli import dispatch as dispatch_context

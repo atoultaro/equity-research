@@ -22,11 +22,26 @@ def main(argv=None) -> int:
     register_outcomes(commands)
     from .universe.cli import register as register_universe
     register_universe(commands)
+    from .comprehension.cli import register as register_expert
+    register_expert(commands)
+    from .lifecycle.cli import register as register_lifecycle
+    register_lifecycle(commands)
+    from .management.cli import register as register_management
+    register_management(commands)
     args = parser.parse_args(argv)
     try:
         if args.command == "universe":
             from .universe.cli import dispatch as dispatch_universe
             return dispatch_universe(args)
+        if args.command == "management":
+            from .management.cli import dispatch as dispatch_management
+            return dispatch_management(args)
+        if args.command == "lifecycle":
+            from .lifecycle.cli import dispatch as dispatch_lifecycle
+            return dispatch_lifecycle(args)
+        if args.command == "expert":
+            from .comprehension.cli import dispatch as dispatch_expert
+            return dispatch_expert(args)
         if args.command == "outcomes":
             from .outcomes.cli import dispatch as dispatch_outcomes
             return dispatch_outcomes(args)

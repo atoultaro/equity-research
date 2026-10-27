@@ -1,0 +1,420 @@
+{
+  "allow_email_availability_bound": true,
+  "analysis_cutoff": "2026-10-26T18:11:00-04:00",
+  "basis_evidence": [
+    {
+      "anchors": [
+        {
+          "field": "low",
+          "nominal_quote": "117.87",
+          "session_date": "2026-10-26",
+          "source_status": "OPERATOR_PROVIDED_CONTEMPORANEOUS_QUOTE"
+        }
+      ],
+      "con_id": 4347086,
+      "limitation": "Numerical scale corroboration for October26 only, not a complete independent corporate-action audit; actual order/fill evidence absent",
+      "source_reference": "Operator PR16 EBAY case: October26 low117.87 and original nominal stop119.20; exact native RTH low independently matches",
+      "status": "OPERATOR_QUOTE_ANCHORED_SESSION_SCALE",
+      "symbol": "EBAY"
+    }
+  ],
+  "dated_event_evidence_parent_input_sha256": "01968c15438d78b47217d1402e95cb4b097eea297c0b5aef2921e8903e0e8a49",
+  "dated_events": [
+    {
+      "capture_level": "Researcher factual evidence inventory recorded now; not original HTTP body and not historical publication time",
+      "captured_at": "2026-10-27T01:43:34.619001+00:00",
+      "description": "SailPoint filed results for fiscal quarter ended July 31, 2026; publication clock remains unverified.",
+      "event_category": "EARNINGS",
+      "publication_evidence": "SEC index lists acceptance at 07:12:33 ET; acceptance alone is not asserted to be the public dissemination timestamp.",
+      "publication_evidence_status": "UNKNOWN",
+      "publication_precision": "DATE",
+      "published_at": null,
+      "sec_accepted_at": "2026-09-09T07:12:33-04:00",
+      "source_date": "2026-09-09",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/2030781/000162828026061015/sail-20260909.htm",
+      "symbol": "SAIL"
+    },
+    {
+      "capture_level": "Researcher factual evidence inventory recorded now; not original HTTP body and not historical publication time",
+      "captured_at": "2026-10-27T01:43:34.619001+00:00",
+      "description": "SLB announced third-quarter 2026 results on October 23; no claim about expert reaction to that release.",
+      "event_category": "EARNINGS",
+      "publication_evidence": "SEC index lists acceptance at 07:04:15 ET; exact public dissemination time not independently verified.",
+      "publication_evidence_status": "UNKNOWN",
+      "publication_precision": "DATE",
+      "published_at": null,
+      "sec_accepted_at": "2026-10-23T07:04:15-04:00",
+      "source_date": "2026-10-23",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/87347/000119312526429435/d151271d8k.htm",
+      "symbol": "SLB"
+    },
+    {
+      "capture_level": "Researcher factual evidence inventory recorded now; not original HTTP body and not historical publication time",
+      "captured_at": "2026-10-27T01:43:34.619001+00:00",
+      "description": "GE Aerospace announced third-quarter 2026 results dated October 20.",
+      "event_category": "EARNINGS",
+      "publication_evidence": "Issuer dated release and 07:30 ET conference-call schedule; call start is not a publication timestamp.",
+      "publication_evidence_status": "UNKNOWN",
+      "publication_precision": "DATE",
+      "published_at": null,
+      "source_date": "2026-10-20",
+      "source_url": "https://www.geaerospace.com/news/press-releases/ge-aerospace-announces-third-quarter-2026-results",
+      "symbol": "GE"
+    },
+    {
+      "capture_level": "Researcher factual evidence inventory recorded now; not original HTTP body and not historical publication time",
+      "captured_at": "2026-10-27T01:43:34.619001+00:00",
+      "description": "GE Aerospace became standalone following GE Vernova separation on April 2, 2024; earlier native price history is not constant-business history.",
+      "event_category": "BUSINESS_IDENTITY",
+      "publication_evidence": "Issuer dated separation release; exact public posting timestamp unknown.",
+      "publication_evidence_status": "UNKNOWN",
+      "publication_precision": "DATE",
+      "published_at": null,
+      "source_date": "2024-04-02",
+      "source_url": "https://www.geaerospace.com/news/press-releases/ge-aerospace-launches-independent-investment-grade-public-company-following-0",
+      "symbol": "GE"
+    },
+    {
+      "capture_level": "Researcher factual evidence inventory recorded now; not original HTTP body and not historical publication time",
+      "captured_at": "2026-10-27T01:43:34.619001+00:00",
+      "description": "October 20 filing documents Q3 results and an October 15 dividend declaration; record/payment dates do not establish an ex-date.",
+      "event_category": "EARNINGS_AND_DIVIDEND_DECLARATION",
+      "ex_dividend_date": null,
+      "publication_evidence": "Dated issuer filing; exact public dissemination timestamp and ex-dividend date remain unknown.",
+      "publication_evidence_status": "UNKNOWN",
+      "publication_precision": "DATE",
+      "published_at": null,
+      "source_date": "2026-10-20",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1001838/000110465926117588/scco-20261020x8k.htm",
+      "symbol": "SCCO"
+    }
+  ],
+  "email_bound_decision": "Explicit research clock: matching original weekly email internal timestamp is separate latest-availability evidence; never resolve original Yesterday display to an absolute publication date",
+  "end": "2026-10-26",
+  "entry_rule": "NEXT_ELIGIBLE_REGULAR_OPEN",
+  "freeze_policy": "Exact subscriber source and raw market data remain local; publish derived factual tables only; no subscriber full-text Git publication",
+  "identity_notes": [
+    {
+      "con_id": 922990633,
+      "finding": "Current ordinary-share contract starts September14,2026; no splice to old ADS contract. Only31 bars; MA50/150/200 and60-session returns unavailable.",
+      "source_date": "2026-09-14",
+      "source_url": "https://ir.tevapharm.com/news-and-events/press-releases/press-release-details/2026/Teva-Begins-Trading-Ordinary-Shares-Directly-on-the-NYSE-Marking-a-Milestone-in-its-Pivot-to-Growth-Strategy/default.aspx",
+      "symbol": "TEVA"
+    },
+    {
+      "con_id": 760250490,
+      "finding": "Current separated SanDisk identity. Native427bars include February2025 pre-regular-way history; regular-way listing February24. No stitch to pre-2016 ticker. All October rolling252-session windows are after regular-way listing.",
+      "source_date": "2025-02-24",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/106040/000119312525033383/d847507d8k.htm",
+      "symbol": "SNDK"
+    },
+    {
+      "con_id": 852120292,
+      "finding": "Current Strive identity, not an assumption of unchanged AssetEntities business. February6,2026 reverse split1-for-20. Native split-adjusted historical bars retained, stop-basis compatibility unverified; long warmup may span a business change.",
+      "source_date": "2026-02-04",
+      "source_url": "https://www.nasdaqtrader.com/TraderNews.aspx?id=ECA2026-70",
+      "symbol": "ASST"
+    }
+  ],
+  "limitations": [
+    "25stocks lack quote/adjustment-basis corroboration; primary outcomes unresolved while separate conditional scenario assumes compatibility",
+    "ASST sector proxy unresolved",
+    "No complete independently publication-verified earnings/corporate-action inventory; unknown is not no event",
+    "No intraday reconstruction; stop/target ordering ambiguity retained",
+    "No actual fills/position sizes; no execution accounting or profitability conclusion"
+  ],
+  "methodology_application": "PR16 explicitly extends operator-reported current1R convention to all26 analytical episodes; no trade-specific exit instruction verified",
+  "operator_corroboration_bundle_sha256": "e0c565d4777418aa196a1592c2d02a013990c48f3e0c401e1935432a86a9d2da",
+  "prior_pr15_head": "0adb9c128589760e8043c366f2157b25458de729",
+  "schema_version": "grimes_lifecycle_inputs_v1",
+  "sector_proxies": [
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 265598,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "AAPL"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 715002751,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLE",
+      "proxy_con_id": 4215217,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "CLMT"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 922990633,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLV",
+      "proxy_con_id": 4215205,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "TEVA"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 5437,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLI",
+      "proxy_con_id": 4215227,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "CAT"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 37018770,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLC",
+      "proxy_con_id": 322317077,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "T"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 852120292,
+      "evidence": "ASST qualified Strive identity has bitcoin/structured-finance exposure; a single conventional sector proxy is left unresolved",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": null,
+      "proxy_con_id": null,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "ASST"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 135423662,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "AAOI"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 4391,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "AMD"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 740948854,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "ANET"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 760250490,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "SNDK"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 36285627,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLY",
+      "proxy_con_id": 4215215,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "GME"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 444884769,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "SNOW"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 60532895,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLB",
+      "proxy_con_id": 4215200,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "CDE"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 248682005,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLP",
+      "proxy_con_id": 4215210,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "ELF"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 8251,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLV",
+      "proxy_con_id": 4215205,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "HUM"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 53747825,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLY",
+      "proxy_con_id": 4215215,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "SIG"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 69342644,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLV",
+      "proxy_con_id": 4215205,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "OMER"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 118089500,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLV",
+      "proxy_con_id": 4215205,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "ABBV"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 11926119,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLE",
+      "proxy_con_id": 4215217,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "CNQ"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 4347086,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLY",
+      "proxy_con_id": 4215215,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "EBAY"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 520512263,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "GTLB"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 9720,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLI",
+      "proxy_con_id": 4215227,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "MMM"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 760966616,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLK",
+      "proxy_con_id": 4215230,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "SAIL"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 12200,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLE",
+      "proxy_con_id": 4215217,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "SLB"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 498843743,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLI",
+      "proxy_con_id": 4215227,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "GE"
+    },
+    {
+      "attribution": "AGENT_SELECTED_BROAD_CONTEXT_PROXY_NOT_HISTORICAL_GICS_OR_ETF_MEMBERSHIP",
+      "con_id": 1812968,
+      "evidence": "Explicit broad business-context choice for descriptive comparisons, not an observed expert choice or an ETF constituent claim",
+      "historical_classification_publication": "UNKNOWN_NOT_USED_AS_SCREENING_EVIDENCE",
+      "limitations": "Proxy choice is fixed analytical configuration; ETF returns are price returns with different dividends. No dated licensed taxonomy inferred.",
+      "proxy": "XLB",
+      "proxy_con_id": 4215200,
+      "source_reference": "PR16 fixed analyst context configuration; native qualified stock and ETF identities from frozen IBKR captures",
+      "symbol": "SCCO"
+    }
+  ],
+  "source_base_commit": "c44dfd836ff4304f7b89d0d76616bc91cfc0e452",
+  "start": "2025-01-02"
+}
