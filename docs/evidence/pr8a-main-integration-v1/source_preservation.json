@@ -1,0 +1,18 @@
+{
+  "both_parents_retained": true,
+  "existing_main_files_verified_byte_identical": 259,
+  "frozen_lifecycle_and_management_implementation_unchanged": true,
+  "integration_merge": "156b9a99c1746f4dc2558368c907298fc7904818",
+  "main": "6ead08793a41edd78513749c49032a04fdd69ae2",
+  "main_file_inventory_sha256": "07991da86c518d3870adbef0daaf10cd271bcaedf92a2864f26b30b1e2bcc1f4",
+  "only_existing_main_files_changed": [
+    "README.md",
+    "src/equity_research/cli.py"
+  ],
+  "pr8a_implementation_and_tests_unchanged_from_prior_head": [
+    "src/equity_research/universe",
+    "tests/test_universe.py",
+    "scripts/pilot_historical_universe.py"
+  ],
+  "prior_pr12_head": "733bf7e9ab67115183fe58b0d2e0f3b48468c954"
+}
