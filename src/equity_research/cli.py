@@ -22,8 +22,13 @@ def main(argv=None) -> int:
     register_outcomes(commands)
     from .comprehension.cli import register as register_expert
     register_expert(commands)
+    from .lifecycle.cli import register as register_lifecycle
+    register_lifecycle(commands)
     args = parser.parse_args(argv)
     try:
+        if args.command == "lifecycle":
+            from .lifecycle.cli import dispatch as dispatch_lifecycle
+            return dispatch_lifecycle(args)
         if args.command == "expert":
             from .comprehension.cli import dispatch as dispatch_expert
             return dispatch_expert(args)
