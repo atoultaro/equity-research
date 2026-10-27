@@ -220,13 +220,15 @@ def test_publication_evidence_not_retrieval_clock(stamp, precision, evidence, ex
 def test_heuristic_ambiguity_not_forced(captured):
     spec, prices, info, calendar = captured[3]
     f = Panel(prices, info, calendar, spec["observations"]["analysis_cutoff"]).features("SAIL", "2026-10-26")
-    assert setup(f)["classification"] == "OTHER_OR_UNCERTAIN"
+    assert setup(f)["intended_expert_setup"] is None
+    assert setup(f)["resolution"] == "UNRESOLVED_EXPERT_INTENT"
     f["breakout20"]["value"] = True
     f["close_sma50"]["value"] = .1
     f["close_sma200"]["value"] = .2
     f["sma50_sma200"]["value"] = .1
-    assert len(setup(f)["candidates"]) == 2
-    assert setup(f)["classification"] == "OTHER_OR_UNCERTAIN"
+    diagnostics = setup(f)["researcher_diagnostics"]
+    assert diagnostics["legacy_bullish_breakout"] and diagnostics["legacy_pullback_proximity"]
+    assert setup(f)["intended_expert_setup"] is None
 
 
 def test_opposing_setup_is_preserved_as_a_contradiction(captured):
@@ -235,9 +237,10 @@ def test_opposing_setup_is_preserved_as_a_contradiction(captured):
     # a flat background, is bearish geometry even for a reported LONG.
     prices["SAIL"][-1]["high"] = "103"
     result = derive(spec, prices, info, calendar)
-    inferred = result["stock_features.json"]["SAIL"]["inferred_setup"]
-    assert inferred["classification"] == "FAILED_BREAKOUT_OR_BEARISH_REVERSAL"
-    assert inferred["direction_consistency"] == "OPPOSES_REPORTED_DIRECTION"
+    hypotheses = result["stock_features.json"]["SAIL"]["research_setup_hypotheses"]
+    assert hypotheses["researcher_diagnostics"]["failed_breakout20"] is True
+    assert hypotheses["intended_expert_setup"] is None
+    assert result["stock_features.json"]["SAIL"]["interpretation"]["opposing_evidence"]
 
 
 def test_shared_math_and_calendar_windows_hand_checked(captured):

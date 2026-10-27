@@ -11,11 +11,13 @@ from ..ingestion.storage import digest, encode, read_bundle, write_bundle
 from ..reporting import shared_identity
 from .features import Panel, VERSION, alignment, metric, setup, stop_analysis
 from .inputs import read_inputs
+from .methodology import management, validate_methodology
+from .amendment import es_context, return_verification
 
 MARKETS = ("SPY", "QQQ", "RSP", "IWM")
 OFFSETS = (0, 5, 20, 60, 120)
 VECTOR = ("close_sma20", "close_sma50", "close_sma150", "close_sma200", "sma50_slope20",
-          "return20", "return60", "atr14_fraction", "realized_volatility20", "drawdown_high252",
+          "daily_return", "return_5d", "return_20d", "return_60d", "atr14_fraction", "realized_volatility20", "drawdown_high252",
           "range_contraction20_60", "volume_vs_prior20", "mean_dollar_volume20_native")
 
 
@@ -71,17 +73,19 @@ def interpretation(stock, contexts, stop, direction):
         if value is None:
             missing.append(name)
         elif sign*value > 0:
-            support.append(f"{name}={value:.6f} supports the reported {direction} direction")
+            label = {"return20": "20-session price return", "return60": "60-session price return"}.get(name, name)
+            support.append(f"{label}={value*100:.2f}% supports the reported {direction} direction")
         elif sign*value < 0:
-            opposition.append(f"{name}={value:.6f} opposes the reported {direction} direction")
+            label = {"return20": "20-session price return", "return60": "60-session price return"}.get(name, name)
+            opposition.append(f"{label}={value*100:.2f}% opposes the reported {direction} direction")
     for proxy in ("SPY", "QQQ"):
         value = stock["relative_strength"][proxy]["20"]["value"]
         if value is None:
             missing.append(f"relative_to_{proxy}20")
         elif sign*value > 0:
-            support.append(f"20-session ratio change vs {proxy}={value:.6f} supports directional relative strength")
+            support.append(f"20-session price ratio change vs {proxy}={value*100:.2f}% supports directional relative strength")
         elif sign*value < 0:
-            opposition.append(f"20-session ratio change vs {proxy}={value:.6f} opposes directional relative strength")
+            opposition.append(f"20-session price ratio change vs {proxy}={value*100:.2f}% opposes directional relative strength")
     failed = stock["features"]["failed_breakout20"]["value"]
     if failed:
         (opposition if direction == "LONG" else support).append("Current High exceeded the prior 20-session High, but Close returned below that boundary")
@@ -93,16 +97,23 @@ def interpretation(stock, contexts, stop, direction):
             opposition.append(f"{kind} proxy {context['proxy']} opposes all three disclosed trend dimensions")
         else:
             missing.append(f"{kind} alignment {status}; no unqualified contextual confirmation")
-    distances = stop.get("technical_level_distances", {})
-    available = [(k, v) for k, v in distances.items() if v["absolute_atr_distance"] is not None]
-    nearest = min(available, key=lambda p: (float(p[1]["absolute_atr_distance"]), p[0])) if available else None
-    return {"supporting_evidence": support, "opposing_evidence": opposition, "unresolved_or_mixed": missing,
-        "nearest_tested_stop_level": {"name": nearest[0], **nearest[1]} if nearest else None,
+    return {"attribution": "RESEARCH_HYPOTHESIS", "supporting_evidence": support, "opposing_evidence": opposition, "unresolved_or_mixed": missing,
         "scope": "Sign tests and geometric proximity only; no calibrated score, causality or attribution of private rationale"}
 
 
-def derive(spec, prices, coverage, calendar):
-    observations = spec["observations"]
+def derive(spec, prices, coverage, calendar, *, methodology=None, amendment=None, close_reference_1r=False):
+    if type(close_reference_1r) is not bool:
+        raise ValueError("closing reference scenario option must be boolean")
+    observations = deepcopy(spec["observations"])
+    observations["attribution"] = "EXPERT_REPORTED"
+    for row in observations["recommendations"]:
+        row.update(attribution="EXPERT_REPORTED", intended_setup=None)
+    if methodology:
+        methodology = validate_methodology(methodology)
+    if close_reference_1r and (not methodology or observations["recommendation_date"] != "2026-10-26"):
+        raise ValueError("October 26 reference scenario requires an explicit operator methodology")
+    if amendment and amendment.get("schema_version") != "expert_amendment_v1":
+        raise ValueError("unsupported expert amendment evidence schema")
     cutoff, end = observations["analysis_cutoff"], observations["recommendation_date"]
     panel = Panel(prices, coverage, calendar, cutoff)
     if not panel.days or panel.days[-1] != end:
@@ -140,7 +151,8 @@ def derive(spec, prices, coverage, calendar):
             complete_three_year_history_not_implied_by_status=True)
     market = {"proxies": {s: evolution(s) for s in MARKETS}, "transition_deltas": {},
         "breadth": "NOT_AVAILABLE: RSP/SPY is an equal/cap-weight participation proxy, not constituent breadth",
-        "es_context": deepcopy(spec.get("es_context", {"status": "NOT_AVAILABLE", "reason": "NO_VERIFIED_ES_INPUT"}))}
+        "attribution": "MARKET_OBSERVED",
+        "es_context": es_context(spec.get("es_context", {"status": "NOT_AVAILABLE", "reason": "NO_VERIFIED_ES_INPUT"}), amendment, calendar, end)}
     for s in MARKETS:
         current = evolution(s)["0"]["features"]
         market["transition_deltas"][s] = {}
@@ -150,17 +162,13 @@ def derive(spec, prices, coverage, calendar):
                 round(current[k]["value"]-old["features"][k]["value"], 12)
                 if old and current[k]["value"] is not None and old["features"][k]["value"] is not None else None)
                 for k in ("close_sma200", "sma50_slope20", "return20", "realized_volatility20", "drawdown_high252")}
-    sectors, stocks, stops, events, vectors = {}, {}, {}, {}, {}
+    sectors, stocks, stops, events, vectors, trade_management = {}, {}, {}, {}, {}, {}
     for obs in observations["recommendations"]:
         symbol, direction = obs["symbol"], obs["direction"]
         f = panel.features(symbol, end)
-        stocks[symbol] = {"session_date": end, "features": f, "inferred_setup": setup(f),
+        stocks[symbol] = {"session_date": end, "attribution": "MARKET_OBSERVED", "features": f, "research_setup_hypotheses": setup(f),
             "stock_trend_alignment": alignment(f, direction), "relative_strength": {},
             "market_alignment": {m: alignment(evolution(m)["0"]["features"], direction) for m in MARKETS}}
-        label = stocks[symbol]["inferred_setup"]["classification"]
-        inferred_direction = "LONG" if label.startswith("BULLISH") else "SHORT" if label.startswith(("BEARISH", "FAILED_BREAKOUT")) else None
-        stocks[symbol]["inferred_setup"]["direction_consistency"] = (
-            "UNDETERMINED" if inferred_direction is None else "SUPPORTS_REPORTED_DIRECTION" if inferred_direction == direction else "OPPOSES_REPORTED_DIRECTION")
         mapping = classification(spec, symbol, coverage)
         contexts = {}
         for kind in ("sector", "industry"):
@@ -177,16 +185,20 @@ def derive(spec, prices, coverage, calendar):
                 stocks[symbol]["relative_strength"][kind] = {str(n): panel.relative(symbol, proxy, end, n) for n in (20, 60)}
         for m in ("SPY", "QQQ"):
             stocks[symbol]["relative_strength"][m] = {str(n): panel.relative(symbol, m, end, n) for n in (20, 60)}
-        sectors[symbol] = {"classification": mapping, "contexts": contexts}
+        sectors[symbol] = {"classification_attribution": "RESEARCH_HYPOTHESIS", "context_price_attribution": "MARKET_OBSERVED",
+            "classification": mapping, "contexts": contexts}
         stops[symbol] = stop_analysis(obs, f)
         stocks[symbol]["interpretation"] = interpretation(stocks[symbol], contexts, stops[symbol], direction)
+        trade_management[symbol] = management(obs, f["close"]["value"], methodology, scenario=close_reference_1r)
         inventory = [e for e in spec.get("event_evidence", []) if e.get("symbol") in {symbol, "MARKET", "INDUSTRY"}]
         events[symbol] = {"events": [classify_event(e, cutoff) for e in inventory],
             "coverage": "PARTIAL_DOCUMENTED_INVENTORY_NOT_AN_EVENT_COMPLETENESS_ATTESTATION",
             "unknowns": ["Exact recommendation publication and execution times", "Complete earnings/action calendar",
                 "Comprehensive company, industry and macro news; no catalyst inferred from OHLCV", "Expert's private rationale"]}
         vectors[symbol] = {"direction": direction, "action": obs["action"], "units": "dimensionless fractions except explicitly named native dollar-volume proxy",
-            "features": {k: f[k]["value"] for k in VECTOR}, "setup": stocks[symbol]["inferred_setup"],
+            "reported_fields_attribution": "EXPERT_REPORTED", "features_attribution": "MARKET_OBSERVED",
+            "features": {k: f[k]["value"] for k in VECTOR}, "research_setup_hypotheses": stocks[symbol]["research_setup_hypotheses"],
+            "intended_expert_setup": None,
             "relative_strength": stocks[symbol]["relative_strength"],
             "stop_atr_distance": stops[symbol].get("atr_normalized_distance"),
             "sector_alignment": contexts["sector"].get("direction_alignment"),
@@ -208,7 +220,10 @@ def derive(spec, prices, coverage, calendar):
             comparison["pairwise_feature_differences"].append({"left": a, "right": b,
                 "left_minus_right": {k: round(vectors[a]["features"][k]-vectors[b]["features"][k], 12)
                     if vectors[a]["features"][k] is not None and vectors[b]["features"][k] is not None else None for k in VECTOR}})
-    manifest = {"schema_version": "expert_comprehension_v1", "feature_version": VERSION,
+    manifest = {"schema_version": "expert_comprehension_v2", "feature_version": VERSION,
+        "attribution_classes": {"EXPERT_REPORTED": "Operator-provided recommendation facts, not independently verified",
+            "MARKET_OBSERVED": "Computed from frozen provider observations under stated basis/timing assumptions",
+            "RESEARCH_HYPOTHESIS": "Researcher interpretation or reference scenario; never an intended expert setup or actual fill"},
         "source_origins": {s: c["origin"] for s, c in coverage.items()},
         "analysis_cutoff": cutoff, "price_session": end, "availability_assumption": "RECONSTRUCTED_US_CASH_CLOSE_PLUS_60_MINUTES",
         "exact_historical_bar_publication_times": "UNKNOWN", "retrieved_vintage_may_include_later_revisions": True,
@@ -219,12 +234,16 @@ def derive(spec, prices, coverage, calendar):
             "volume": "relative within native capture; dollar-volume proxy unverified units, not execution liquidity",
             "swings": "strict 3-neighbor pivots, confirmed with 3 later completed sessions within each snapshot",
             "missingness": "each calculation requires its full ordered calendar window; never forward filled"},
-        "taxonomy": {"breakout": "close > previous 20 highs and close > SMA50", "pullback": "close > SMA200, SMA50 > SMA200, within 1 ATR of SMA20 or SMA50",
-            "breakdown": "close < previous 20 lows and close < SMA50", "failed_breakout": "current high > previous 20 highs > current close",
-            "ambiguity": "zero or multiple matches -> OTHER_OR_UNCERTAIN; hypotheses do not assert expert motive"}}
+        "setup_policy": "No automatic intended-setup classification. Retain multiple competing research hypotheses; 20-session diagnostics are not documented Grimes requirements",
+        "closing_reference_1r_scenario_enabled": close_reference_1r,
+        "legacy_return_aliases": {"return1": "daily_return", "return5": "return_5d", "return20": "return_20d", "return60": "return_60d"},
+        "methodology_id": methodology["methodology_id"] if methodology else None}
     result = {"expert_recommendations.json": observations, "data_coverage.json": coverage, "market_context.json": market,
         "sector_context.json": sectors, "stock_features.json": stocks, "stop_analysis.json": stops,
-        "event_context.json": events, "comparison.json": comparison, "manifest.json": manifest}
+        "event_context.json": events, "comparison.json": comparison, "manifest.json": manifest,
+        "expert_methodology.json": methodology or {"source_status": "UNKNOWN_OR_MISSING"},
+        "trade_management.json": trade_management,
+        "return_validation.json": return_verification(panel, prices, end, coverage, amendment)}
     return result
 
 
@@ -239,113 +258,195 @@ def _fmt(value, percent=False):
 
 
 def markdown(result, only=None):
-    observations = result["expert_recommendations.json"]
-    lines = ["# Expert trade comprehension — Adam Grimes", "", f"Observation: {observations['recommendation_date']}; assumed cutoff {observations['analysis_cutoff']}.", "",
-        "All four actions mean OPEN_NEW_POSITION. Closing prices are research references; execution, entry, size, targets and exact publication time are UNKNOWN.", "",
-        "Native IBKR TRADES is documented split-adjusted, not dividend-adjusted. Stop/price contemporaneous basis compatibility is unverified. No fills, risk budgets, outcomes or profitability are computed.", "",
-        "## Market evolution", "", "Rows compare only completed sessions available at each historical snapshot. Volatility is unannualized daily population SD; drawdown uses trailing 252-session High.", "",
-        "| Proxy | Sessions before cutoff | Session | Close/SMA200 − 1 | 20-session momentum | Daily RV20 | Drawdown |", "| --- | ---: | --- | ---: | ---: | ---: | ---: |"]
-    for proxy, snapshots in result["market_context.json"]["proxies"].items():
-        for offset, snap in snapshots.items():
-            f = snap["features"]
-            lines.append(f"| {proxy} | {offset} | {snap['session_date']} | " + " | ".join(_fmt(f[k]["value"], True) for k in ("close_sma200", "return20", "realized_volatility20", "drawdown_high252")) + " |")
-    lines += ["", "Transitions are numerical deltas in market_context.json; no year-wide bull/bear label. RSP/SPY measures participation, not constituent breadth.",
-        f"ES: {result['market_context.json']['es_context']['status']}. {result['market_context.json']['es_context'].get('reason', '')}", ""]
-    origins = sorted(set(result["manifest.json"]["source_origins"].values()))
-    lines += [f"Source origins: {', '.join(origins)}. Synthetic fixtures demonstrate arithmetic and reproducibility only.", "",
-        "| Current market proxy | Close/SMA20 − 1 | Close/SMA50 − 1 | Close/SMA150 − 1 | Close/SMA200 − 1 | SMA50 slope20 |",
-        "| --- | ---: | ---: | ---: | ---: | ---: |"]
-    for proxy, snapshots in result["market_context.json"]["proxies"].items():
-        f = snapshots["0"]["features"]
-        lines.append(f"| {proxy} | " + " | ".join(_fmt(f[k]["value"], True) for k in ("close_sma20", "close_sma50", "close_sma150", "close_sma200", "sma50_slope20")) + " |")
-    lines.append("")
-    for obs in observations["recommendations"]:
-        s = obs["symbol"]
-        if only and only != s:
-            continue
-        stock, stop, sector = (result[k][s] for k in ("stock_features.json", "stop_analysis.json", "sector_context.json"))
-        f, coverage = stock["features"], result["data_coverage.json"].get(s)
-        lines += [f"## {s} — {obs['direction']} / OPEN_NEW_POSITION", "", f"> {obs['original_recommendation']}", "",
-            f"Original source: {observations['source_reference']}. Expert's private motives remain unknown.", ""]
-        if coverage:
-            lines += [f"IBKR conId {coverage['contract']['conId']}, {coverage['contract']['primaryExchange']}; observed {coverage['first_observed']} through {coverage['last_observed']}, {coverage['observed_sessions']} sessions. "
-                f"Missing expected: {len(coverage['missing_expected_sessions'])}; excluded before documented listing: {len(coverage['listing_excluded_sessions'])}; three-year target met: {coverage['three_year_target_met']}.", ""]
+    observations = result['expert_recommendations.json']
+    market = result['market_context.json']
+    lines = ['# Expert trade comprehension — Adam Grimes', '',
+        f"Observation {observations['recommendation_date']}; assumed after-close cutoff {observations['analysis_cutoff']}.", '',
+        '**EXPERT_REPORTED**: operator-provided direction, OPEN_NEW_POSITION action and reported stop. Actual entry, execution time, quantity and trade-specific targets/exits remain UNKNOWN.', '',
+        '**MARKET_OBSERVED**: calculations from frozen IBKR completed-session OHLCV. Price availability is reconstructed as cash close +60 minutes; later retrieval can contain revisions.', '',
+        '**RESEARCH_HYPOTHESIS**: competing technical explanations, candidate invalidation levels and optional closing-reference arithmetic. These do not identify Grimes\' intended setup or verified execution.', '',
+        'The separate methodology specification is OPERATOR_REPORTED, not independently verified. No simulated fills, exits, realized P&L or portfolio performance are produced.', '',
+        'Native TRADES prices are documented split-adjusted, not dividend-adjusted; volume units and reported-stop adjustment compatibility remain unverified.', '',
+        '## MARKET_OBSERVED — October 26 closing-price returns by horizon', '',
+        'Every return is Close(t)/Close(t−n completed trading sessions)−1 and requires n+1 consecutive calendar observations. Daily means previous completed session to current, not a trailing 20-session return.', '',
+        '| Market proxy | Daily return (1 session) | Trailing 5-session return | Trailing 20-session return | Trailing 60-session return |',
+        '| --- | ---: | ---: | ---: | ---: |']
+    for proxy, snapshots in market['proxies'].items():
+        f = snapshots['0']['features']
+        lines.append(f'| {proxy} | ' + ' | '.join(_fmt(f[k]['value'], True) for k in ('daily_return', 'return_5d', 'return_20d', 'return_60d')) + ' |')
+    lines += ['', '### Independent QQQ reconciliation from frozen closes', '']
+    for name, check in result['return_validation.json']['QQQ'].items():
+        horizon = 'daily (1 session)' if name == 'daily_return' else 'trailing 20 sessions'
+        if check['status'] == 'UNAVAILABLE':
+            lines += [f"QQQ {horizon}: UNAVAILABLE ({check['reason']}).", '']
         else:
-            lines += ["Stock price capture NOT_AVAILABLE; all dependent features remain unavailable.", ""]
-        lines += ["### Objective price structure", "", "| Measurement | Value |", "| --- | ---: |"]
-        for k in ("close", "sma20", "sma50", "sma150", "sma200", "sma50_slope20", "return20", "return60", "atr14", "atr14_fraction", "realized_volatility20", "high20", "low20", "high60", "low60", "drawdown_high252", "range_contraction20_60", "range_contraction10_previous20", "volume_vs_prior20", "breakout20", "breakdown20", "failed_breakout20"):
-            lines.append(f"| {k} | {_fmt(f[k]['value'])} |")
-        lines += ["", f"Inferred setup: **{stock['inferred_setup']['classification']}**; {stock['inferred_setup']['reason']}. "
-            f"Candidates: {stock['inferred_setup']['candidates']}; {stock['inferred_setup']['direction_consistency']}. "
-            "These are fixed geometric heuristics, not a claim about Grimes' intended setup. A pattern opposing the reported direction belongs in the antithesis, not the expert's presumed rationale.", "",
-            "### Sector and relative strength", "", f"Classification status: {sector['classification']['status']}.", ""]
-        if sector["classification"].get("source_url"):
-            c = sector["classification"]
-            lines += [f"Analyst mapping: {c['sector']} / {c['industry']}, based on [{c['issuer_identity']}]({c['source_url']}) dated {c['source_document_date']}. Effective classification date: {c.get('effective_date') or 'UNKNOWN'}. "
-                f"{c['proxy_limitations']} Historical ETF membership is UNKNOWN.", ""]
-        for kind, context in sector["contexts"].items():
-            if context["status"] != "AVAILABLE":
-                lines += [f"{kind}: NOT_AVAILABLE ({context['reason']}).", ""]
-            else:
-                relative = stock["relative_strength"][kind]
-                lines += [f"{kind}: {context['proxy']}, direction alignment **{context['direction_alignment']['status']}**; stock/proxy ratio change20 {_fmt(relative['20']['value'], True)}, 60 {_fmt(relative['60']['value'], True)}. "
-                    "Proxy trends, SPY-relative momentum and their 5/20/60/120-session evolution are preserved in sector_context.json.", ""]
-                lines += ["| Sessions before cutoff | Session | Proxy/SMA50 − 1 | Proxy momentum20 | Proxy/SPY change20 |",
-                    "| ---: | --- | ---: | ---: | ---: |"]
-                for offset, snapshot in context["evolution"].items():
-                    lines.append(f"| {offset} | {snapshot['session_date']} | {_fmt(snapshot['features']['close_sma50']['value'], True)} | "
-                        f"{_fmt(snapshot['features']['return20']['value'], True)} | {_fmt(snapshot['relative_to_spy20']['value'], True)} |")
-                lines.append("")
-        for proxy in ("SPY", "QQQ"):
-            rs = stock["relative_strength"][proxy]
-            lines += [f"Relative to {proxy}: 20-session ratio change {_fmt(rs['20']['value'], True)}, 60-session {_fmt(rs['60']['value'], True)}; market direction alignment {stock['market_alignment'][proxy]['status']}.", ""]
-        lines += ["### Reported stop assessment", "", f"Reported stop {stop['reported_stop']}; reference close {_fmt(stop['reference_close'])}; "
-            f"absolute distance {stop.get('absolute_distance', 'UNKNOWN')}, fraction of reference {stop.get('fraction_of_reference_close', 'UNKNOWN')}, "
-            f"ATR units {stop.get('atr_normalized_distance', 'UNKNOWN')}. {stop.get('side_assessment', 'UNAVAILABLE')}.", "",
-            "The stop's proximity to independently computed levels is descriptive. It does not establish why the expert chose it. Unexpected side merits investigation because entry and stop adjustment basis are unknown.", "",
-            "| Technical level | Price | Stop minus level | Absolute ATR distance |", "| --- | ---: | ---: | ---: |"]
-        for name, v in stop.get("technical_level_distances", {}).items():
-            lines.append(f"| {name} | {_fmt(v['level'])} | {v['stop_minus_level']} | {v['absolute_atr_distance']} |")
-        nearest = stock["interpretation"]["nearest_tested_stop_level"]
+            value = float(check['calculated_percent'])
+            claim = check['comparison_approximation_percent']
+            lines += [f"QQQ **{horizon}**: {check['first_session']} Close {check['first_close']} → {check['last_session']} Close {check['last_close']} = **{value:+.6f}%**. "
+                f"Comparison approximation ({check['comparison_source']}): {claim if claim is not None else 'not supplied'}%; difference {check['difference_percentage_points'] or 'not compared'} percentage points; "
+                f"tolerance {check['rounding_tolerance_percentage_points']} percentage points. {check['status']}.", '']
+    lines += ['The calculations use original frozen decimal closes and retain both source-row locators and native price basis in return_validation.json. Daily and trailing 20-session returns have distinct horizons and can have opposite signs. Operator approximations are comparison evidence, never replacements for provider values.', '',
+        '## MARKET_OBSERVED — market-regime evolution', '',
+        '| Proxy | Sessions before cutoff | Snapshot session | Close/SMA200 − 1 | Trailing 20-session return | Daily RV over 20 sessions | Drawdown from trailing 252-session High |',
+        '| --- | ---: | --- | ---: | ---: | ---: | ---: |']
+    for proxy, snapshots in market['proxies'].items():
+        for offset, snap in snapshots.items():
+            f = snap['features']
+            lines.append(f"| {proxy} | {offset} | {snap['session_date']} | " + ' | '.join(_fmt(f[k]['value'], True) for k in ('close_sma200', 'return_20d', 'realized_volatility20', 'drawdown_high252')) + ' |')
+    lines += ['', 'Volatility is unannualized population SD of 20 daily price returns. Snapshot deltas preserve 5/20/60/120-session evolution; no year-wide regime label. RSP/SPY is a participation proxy, not constituent breadth.', '',
+        '| Current market proxy | Close/SMA20 − 1 | Close/SMA50 − 1 | Close/SMA150 − 1 | Close/SMA200 − 1 | SMA50 change over 20 sessions |',
+        '| --- | ---: | ---: | ---: | ---: | ---: |']
+    for proxy, snapshots in market['proxies'].items():
+        f = snapshots['0']['features']
+        lines.append(f'| {proxy} | ' + ' | '.join(_fmt(f[k]['value'], True) for k in ('close_sma20', 'close_sma50', 'close_sma150', 'close_sma200', 'sma50_slope20')) + ' |')
+    es = market['es_context']
+    lines += ['', '### ES historical coverage', '', f"ES for October 26: **{es['status']}**. {es.get('reason', '')}", '',
+        f"Last verified locally available ES session: {es.get('last_verified_available_session') or 'UNKNOWN'}. {es['historical_research_role']}", '']
+    missing = es.get('missing_interval')
+    if missing:
+        lines += [f"Missing recent interval: {missing['first_missing_cash_session']} through {missing['last_missing_cash_session']} ({missing['missing_cash_session_count']} XNYS cash-session reference dates). "
+            'This is not a futures ETH completeness claim. Existing metadata and source hashes remain embedded; no ES extrapolation, new download or automatic replacement with recent IBKR futures.', '']
+    origins = ', '.join(sorted(set(result['manifest.json']['source_origins'].values())))
+    lines += [f'Source origins: {origins}. Synthetic fixtures demonstrate arithmetic only.', '']
+    for obs in observations['recommendations']:
+        symbol = obs['symbol']
+        if only and only != symbol:
+            continue
+        stock, stop, sector = (result[k][symbol] for k in ('stock_features.json', 'stop_analysis.json', 'sector_context.json'))
+        f, coverage = stock['features'], result['data_coverage.json'].get(symbol)
+        lines += [f"## {symbol} — {obs['direction']} / OPEN_NEW_POSITION", '', '### EXPERT_REPORTED — original recommendation', '',
+            f"> {obs['original_recommendation']}", '', f"Source: {observations['source_reference']}. Reported stop: **{obs['reported_stop']}**. "
+            'Added means a newly opened position, never an increase to existing holdings. Actual entry, execution time, size, profit target and observed trade-specific exit instruction are UNKNOWN.', '',
+            '### MARKET_OBSERVED — stock price structure', '']
+        if coverage:
+            lines += [f"Qualified conId {coverage['contract']['conId']}, {coverage['contract']['primaryExchange']}; {coverage['first_observed']}–{coverage['last_observed']}, {coverage['observed_sessions']} sessions. "
+                f"Missing expected: {len(coverage['missing_expected_sessions'])}; pre-listing exclusions: {len(coverage['listing_excluded_sessions'])}; three-year target met: {coverage['three_year_target_met']}.", '']
+        else:
+            lines += ['Stock capture NOT_AVAILABLE; dependent measurements remain unavailable.', '']
+        lines += ['| Stock measurement | Value |', '| --- | ---: |']
+        fields = [('close', 'Reference Close', False)] + [(f'sma{n}', f'SMA{n} price', False) for n in (20, 50, 150, 200)] + [
+            ('sma50_slope20', 'SMA50 change over 20 sessions', True), ('daily_return', 'Daily price return (1 session)', True),
+            ('return_5d', 'Trailing 5-session price return', True), ('return_20d', 'Trailing 20-session price return', True),
+            ('return_60d', 'Trailing 60-session price return', True), ('atr14', 'Simple ATR14 price units', False),
+            ('atr14_fraction', 'ATR14 / Close', True), ('realized_volatility20', 'Daily RV over 20 sessions', True),
+            ('high20', 'High over 20 sessions', False), ('low20', 'Low over 20 sessions', False),
+            ('high60', 'High over 60 sessions', False), ('low60', 'Low over 60 sessions', False),
+            ('drawdown_high252', 'Drawdown from trailing 252-session High', True),
+            ('range_contraction20_60', '20-session / 60-session range ratio', False),
+            ('range_contraction10_previous20', 'Latest 10-session / preceding 20-session range ratio', False),
+            ('volume_vs_prior20', 'Current native volume / prior 20-session mean', False)]
+        for key, label, pct in fields:
+            lines.append(f"| {label} | {_fmt(f[key]['value'], pct)} |")
+        hypotheses = stock['research_setup_hypotheses']
+        lines += ['', '### RESEARCH_HYPOTHESIS — competing explanations, expert intent unresolved', '',
+            '**Intended expert setup: UNKNOWN.** No diagnostic result assigns Grimes\' setup or his rules. A fresh closing 20-session breakdown is not a documented Grimes requirement.', '',
+            '| Researcher-defined descriptive diagnostic | Observed value | Precise causal definition |', '| --- | --- | --- |']
+        for name in ('breakout20', 'breakdown20', 'failed_breakout20', 'support_rejection', 'resistance_rejection'):
+            lines.append(f"| {name} | {_fmt(f[name]['value'])} | {hypotheses['diagnostic_definitions'][name]} |")
+        lines += ['', 'The legacy composite bearish diagnostic additionally requires Close < SMA50. Legacy bullish MA-proximity requires Close > SMA200, SMA50 > SMA200 and distance within one ATR of SMA20 or SMA50. These are researcher-defined parameters, not independently documented Grimes methodology.', '',
+            '| Competing interpretation | Evidence status | Supporting diagnostics | Limitation |', '| --- | --- | --- | --- |']
+        for hypothesis in hypotheses['hypotheses']:
+            lines.append(f"| {hypothesis['interpretation']} | {hypothesis['status']} | {', '.join(hypothesis['supporting_diagnostics']) or 'Unresolved'} | {hypothesis['limitation']} |")
+        lines += ['', 'Multiple compatible interpretations remain represented. Two declines alone never establish a second leg.', '',
+            '### Sector context — observed prices and researcher proxy mapping', '']
+        classification = sector['classification']
+        lines += [f"Mapping status: {classification['status']}. Classification/proxy choices are RESEARCH_HYPOTHESIS; ETF OHLCV measurements are MARKET_OBSERVED.", '']
+        if classification.get('source_url'):
+            lines += [f"Dated business evidence: [{classification['issuer_identity']}]({classification['source_url']}), {classification['source_document_date']}; "
+                f"effective date {classification.get('effective_date') or 'UNKNOWN'}. {classification['proxy_limitations']} Historical membership is UNKNOWN.", '']
+        for kind, context in sector['contexts'].items():
+            if context['status'] != 'AVAILABLE':
+                lines += [f"{kind}: NOT_AVAILABLE ({context['reason']}).", '']
+                continue
+            relative = stock['relative_strength'][kind]
+            lines += [f"{kind}: **{context['proxy']}**; direction alignment {context['direction_alignment']['status']} under disclosed researcher sign tests. "
+                f"Stock/proxy price ratio change: trailing 20 sessions {_fmt(relative['20']['value'], True)}, trailing 60 sessions {_fmt(relative['60']['value'], True)}.", '',
+                '| Sessions before cutoff | Snapshot session | Proxy/SMA50 − 1 | Proxy trailing 20-session return | Proxy/SPY trailing 20-session ratio change |',
+                '| ---: | --- | ---: | ---: | ---: |']
+            for offset, snap in context['evolution'].items():
+                lines.append(f"| {offset} | {snap['session_date']} | {_fmt(snap['features']['close_sma50']['value'], True)} | "
+                    f"{_fmt(snap['features']['return_20d']['value'], True)} | {_fmt(snap['relative_to_spy20']['value'], True)} |")
+            lines.append('')
+        for proxy in ('SPY', 'QQQ'):
+            rs = stock['relative_strength'][proxy]
+            lines += [f"Stock/{proxy} trailing price-ratio changes: 20 sessions {_fmt(rs['20']['value'], True)}, 60 sessions {_fmt(rs['60']['value'], True)}. "
+                f"Directional market alignment: {stock['market_alignment'][proxy]['status']} (researcher interpretation).", '']
+        lines += ['### Stop — reported fact, observed distances, candidate invalidation hypotheses', '',
+            f"EXPERT_REPORTED stop {stop['reported_stop']}; reference Close {_fmt(stop['reference_close'])}. Absolute distance {stop.get('absolute_distance', 'UNKNOWN')}; "
+            f"percentage of reference Close {_fmt(float(stop['fraction_of_reference_close']) if stop.get('fraction_of_reference_close') else None, True)}; "
+            f"ATR distance {stop.get('atr_normalized_distance', 'UNKNOWN')}. {stop.get('side_assessment', 'UNAVAILABLE')}.", '']
+        nearest = stop.get('nearest_numerical_technical_level')
         if nearest:
-            lines += ["", f"Nearest of the disclosed tested levels: {nearest['name']} at {_fmt(nearest['level'])}, "
-                f"{float(nearest['absolute_atr_distance']):.3f} ATR from the reported stop. Proximity is a candidate technical reference, not proof of intended invalidation logic."]
-        align = stock["market_alignment"]["SPY"]["status"]
-        sector_align = sector["contexts"]["sector"].get("direction_alignment", {}).get("status", "UNAVAILABLE")
-        lines += ["", "### Thesis and antithesis hypotheses", "",
-            f"Potential thesis for the reported {obs['direction']}: the directionally supporting trend, momentum and relative-strength observations listed below "
-            f"may explain part of the selection, alongside unknown discretionary information. SPY alignment is {align}; sector alignment is {sector_align}. "
-            "These observations motivate a hypothesis to test; they do not establish a selection rule.", "",
-            "Potential antithesis: mixed or opposing context, a non-unique taxonomy match, recent event risk, proxy mismatch, and subsequent data revisions can undermine a purely technical explanation. "
-            "Even aligned context cannot establish entry timing or expected return. No selection universe or unchosen opportunities were observed.", "",
-            "### Events and remaining uncertainty", ""]
-        # Insert the individual evidence before the event section, keeping both
-        # favorable and unfavorable observations visible for every recommendation.
-        evidence = []
-        for title, key in (("Supporting observations", "supporting_evidence"), ("Opposing observations", "opposing_evidence"),
-                           ("Mixed or unresolved", "unresolved_or_mixed")):
-            evidence += [title + ":", ""] + [f"- {v}" for v in stock["interpretation"][key]] + [""]
-            if not stock["interpretation"][key]:
-                evidence += ["No qualifying observation under these disclosed sign tests; this does not establish absence of risk.", ""]
-        lines[-2:-2] = evidence
-        for event in result["event_context.json"][s]["events"]:
-            lines += [f"- {event['availability_category']}: {event['description']} ([source]({event['source_url']})); "
-                f"published_at={event.get('published_at') or 'UNKNOWN'}, source date={event.get('source_date') or 'UNKNOWN'}. {event.get('publication_evidence', '')}"]
-        lines += ["", "Company/news inventory is partial. Date-only evidence and SEC acceptance clocks alone are not promoted to verified publication timestamps. "
-            "Industry and macro catalysts, complete corporate actions, historical bar dissemination clocks, entry/quantity/targets and private rationale remain unknown. No news is inferred from volume or gaps.", ""]
-    lines += ["## Comparison and next reference classes", "", "| Symbol | Direction | Setup hypothesis | Stop / ATR | SPY alignment | Sector alignment |", "| --- | --- | --- | ---: | --- | --- |"]
-    for s, v in result["comparison.json"]["standardized_vectors"].items():
-        lines.append(f"| {s} | {v['direction']} | {v['setup']['classification']} | {v['stop_atr_distance'] or 'UNKNOWN'} | "
-            f"{v['market_alignment']['SPY']['status']} | {(v['sector_alignment'] or {}).get('status', 'UNAVAILABLE')} |")
-    lines += ["", "The LONG pair and SHORT pair use the same features, timing and side-aware stop formula. Six pairwise vectors and sector-leadership trajectories are in comparison.json. "
-        "Future reference classes should separate setup geometry, market trajectory, sector strength, relative strength, volatility/liquidity and dated catalyst category. No full-universe search, screening-membership inference or statistical edge claim is made.", ""]
-    return "\n".join(lines)
+            lines += [f"Nearest **numerical** tested level: {nearest['name']} at {_fmt(nearest['level'])}, absolute price distance {nearest['absolute_price_distance']}, "
+                f"ATR distance {nearest['absolute_atr_distance'] or 'UNKNOWN'}. Numerical proximity does not establish a meaningful invalidation level.", '']
+        lines += ['| All tested numerical levels | Price | Stop minus level | Absolute ATR distance |', '| --- | ---: | ---: | ---: |']
+        for name, value in stop.get('technical_level_distances', {}).items():
+            lines.append(f"| {name} | {_fmt(value['level'])} | {value['stop_minus_level']} | {value['absolute_atr_distance']} |")
+        lines += ['', 'Candidate directionally relevant levels (RESEARCH_HYPOTHESIS): support below reference Close for LONG, resistance above it for SHORT. Expected protective stop is strictly below support or strictly above resistance, respectively.', '',
+            '| Candidate | Role | Price | Stop/level absolute ATR distance | Stop on expected protective side? |', '| --- | --- | ---: | ---: | --- |']
+        for candidate in stop.get('directional_invalidation_candidates', []):
+            lines.append(f"| {candidate['name']} | {candidate['candidate_role']} | {_fmt(candidate['level'])} | {candidate['absolute_atr_distance']} | {candidate['stop_on_expected_protective_side']} |")
+        if not stop.get('directional_invalidation_candidates'):
+            lines += ['| Unresolved / no eligible measured level | UNKNOWN | UNKNOWN | UNKNOWN | UNKNOWN |']
+        lines += ['', 'These are candidate proxies, not independently documented expert stop logic. Entry, original stop units and actual invalidation rationale remain unknown.', '',
+            '### Operator-reported current 1R methodology and optional reference scenario', '']
+        manage = result['trade_management.json'][symbol]
+        convention = manage['profit_taking_convention']
+        if convention:
+            policy = 'SHORT: close 100% at +1 original R; no runner.' if obs['direction'] == 'SHORT' else 'LONG: close at least one-third of the original position at +1 original R; exact fraction is UNKNOWN; allow the remainder to run.'
+            lines += [f"**OPERATOR_REPORTED**, not independently verified: {policy} The operator applies this current convention to this new-position observation; it is not an independently observed exit instruction for this individual trade.", '',
+                'Subsequent stop changes, final exit rules and remaining-exit timing are UNKNOWN. Actual entry and actual 1R target remain UNKNOWN.', '']
+        else:
+            lines += ['Methodology not supplied for this input: UNKNOWN_OR_MISSING.', '']
+        scenario = manage['reference_scenario']
+        if scenario:
+            lines += ['**RESEARCH_HYPOTHESIS — hypothetical closing-reference arithmetic only.** reference_entry_basis=OCT_26_CLOSE; is_actual_execution=false; actual_target=null.', '',
+                '| Hypothetical entry (October 26 Close) | Reported stop | Hypothetical original per-share R | Hypothetical +1R target | Actual target |',
+                '| ---: | ---: | ---: | ---: | --- |',
+                f"| {_fmt(scenario['hypothetical_entry'])} | {obs['reported_stop']} | {scenario['hypothetical_original_per_share_risk'] or 'UNKNOWN'} | {scenario['hypothetical_1R_target'] or 'UNKNOWN'} | UNKNOWN |", '',
+                f"Scenario status: {scenario['status']}; {scenario['reason'] or 'arithmetic available under assumed common price units'}. No entry, target fill or exit event is created.", '']
+        else:
+            lines += ['Closing-reference 1R scenario disabled. No hypothetical target supplied.', '']
+        lines += ['### RESEARCH_HYPOTHESIS — thesis, antithesis and unresolved questions', '']
+        for title, key in (('Potential thesis — supporting observations', 'supporting_evidence'),
+                           ('Potential antithesis — opposing observations', 'opposing_evidence'), ('Mixed or unresolved context', 'unresolved_or_mixed')):
+            lines += [title + ':', ''] + [f'- {value}' for value in stock['interpretation'][key]] + ['']
+            if not stock['interpretation'][key]:
+                lines += ['No qualifying observation under these disclosed sign tests; other evidence can still matter.', '']
+        questions = {
+            'SAIL': 'A LONG can be consistent with larger-trend strength and relative performance despite an intraday rejection of the previous 20-session High. That rejection remains contrary short-term evidence; it does not uniquely determine expert intent or invalidate the recommendation. The actual entry/path and discretionary information needed to choose between explanations remain unknown.',
+            'SLB': 'Recovery or pullback within a trend is a competing interpretation of MA proximity and recent momentum. Compare the measured stock/sector ratio changes before claiming sector leadership; a stock can recover while lagging its energy proxy. Entry timing and a complete preceding pullback structure remain unverified.',
+            'GE': 'Continuation of weakness does not require a new 20-session closing low. A failed-rally or resistance-rejection interpretation requires the separately defined rejection evidence; if unavailable it remains unresolved. No second leg is asserted without a validated ordered impulse/pullback/renewal structure.',
+            'SCCO': 'Negative broad-market relative strength can coexist with positive copper-peer relative strength. This mixed comparison leaves several explanations possible, including different peer weights and individual price structure; it does not establish why the expert shorted. The peer contradiction remains visible rather than being turned into a unique setup.'}
+        lines += [questions.get(symbol, 'Expert intent remains unresolved; measured conditions support competing interpretations.'), '',
+            '### Event evidence and remaining unknowns', '']
+        for event in result['event_context.json'][symbol]['events']:
+            lines += [f"- {event['availability_category']}: {event['description']} ([source]({event['source_url']})); publication {event.get('published_at') or 'UNKNOWN'}, source date {event.get('source_date') or 'UNKNOWN'}."]
+        lines += ['', 'Publication clocks, complete action/news inventories and expert motives are unknown. Research retrieval dates, price gaps and volume do not establish contemporaneously known news. All actual entry/exit instructions and executed exits remain unknown.', '']
+    lines += ['## Comparison — stock returns by horizon and unresolved expert setups', '',
+        '| Stock | Reported direction | Daily return (1 session) | Trailing 5-session return | Trailing 20-session return | Trailing 60-session return | Intended expert setup | Reference stop / ATR |',
+        '| --- | --- | ---: | ---: | ---: | ---: | --- | ---: |']
+    for symbol, vector in result['comparison.json']['standardized_vectors'].items():
+        values = vector['features']
+        lines.append(f"| {symbol} | {vector['direction']} | " + ' | '.join(_fmt(values[k], True) for k in ('daily_return', 'return_5d', 'return_20d', 'return_60d')) + f" | UNKNOWN | {vector['stop_atr_distance'] or 'UNKNOWN'} |")
+    lines += ['', 'Six pairwise observed-feature differences and fixed-proxy leadership trajectories remain in comparison.json. Multiple research hypotheses are retained; no screened opportunity universe, expert rule reconstruction, prediction model or profitability inference is made.', '']
+    return '\n'.join(lines)
 
 
 def _files(inputs, hashes, identity):
     spec, prices, coverage, calendar = read_inputs(inputs)
-    result = derive(spec, prices, coverage, calendar)
+    options = json.loads(inputs.get("study-options.json", b"{}"))
+    if "parent_input_hashes" in options:
+        from .inputs import _check_hashes
+        parent = options["parent_input_hashes"]
+        _check_hashes({name: inputs[name] for name in parent["files"]}, parent)
+    result = derive(spec, prices, coverage, calendar,
+        methodology=json.loads(inputs["expert-methodology.json"]) if "expert-methodology.json" in inputs else None,
+        amendment=json.loads(inputs["amendment-evidence.json"]) if "amendment-evidence.json" in inputs else None,
+        close_reference_1r=options.get("close_reference_1r", False))
     result["manifest.json"].update(inputs_sha256=hashes["bundle_sha256"], implementation=identity)
+    if "parent_input_hashes" in options:
+        result["manifest.json"]["original_source_inputs_sha256"] = options["parent_input_hashes"]["bundle_sha256"]
     files = {name: encode(value) for name, value in result.items()}
     files["report.md"] = markdown(result).encode()
     for r in spec["observations"]["recommendations"]:
@@ -355,8 +456,16 @@ def _files(inputs, hashes, identity):
     return files
 
 
-def freeze_study(inputs, output):
+def freeze_study(inputs, output, *, methodology=None, amendment=None, close_reference_1r=False):
     files, hashes = read_bundle(inputs)
+    if methodology or amendment or close_reference_1r:
+        files["study-options.json"] = encode({"parent_input_hashes": hashes, "close_reference_1r": close_reference_1r})
+        if methodology:
+            files["expert-methodology.json"] = Path(methodology).read_bytes()
+        if amendment:
+            files["amendment-evidence.json"] = Path(amendment).read_bytes()
+        mapping = {k: digest(v) for k, v in sorted(files.items())}
+        hashes = {"schema_version": "artifact_hashes_v1", "algorithm": "sha256", "files": mapping, "bundle_sha256": digest(encode(mapping))}
     return write_bundle(Path(output), _files(files, hashes, implementation_identity()))
 
 

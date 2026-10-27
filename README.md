@@ -219,8 +219,11 @@ four operator-reported Grimes new positions and builds immutable, descriptive
 daily-price, market/sector, stop and event-evidence dossiers. `expert freeze-inputs`,
 `expert study` and `expert replay` are offline; actual acquisition reuses the
 separately invoked depth audit. Reference closes are not assumed entries. The
-[October 26 report](docs/reports/GRIMES_20261026.md) includes competing hypotheses,
-unknowns and the observed setup contradictions, without simulated fills or P&L.
+[October 26 report](docs/reports/GRIMES_20261026.md) separates reported facts,
+observed prices and competing research hypotheses, with explicit daily/5/20/60-session
+return horizons. A versioned operator-reported 1R convention and optional hypothetical
+closing-reference targets preserve unknown actual entries/exits, without simulated
+fills or P&L.
 
 PR 6A adds the first actual AAPL individual-stock dataset: 703 IBKR daily sessions
 plus independently sourced earnings, dividend declarations and historical splits.

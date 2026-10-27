@@ -13,6 +13,9 @@ def register(commands):
     study = operations.add_parser("study")
     study.add_argument("--inputs", required=True, type=Path)
     study.add_argument("--output", required=True, type=Path)
+    study.add_argument("--methodology", type=Path, help="versioned operator-reported methodology; never an execution instruction")
+    study.add_argument("--amendment", type=Path, help="dated ES boundary and operator return comparison evidence")
+    study.add_argument("--close-reference-1r", action="store_true", help="optional hypothetical October 26 Close scenario; no actual fills/targets")
     replay = operations.add_parser("replay")
     replay.add_argument("--study", required=True, type=Path)
     replay.add_argument("--output", required=True, type=Path)
@@ -29,7 +32,8 @@ def dispatch(args):
         config = json.loads(args.audits.read_bytes())
         result = freeze_inputs(json.loads(args.research.read_bytes()), [(r["path"], r["symbols"]) for r in config], args.output)
     elif args.expert_operation == "study":
-        result = freeze_study(args.inputs, args.output)
+        result = freeze_study(args.inputs, args.output, methodology=args.methodology,
+            amendment=args.amendment, close_reference_1r=args.close_reference_1r)
     elif args.expert_operation == "replay":
         study = load_study(args.study)
         result = write_bundle(args.output, study["files"])

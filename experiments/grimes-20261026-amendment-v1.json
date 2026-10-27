@@ -1,0 +1,23 @@
+{
+  "schema_version": "expert_amendment_v1",
+  "source_reference": "Operator PR15 amendment and read-only inspection of existing local ES coverage",
+  "QQQ_return_observations": {
+    "daily_return_percent": "1.10",
+    "return_20d_percent": "-3.30",
+    "daily_return_source": "OPERATOR_REPORTED_APPROXIMATION",
+    "return_20d_source": "PR15_PREVIOUS_RESEARCH_REPORT_APPROXIMATION",
+    "rounding_tolerance_percentage_points": "0.01"
+  },
+  "es_coverage": {
+    "historical_source": "Databento ES history; retain for future historical regime-evolution research",
+    "historical_start_reported": "2010",
+    "last_verified_available_session": "2026-05-04",
+    "source_file": "ES_databento/2026-05-04.csv",
+    "source_sha256": "a5cb59c37ac932628479a1be6d0871094b5a6b7588af13eb4e6f95cc07b02d6e",
+    "first_timestamp_in_last_file": "2026-05-03T18:00:00-0400",
+    "last_timestamp_in_last_file": "2026-05-04T15:59:00-0400",
+    "verification_scope": "Existing last dated local file and its source hash/timestamp bounds; not verification of continuous returns, complete history, roll policy or adjustment convention",
+    "recent_IBKR_futures_replacement_validated": false,
+    "new_downloads": false
+  }
+}

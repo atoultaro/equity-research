@@ -7,11 +7,19 @@ from ..events.model import timestamp
 from ..market_context.model import _measure
 from .inputs import PRICE_BASIS, VOLUME_BASIS
 
-VERSION = "expert_daily_features_v1"
+VERSION = "expert_daily_features_v2"
+DIAGNOSTIC_DEFINITIONS = {
+    "breakout20": "Current Close > maximum High of previous 20 completed sessions (21 observations including current)",
+    "breakdown20": "Current Close < minimum Low of previous 20 completed sessions (21 observations including current)",
+    "failed_breakout20": "Current High > maximum previous 20 Highs > current Close; a single-bar rejection diagnostic",
+    "support_rejection": "Current Low <= pre-existing confirmed 3-bar swing Low < current Close; pivot confirmation strictly before current session",
+    "resistance_rejection": "Current High >= pre-existing confirmed 3-bar swing High > current Close; pivot confirmation strictly before current session",
+}
 
 
 def metric(value=None, reason=None, sessions=()):
     return {"value": round(value, 12) if isinstance(value, float) else value,
+            "attribution": "MARKET_OBSERVED",
             "status": "UNAVAILABLE" if value is None else "AVAILABLE", "reason": reason,
             "first_session": sessions[0] if sessions else None, "last_session": sessions[-1] if sessions else None}
 
@@ -87,8 +95,11 @@ class Panel:
                 operation(f"sma{n}_slope{lag}", n+lag, "slope", [n, lag])
         for fast, slow in ((20, 50), (50, 150), (150, 200), (50, 200)):
             operation(f"sma{fast}_sma{slow}", slow, "sma_ratio", [fast, slow])
-        for n in (5, 20, 60):
+        for n in (1, 5, 20, 60):
             operation(f"return{n}", n+1, "return", [n])
+            name = "daily_return" if n == 1 else f"return_{n}d"
+            out[name] = {**out[f"return{n}"], "horizon_sessions": n, "required_observations": n+1,
+                "unit": "fraction", "definition": "Close(t)/Close(t-n completed trading sessions)-1"}
         operation("realized_volatility20", 21, "volatility", [20])
         operation("atr14_fraction", 15, "atr", [14])
         # Reuse pinned shared ATR through MarketContext's measure, in price units.
@@ -122,40 +133,74 @@ class Panel:
                     if all(rows[i][field] > x[field] if kind == "high" else rows[i][field] < x[field] for x in neighbors):
                         pivots.append({"session_date": days[i], "confirmed_session": days[i+3], "price": rows[i][field]})
             out[f"confirmed_swing_{kind}"] = metric(pivots[-1] if pivots else None, reason or "NO_STRICT_3_BAR_PIVOT" if not pivots else None, days)
+        current, days, missing = self.window(symbol, end, 1)
+        for name, kind, field in (("support_rejection", "low", "low"), ("resistance_rejection", "high", "high")):
+            pivot = out[f"confirmed_swing_{kind}"]["value"]
+            if current is None or pivot is None or pivot["confirmed_session"] >= end:
+                out[name] = metric(reason=missing or "NO_PREEXISTING_CONFIRMED_PIVOT", sessions=days)
+            else:
+                level, bar = pivot["price"], current[0]
+                flag = bar[field] <= level < bar["close"] if kind == "low" else bar[field] >= level > bar["close"]
+                out[name] = metric(flag, sessions=days)
+                out[name]["level_evidence"] = pivot
+        for name, definition in DIAGNOSTIC_DEFINITIONS.items():
+            out[name].update(definition=definition, definition_provenance="RESEARCHER_DEFINED_DIAGNOSTIC_V2_NOT_A_GRIMES_RULE")
         return out
 
 
 def setup(features):
+    """Competing hypotheses; never assign the expert's intended setup."""
     v = {k: m["value"] for k, m in features.items()}
-    required = ("breakout20", "breakdown20", "failed_breakout20", "close_sma50", "close_sma200", "sma50_sma200", "atr14", "close", "sma20", "sma50")
-    if any(v.get(k) is None for k in required):
-        return {"classification": "OTHER_OR_UNCERTAIN", "candidates": [], "reason": "MISSING_REQUIRED_FEATURES"}
-    candidates = []
-    if v["breakout20"] and v["close_sma50"] > 0:
-        candidates.append("BULLISH_CONTINUATION_OR_BREAKOUT")
-    if v["close_sma200"] > 0 and v["sma50_sma200"] > 0 and min(abs(v["close"]-v["sma20"]), abs(v["close"]-v["sma50"])) <= v["atr14"]:
-        candidates.append("BULLISH_PULLBACK")
-    if v["breakdown20"] and v["close_sma50"] < 0:
-        candidates.append("BEARISH_CONTINUATION_OR_BREAKDOWN")
-    if v["failed_breakout20"]:
-        candidates.append("FAILED_BREAKOUT_OR_BEARISH_REVERSAL")
-    return {"classification": candidates[0] if len(candidates) == 1 else "OTHER_OR_UNCERTAIN",
-            "candidates": candidates, "reason": "EXPLICIT_HEURISTIC_HYPOTHESIS" if len(candidates) == 1 else "NO_UNIQUE_TAXONOMY_MATCH"}
+
+    def check(names, predicate):
+        return None if any(v.get(k) is None for k in names) else bool(predicate())
+
+    diagnostics = {
+        "legacy_bullish_breakout": check(("breakout20", "close_sma50"), lambda: v["breakout20"] and v["close_sma50"] > 0),
+        "legacy_pullback_proximity": check(("close_sma200", "sma50_sma200", "close", "sma20", "sma50", "atr14"),
+            lambda: v["close_sma200"] > 0 and v["sma50_sma200"] > 0 and min(abs(v["close"]-v["sma20"]), abs(v["close"]-v["sma50"])) <= v["atr14"]),
+        "legacy_bearish_breakdown": check(("breakdown20", "close_sma50"), lambda: v["breakdown20"] and v["close_sma50"] < 0),
+        "bullish_trend": check(("close_sma50", "sma50_slope20", "return20"), lambda: all(v[k] > 0 for k in ("close_sma50", "sma50_slope20", "return20"))),
+        "bearish_trend": check(("close_sma50", "sma50_slope20", "return20"), lambda: all(v[k] < 0 for k in ("close_sma50", "sma50_slope20", "return20"))),
+        **{k: v.get(k) for k in ("failed_breakout20", "support_rejection", "resistance_rejection")}}
+    hypotheses = []
+    for name, keys, limitation in (
+        ("TREND_CONTINUATION", ("bullish_trend", "bearish_trend"), "Trend alignment does not require a fresh 20-session closing breakout or breakdown"),
+        ("PULLBACK_WITHIN_TREND_OR_RECOVERY", ("legacy_pullback_proximity",), "MA proximity in an upward trend is compatible with a pullback/recovery; it does not prove the preceding price path"),
+        ("FAILED_RALLY_OR_FAILED_BREAKOUT", ("failed_breakout20", "resistance_rejection"), "A rejection can coexist with a larger upward trend; failed rally requires more than two down moves"),
+        ("SUPPORT_OR_RESISTANCE_REJECTION", ("support_rejection", "resistance_rejection"), "Uses only confirmed, pre-existing pivots; measured levels need not be levels the expert used"),
+        ("POTENTIAL_SECOND_LEG_AFTER_IMPULSE", (), "Unresolved: no validated ordered impulse/pullback/renewal diagnostic is implemented; two declines alone are insufficient"),
+        ("OTHER_OR_UNCERTAIN", (), "Unobserved discretionary context and other explanations remain possible")):
+        evidence = [k for k in keys if diagnostics[k] is True]
+        hypotheses.append({"interpretation": name, "attribution": "RESEARCH_HYPOTHESIS",
+            "status": "CONSISTENT_WITH_DIAGNOSTIC" if evidence else "UNRESOLVED", "supporting_diagnostics": evidence,
+            "limitation": limitation})
+    return {"attribution": "RESEARCH_HYPOTHESIS", "intended_expert_setup": None,
+        "resolution": "UNRESOLVED_EXPERT_INTENT", "hypotheses": hypotheses,
+        "researcher_diagnostics": diagnostics, "definition_provenance": "RESEARCHER_DEFINED_V2_NOT_DOCUMENTED_GRIMES_REQUIREMENTS",
+        "diagnostic_definitions": {**DIAGNOSTIC_DEFINITIONS,
+            "legacy_bullish_breakout": "breakout20 and Close > SMA50",
+            "legacy_bearish_breakdown": "breakdown20 and Close < SMA50; NOT a documented Grimes requirement",
+            "legacy_pullback_proximity": "Close > SMA200, SMA50 > SMA200, min(abs(Close-SMA20), abs(Close-SMA50)) <= ATR14",
+            "bullish_trend": "Close/SMA50-1, SMA50 slope20 and return_20d all strictly positive",
+            "bearish_trend": "Close/SMA50-1, SMA50 slope20 and return_20d all strictly negative"}}
 
 
 def alignment(features, direction):
     sign = 1 if direction == "LONG" else -1
     values = {k: features[k]["value"] for k in ("close_sma50", "return20", "sma50_slope20")}
     if any(v is None for v in values.values()):
-        return {"status": "UNAVAILABLE", "direction": direction, "support_count": None}
+        return {"status": "UNAVAILABLE", "direction": direction, "support_count": None, "attribution": "RESEARCH_HYPOTHESIS"}
     support = sum(sign*v > 0 for v in values.values())
     return {"status": "ALIGNED" if support == 3 else "COUNTERTREND" if support == 0 else "MIXED",
+            "attribution": "RESEARCH_HYPOTHESIS",
             "direction": direction, "support_count": support, "dimensions": values}
 
 
 def stop_analysis(observation, features):
     close = features["close"]["value"]
     result = {"reported_stop": observation["reported_stop"], "direction": observation["direction"],
+        "reported_stop_attribution": "EXPERT_REPORTED", "measurements_attribution": "MARKET_OBSERVED",
         "reference_close": close, "reference_is_actual_entry": False,
         "actual_entry": None, "actual_initial_risk": None, "quantity": None, "profit_targets": None}
     if close is None:
@@ -176,5 +221,25 @@ def stop_analysis(observation, features):
             level = level["price"]
         result["technical_level_distances"][name] = {"level": level,
             "stop_minus_level": str(stop-Decimal(str(level))) if level is not None else None,
+            "absolute_price_distance": str(abs(stop-Decimal(str(level)))) if level is not None else None,
             "absolute_atr_distance": str(abs(stop-Decimal(str(level)))/Decimal(str(atr))) if level is not None and atr else None}
+    levels = [(name, item) for name, item in result["technical_level_distances"].items() if item["level"] is not None]
+    nearest = min(levels, key=lambda pair: (Decimal(pair[1]["absolute_price_distance"]), pair[0])) if levels else None
+    result["nearest_numerical_technical_level"] = {"name": nearest[0], **nearest[1]} if nearest else None
+    result["directional_invalidation_candidates"] = []
+    direction = observation["direction"]
+    for name, item in levels:
+        level = Decimal(str(item["level"]))
+        if direction == "LONG":
+            relevant = name in {"prior20_low", "confirmed_swing_low", "sma20", "sma50", "sma200"} and level < c
+            protective = stop < level
+        else:
+            relevant = name in {"prior20_high", "confirmed_swing_high", "sma20", "sma50", "sma200"} and level > c
+            protective = stop > level
+        if relevant:
+            result["directional_invalidation_candidates"].append({"name": name, **item, "attribution": "RESEARCH_HYPOTHESIS",
+                "candidate_role": "SUPPORT" if direction == "LONG" else "RESISTANCE",
+                "stop_on_expected_protective_side": protective,
+                "expected_stop_side": "STRICTLY_BELOW_LEVEL" if direction == "LONG" else "STRICTLY_ABOVE_LEVEL"})
+    result["level_interpretation"] = "Candidate support/resistance proxies selected by direction and side of reference Close; proximity alone does not establish trade invalidation or expert rationale"
     return result
