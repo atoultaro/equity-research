@@ -1,0 +1,1 @@
+{"changed_or_missing_files":[],"inventory_local_path":"runs/pr12-integration-20261027-v1/preservation-before.json","inventory_sha256":"e1cff81e57c1a02e2c077a21e5cc94030b550a5ae9d562861e93e882fa847842","pre_existing_files":65347,"roots":["runs","data"],"scope":"All files present under runs and data before integration; new verification directories excluded"}

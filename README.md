@@ -93,6 +93,11 @@ effect of an ordinary run.
 
 ## Research and execution boundaries
 
+The isolated [LEAN versus NautilusTrader evaluation](docs/BACKTEST_ENGINE_EVALUATION.md)
+records actual synthetic engine runs, historical-universe compatibility probes
+and bounded 1,000-stock measurements. It recommends retaining PR4 temporarily;
+the experimental frameworks are not core dependencies.
+
 See [MVP specification](docs/MVP_SPEC.md) for exact data, qualification, sizing,
 cost, gap, expiration and same-day ambiguity contracts, and
 [research conventions](docs/RESEARCH_CONVENTIONS.md) for acceptance evidence and
@@ -287,3 +292,15 @@ and incomplete horizon remains represented. Immutable self-contained bundles
 include descriptive context summaries and overlap-cluster diagnostics. The actual
 AAPL/GOOG demonstration preserves all 128 signals; it does not regenerate detection,
 fetch prices or imply fills, short sales, realized R or portfolio P&L.
+
+PR 8A adds an [offline point-in-time historical universe](docs/POINT_IN_TIME_HISTORICAL_UNIVERSE.md):
+bitemporal stable security identities, lifecycle evidence, immutable ID/year
+Parquet panels, monthly median-dollar-volume ranking, daily membership queries,
+turnover/quality audits and a one-security swing/outcome adapter. The controlled
+pilot selects 50 generated securities from a 100-ID catalogue; 100/1,000-security
+scale evidence is synthetic and does not establish actual survivorship-free
+coverage. See the [provider feasibility matrix](docs/HISTORICAL_UNIVERSE_PROVIDER_EVALUATION.md)
+and [pilot evidence](docs/PR8A_PILOT_EVIDENCE.md) for access blockers, hashes,
+performance and offline regression results. `universe --help` lists offline import,
+freeze, build, query, audit and validation operations. Existing datasets and strict
+execution admission remain unchanged.

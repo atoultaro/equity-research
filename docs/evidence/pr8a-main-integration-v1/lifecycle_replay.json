@@ -1,0 +1,23 @@
+{
+  "checks": [
+    {
+      "bundle_sha256": "4ce1b1f021d666bb870983cf894628c665992f97186e6e2740ccd2f4e69b2604",
+      "byte_identical": true,
+      "command": "lifecycle",
+      "files": 67,
+      "original": "runs/grimes-lifecycle-20261018-26-v1/study-v5",
+      "replay": "runs/pr12-integration-20261027-v1/lifecycle-replay-v1",
+      "semantic_validation": "PASSED"
+    },
+    {
+      "bundle_sha256": "fb2fd81dc3eeef6b10a185057930776a1534230a3534d63793d72d3e257342ca",
+      "byte_identical": true,
+      "command": "management",
+      "files": 112,
+      "original": "runs/grimes-management-20261018-26-v1/study-v2",
+      "replay": "runs/pr12-integration-20261027-v1/management-replay-v1",
+      "semantic_validation": "PASSED"
+    }
+  ],
+  "network": "SOCKETS_DENIED"
+}
