@@ -225,6 +225,15 @@ return horizons. A versioned operator-reported 1R convention and optional hypoth
 closing-reference targets preserve unknown actual entries/exits, without simulated
 fills or P&L.
 
+PR16 adds [Grimes source/model lifecycle reconstruction](docs/GRIMES_TRADE_LIFECYCLES.md)
+for exactly 26 stocks across seven October 18–26 alerts. The offline `lifecycle`
+commands preserve source positions, stop histories and underway transitions,
+reconcile separate modeled triggers/1R outcomes, and produce immutable event-context
+tables and one dossier per stock. The [research report](docs/reports/GRIMES_LIFECYCLES_20261018_26.md)
+documents EBAY's old-stop crossing versus its later source revision, unresolved
+weekly publication time, conditional price-basis scenarios and right censoring.
+Actual fills, position sizes and profitability remain unknown.
+
 PR 6A adds the first actual AAPL individual-stock dataset: 703 IBKR daily sessions
 plus independently sourced earnings, dividend declarations and historical splits.
 [The AAPL event-aware study](docs/AAPL_EVENT_AWARE_RESEARCH.md) records acquisition
