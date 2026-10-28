@@ -318,3 +318,12 @@ conventions and native-price adjustment diagnostics over the preserved 26 episod
 The [research findings](docs/reports/GRIMES_RECONSTRUCTION_20261018_26.md) compare
 source-action compatibility without claiming observed fills or realized performance.
 All commands run offline over existing frozen captures.
+
+PR9B adds [four-trade hard-stop forensics](docs/reports/GRIMES_FOUR_TRADE_FORENSICS.md)
+and [cross-trade inference](docs/reports/GRIMES_CROSS_TRADE_INFERENCE.md).
+Four bounded IBKR five-minute captures narrow late-entry explanations; fixed
+closing and delayed-entry diagnostics distinguish protective-stop conflicts from
+target-exit conventions without identifying actual fills or changing source states.
+The [machine-readable comparison](docs/evidence/pr9b-forensics-v1/forensic_comparison.json)
+retains all 26 episodes and three conditional publication clocks. Freeze/replay is
+offline; the original trade-status CSV and frozen research remain unchanged.
