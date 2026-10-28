@@ -1,0 +1,2 @@
+# Preserve deterministic CSV bytes and recognize standard CRLF row endings.
+reports/grimes_trade_status.csv -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

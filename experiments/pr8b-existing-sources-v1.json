@@ -1,0 +1,25 @@
+{
+  "schema_version": "observed_universe_config_v1",
+  "origin": "RECORDED",
+  "base_commit": "fda110095638d7990864c080d70d1b22efb8e758",
+  "inventory_start": "1980-01-02",
+  "pilot_start": "2025-01-02",
+  "end": "2026-10-26",
+  "calendar_end": "2026-11-09",
+  "selection_months": ["2026-08", "2026-09"],
+  "top_n": 10,
+  "cycles": [
+    {"label": "2008 first half", "start": "2008-01-01", "end": "2008-06-30"},
+    {"label": "2015 first half", "start": "2015-01-01", "end": "2015-06-30"},
+    {"label": "2020 first half", "start": "2020-01-01", "end": "2020-06-30"},
+    {"label": "2022 first half", "start": "2022-01-01", "end": "2022-06-30"},
+    {"label": "2026 through October 26", "start": "2026-01-01", "end": "2026-10-26"}
+  ],
+  "sources": [
+    {"path": "runs/ibkr-depth-20261026-v1/report-final-v1", "bundle_sha256": "b2b8f5a15856a9ed4521b2c07f270e269501835b35ca3383305260c568b26043", "symbols": ["AAPL", "MSFT", "GOOG", "NVDA", "AMZN", "META", "SPY", "QQQ", "IWM", "RSP", "XLK", "XLF", "XLE", "XLI", "XLV", "SMH", "XBI"]},
+    {"path": "runs/grimes-comprehension-20261026-v1/audit-report-v1", "bundle_sha256": "00f001c3a9cd76dc10c1f4c282ea6177399900f6e556df9f8b386061c8d3e02b", "symbols": ["SAIL", "SLB", "GE", "SCCO", "CIBR", "COPX", "ITA", "OIH", "XLB"]},
+    {"path": "runs/grimes-lifecycle-20261018-26-v1/audit-report-1-v1", "bundle_sha256": "65bc1bf21501833dec07455bcda5f995198ee0098c9255210c3e5fa657a676f3", "symbols": ["AAOI", "AMD", "ANET", "ASST", "CAT", "CDE", "CLMT", "GME", "SNDK", "SNOW", "T", "TEVA"]},
+    {"path": "runs/grimes-lifecycle-20261018-26-v1/audit-report-2-v1", "bundle_sha256": "1ecf8888edcc62a73d68a4b4c3883d84ffe1152df89e27ea8435804eb6b44013", "symbols": ["ABBV", "CNQ", "EBAY", "ELF", "GTLB", "HUM", "MMM", "OMER", "SIG", "XLC", "XLY"]},
+    {"path": "runs/grimes-lifecycle-20261018-26-v1/audit-report-3-v1", "bundle_sha256": "95884ef0a2791e9e3693cc4dbcbf7bd5aee00f518a28cfe656d2eee683145b7a", "symbols": ["XLP"]}
+  ]
+}
