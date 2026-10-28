@@ -311,3 +311,10 @@ native-unit/identity exclusions and cycle-by-cycle coverage. Strict historical
 universe admission remains unverified; the observed cohort is not a complete
 historical population. The [readable Grimes trade-status CSV](reports/grimes_trade_status.csv)
 preserves all 26 source-reported episodes, independently of modeled outcomes.
+
+PR9A adds [conditional Grimes trade reconstruction](docs/GRIMES_RECONSTRUCTION_METHOD.md):
+four causal entry hypotheses, publication-bound sensitivity, alternative management
+conventions and native-price adjustment diagnostics over the preserved 26 episodes.
+The [research findings](docs/reports/GRIMES_RECONSTRUCTION_20261018_26.md) compare
+source-action compatibility without claiming observed fills or realized performance.
+All commands run offline over existing frozen captures.

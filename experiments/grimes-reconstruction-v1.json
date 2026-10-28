@@ -1,0 +1,14 @@
+{
+  "schema_version": "grimes_reconstruction_config_v1",
+  "mode": "EXPLORATORY_RECONSTRUCTION",
+  "inspected_main_commit": "b03c2acb63614b1629e983e562fe94d21f460f65",
+  "parent_pr17_sha256": "fb2fd81dc3eeef6b10a185057930776a1534230a3534d63793d72d3e257342ca",
+  "trigger_valid_sessions": 3,
+  "fit_parameters_to_profit": false,
+  "split_price_source": "runs/ibkr-depth-20261026-v1/report-final-v1",
+  "split_price_source_sha256": "b2b8f5a15856a9ed4521b2c07f270e269501835b35ca3383305260c568b26043",
+  "split_events": {
+    "AAPL": {"path": "data/research_datasets/pr6a-aapl-gzfik0eg-events-v1", "bundle_sha256": "dbab45eac84ea3c657b60959cdd87b16abc7526641c3efdbd15a0dc1720ed9cd", "event_id": "AAPL-split-2020-08-31"},
+    "GOOG": {"path": "data/research_datasets/pr6b-goog-5b2nlv7-events-v1", "bundle_sha256": "6cf0647c5a4847a52c6fde94650ffe8da4569aafc45300e5441bbd04dea4ac2a", "event_id": "Alphabet-split-20220718"}
+  }
+}
