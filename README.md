@@ -327,3 +327,13 @@ target-exit conventions without identifying actual fills or changing source stat
 The [machine-readable comparison](docs/evidence/pr9b-forensics-v1/forensic_comparison.json)
 retains all 26 episodes and three conditional publication clocks. Freeze/replay is
 offline; the original trade-status CSV and frozen research remain unchanged.
+
+PR9C adds [sealed source-decision forecasts](docs/GRIMES_PROSPECTIVE_PREDICTION_METHOD.md)
+with five fixed hypotheses, physically bounded input views, separate authorized
+alert reveals and append-only evaluations. The [historical dry run](docs/reports/GRIMES_WALK_FORWARD_EVALUATION.md)
+contains 61 trade forecasts across six shared alert clusters; those same alerts
+informed the hypotheses, so this is not fresh predictive evidence. The separate
+[next-alert registration](docs/reports/GRIMES_NEXT_ALERT_PREDICTIONS.md) covers the
+14 source-open episodes using disclosed stale observations and remains unevaluated.
+`scripts/grimes_predictions.py --help` lists the offline workflow; no subscriber
+content, market data or brokerage account is fetched by these commands.
