@@ -7,6 +7,14 @@ The included SYNTH data is synthetic acceptance evidence, not a profitable-strat
 claim. Replay is fully offline. Optional historical acquisition and data preparation
 are separate workflows; see below.
 
+## Grimes research direction
+
+The [research charter and roadmap](docs/research/GRIMES_RESEARCH_ROADMAP.md)
+frames this work as inferring the latent decision rules behind MarketLife alerts.
+It separates published teachings, observed setup decisions and competing hypotheses.
+The next scientific priority is structural-stop case studies using existing evidence;
+ATR normalizes risk, while incomplete histories remain explicit research limitations.
+
 ## Install
 
 From this repository root, with Python3.12 or newer:
