@@ -22,6 +22,8 @@ def main():
     rdry=sub.add_parser('replay-dry-run');rdry.add_argument('--study',type=Path,required=True)
     for command in (base,view,pred,reveal,evaluate,replay,reval,advance,dry,rdry):command.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
+    if args.operation=='predict' and args.mode=='FORWARD_REGISTERED':
+        p.error('legacy execution-to-DROP forecasts are non-operational; use scripts/marketlife_setups.py register with current source/market completeness evidence')
     def denied(*args,**kwargs):raise AssertionError('prospective research commands prohibit network connections')
     socket.socket.connect=socket.socket.connect_ex=socket.create_connection=denied
     op=args.operation

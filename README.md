@@ -328,12 +328,16 @@ The [machine-readable comparison](docs/evidence/pr9b-forensics-v1/forensic_compa
 retains all 26 episodes and three conditional publication clocks. Freeze/replay is
 offline; the original trade-status CSV and frozen research remain unchanged.
 
-PR9C adds [sealed source-decision forecasts](docs/GRIMES_PROSPECTIVE_PREDICTION_METHOD.md)
-with five fixed hypotheses, physically bounded input views, separate authorized
-alert reveals and append-only evaluations. The [historical dry run](docs/reports/GRIMES_WALK_FORWARD_EVALUATION.md)
-contains 61 trade forecasts across six shared alert clusters; those same alerts
-informed the hypotheses, so this is not fresh predictive evidence. The separate
-[next-alert registration](docs/reports/GRIMES_NEXT_ALERT_PREDICTIONS.md) covers the
-14 source-open episodes using disclosed stale observations and remains unevaluated.
-`scripts/grimes_predictions.py --help` lists the offline workflow; no subscriber
-content, market data or brokerage account is fetched by these commands.
+PR9C now models [MarketLife setup selection and fresh-entry eligibility](docs/MARKETLIFE_SETUP_AND_OPPORTUNITY_MODEL.md)
+separately from unobserved subscriber executions. The [opportunity reassessment](docs/reports/GRIMES_ENTRY_OPPORTUNITIES.md)
+uses immutable stop-version windows; the [UNDERWAY study](docs/reports/GRIMES_UNDERWAY_TRANSITIONS.md)
+compares causal price references and same-direction controls without fitting a threshold.
+The [amended prospective method](docs/GRIMES_PROSPECTIVE_PREDICTION_METHOD.md)
+requires current source and market completeness before replacement registration.
+The original five-hypothesis [historical dry run](docs/reports/GRIMES_WALK_FORWARD_EVALUATION.md)
+and [stale forward registration](docs/reports/GRIMES_NEXT_ALERT_PREDICTIONS.md)
+remain unchanged as historical evidence; the original forward artifact is
+non-operational and unevaluated. October 27–29 source backfill is retained, while
+current prices and explicit source completeness remain missing: no replacement
+forecast is registered. `scripts/marketlife_setups.py --help` lists the amended
+offline workflow; no subscriber, vendor or brokerage access occurs.
