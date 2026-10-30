@@ -1,0 +1,3 @@
+# Historical dry-run projection
+
+Six source transitions yield61 trade/alert forecasts, grouped into six shared alert clusters. These are retrospective exercises over the same seven alerts that motivated the hypotheses; they are not fresh out-of-sample evidence. Full local experiment replay regenerates each bounded prefix from the frozen archive, then independently rederives all predictions, reveals, evaluations and aggregates. Native full-history prices and verbatim source bodies remain local. The public artifact retains derived forecasts, actual source-action observations, metrics, code identities and exact local component hashes.
