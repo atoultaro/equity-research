@@ -1,6 +1,6 @@
 # MarketLife source-history completeness
 
-Audit as of 2026-10-30T04:29:06.369653+00:00. Native current archive SHA256: `7bad57dffed892962140f42d39370fe9002a65c724126506f27c9e54b7c35add`. Public evidence SHA256: `2b4f2a01a7964dcd0e5d9ba6a817b18e93c6091d2b91702cafcb855f9431501e`. [Input registry](../evidence/pr9d-current-readiness-v2/manifest.json); [regression and replay record](../evidence/pr9d-validation-v1/validation.json).
+Audit as of 2026-10-30T13:12:59.892784+00:00. Native current archive SHA256: `07882253d2207a3117a115d40e04f469b207eccfd99f8b67a0375377e4ec5184`. Public evidence SHA256: `97068d3bcf0d6216bf064f89765a12a9e72239129931022096be14e614d24080`. [Input registry](../evidence/pr9d-current-readiness-v3/manifest.json); [regression and replay record](../evidence/pr9d-validation-v2/validation.json).
 
 The retained ledger has **10 alerts, 116 parsed actions and 34 captured setup episodes**. No later alert was fabricated or fetched from subscriber-only content. Actual subscriber fills and positions remain UNKNOWN.
 
@@ -21,7 +21,9 @@ The original weekly publication remains UNKNOWN. October 27–29 retain their op
 
 Ordered alert/body manifest SHA256: `3cefa799bfbdc16e1ec41803638a48cb1cd1a3290804de0125b80d391ec72b37`. A matching hash proves agreement with the supplied records, **not completeness of an external MarketLife feed**.
 
-Completeness assertion status: **FAIL**. No complete-through-registration assertion with matching hashes and an auditable operator statement. This is an operator declaration, not independent feed verification. A failed assertion blocks registration.
+Completeness assertion status: **FAIL**. The operator supplied all material available to them; external source-history completeness remains unverified. No stronger assertion is inferred. This is an operator declaration, not independent feed verification. A failed assertion blocks registration.
+
+The operator stated: “I gave you all I have.” That is recorded as availability of the supplied material, not a claim that the external feed has no omitted alerts. No further subscriber material was requested and no completeness assertion was invented.
 
 ## Explicit later-alert intake
 

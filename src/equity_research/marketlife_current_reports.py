@@ -14,6 +14,7 @@ def render(files,public_hash):
     assertion=json.loads(files['source-completeness.json'])
     forecast=json.loads(files['forecast-status.json'])
     evidence_directory=manifest.get('public_evidence_directory','pr9d-current-readiness-v1')
+    operator_context=json.loads(files.get('operator-context.json',b'{}'))
     provenance=f"Audit as of {coverage['asof']}. Native current archive SHA256: `{manifest['native_archive_sha256']}`. Public evidence SHA256: `{public_hash}`. "
     provenance+='[Input registry](../evidence/pr9d-current-readiness-v1/manifest.json); [regression and replay record](../evidence/pr9d-validation-v1/validation.json).'
     market=[
@@ -49,6 +50,18 @@ def render(files,public_hash):
         'The source command validates the entire chain before sealing a new bundle. It rejects duplicate IDs or duplicate bodies at the same publication evidence, inconsistent old stops, invalid previous eligibility, unsupported lines and reversed chronology. Identical ADDED wording on a later date can be a legitimate new episode after DROPPED; it is not deduplicated merely by text. UNDERWAY suspends entry; a monitored stop update does not reset eligibility; an explicit return creates a fresh version. DROPPED never establishes an executed exit.',
         'Completeness is a separate operator assertion containing complete=true, complete_through=REGISTRATION, the matching alert_manifest_sha256, source_reference, asserted_at and the operator_statement. An absent, future-dated or mismatched assertion blocks readiness. Retain the actual statement and assertion time; the program does not independently verify the subscriber feed. Renew this assertion for the registration being authorized, rather than treating old source captures as current feed completeness.',
     ]
+    if operator_context:
+        captured=access['capture_summary']
+        market[7]=(f"The operator explicitly authorized the non-paper TWS on {access['host']}:{access['port']} with Read-Only API. "
+            'The acquisition recorded non-paper mode without claiming paper authentication. Account mode was supplied by the operator; no account query established or stored account identifiers. All broker interactions were contract qualification and historical data requests, followed by disconnect.')
+        market[8]=(f"The earlier SPY smoke/context panels and PR9C captures remain intact. The new live run captured {captured['instruments']} instruments over {captured['requested_start']}–{captured['requested_end']}: {captured['selected_rows']} selected canonical observations and {captured['native_rows']} native returned rows across {captured['historical_requests']} historical requests, including explicitly excluded over-return. "
+            'The 60 required sessions are complete for every selected instrument and benchmark. Historical data access succeeded for this bounded scope; no broader entitlement claim is made.')
+        revision=json.loads(files['revision-audit.json'])
+        market.extend(['## Overlapping native revisions',
+            table(['Symbol','Session','Field','Earlier capture','Fresh capture','Retained canonical value'],[
+                (r['symbol'],r['session'],r['field'],r['earlier'],r['fresh'],r['retained']) for r in revision['differences']]),
+            f"The audit identifies {len(revision['differences'])} changed fields in the overlapping native observations. Both vintages and their source hashes are retained. Earlier canonical rows remain unchanged, no adjustment policy is changed, and no revision conflict is waived. Current features can be calculated on the retained series, but they are conditional on that unresolved vintage choice and cannot establish forecast readiness."])
+        source_report.insert(7,'The operator stated: “I gave you all I have.” That is recorded as availability of the supplied material, not a claim that the external feed has no omitted alerts. No further subscriber material was requested and no completeness assertion was invented.')
     active=[s for s in ledgers[-1]['setups'] if s['setup_status']=='ACTIVE']
     readiness=[
         '# MarketLife prospective forecast readiness',
@@ -74,6 +87,10 @@ def render(files,public_hash):
         'See [the PR9D intake commands](../MARKETLIFE_CURRENT_EVIDENCE.md). Current archive and forecast replay rederive semantic outputs from retained parent bytes, source batches and native market proofs; resealing changed derived prices or predictions with valid hashes is rejected. Public reports reproduce from the derived evidence bundle without network access. Full native replay needs the local immutable inputs, which are not published.',
         'A documented blocker is an acceptable result. Resolve the exact failed prerequisites, freeze a new pre-acquisition audit, run the explicitly confirmed bounded intake, then build a new immutable archive version. Only a PASS at the actual registration clock may create a forecast. Original PR9C artifacts, forecasts, source records and the October 26 CSV remain unchanged. There are no orders, account queries, new vendors, subscriptions, CI changes or automatic merge.',
     ]
+    if operator_context:
+        readiness.insert(4,'Live acquisition is complete for the bounded 11-instrument snapshot on the confirmed non-paper read-only TWS. Remaining blockers are the six native revision conflicts and unverified source completeness. No further broker action is needed for the October 29 coverage recorded here.')
+        readiness[-1]='Market intake is complete for the recorded cutoff. Both native vintages remain available for explicit review; no revision conflict or source-completeness gate is waived. The operator has supplied all material available to them, and no further subscriber material is requested. No operational forecast is registered. Original PR9C artifacts, source records, forecasts and the October 26 CSV remain unchanged; there are no orders, account queries, new vendors, subscriptions or automatic merge.'
     return dict(zip(('MARKETLIFE_CURRENT_DATA_AUDIT.md','MARKETLIFE_SOURCE_COMPLETENESS.md','MARKETLIFE_PROSPECTIVE_READINESS.md'),
-        (('\n\n'.join(parts)+'\n').replace('pr9d-current-readiness-v1',evidence_directory).encode()
+        (('\n\n'.join(parts)+'\n').replace('pr9d-current-readiness-v1',evidence_directory)
+         .replace('pr9d-validation-v1','pr9d-validation-v2' if operator_context else 'pr9d-validation-v1').encode()
          for parts in (market,source_report,readiness))))

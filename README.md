@@ -348,7 +348,8 @@ readiness validation around the unchanged PR9C models. See the
 [current-data audit](docs/reports/MARKETLIFE_CURRENT_DATA_AUDIT.md),
 [source completeness report](docs/reports/MARKETLIFE_SOURCE_COMPLETENESS.md) and
 [prospective readiness](docs/reports/MARKETLIFE_PROSPECTIVE_READINESS.md).
-The recorded run is blocked: required current prices/identities, a current paper-TWS
-confirmation and source-completeness assertion are missing. No broker connection
-or replacement forecast was created. Offline commands fetch nothing; acquisition
-is a separate explicitly confirmed local paper-TWS operation.
+The latest run acquired real daily history from the confirmed non-paper, read-only
+TWS on port 7496: 11 qualified instruments, 65 selected sessions each through
+October 29, and no missing required sessions. Forecasting remains blocked by
+six native-vintage revisions and unverified source completeness. Earlier blocked
+snapshots are retained. No account queries, trades or replacement forecast occurred.

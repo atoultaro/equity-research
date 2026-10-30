@@ -1,4 +1,4 @@
-"""Explicit local paper-TWS market intake using the existing IBKR daily adapter."""
+"""Explicit local read-only TWS market intake using the existing IBKR adapter."""
 import asyncio
 from dataclasses import replace
 from datetime import UTC,datetime
@@ -44,9 +44,12 @@ async def qualify(selections,host,port,client_id,*,backend_factory=make_backend,
     return records
 
 
-def acquire(archive,batches,plan_path,output,*,port,client_id,connect=False,read_only=False,paper=False,reference=None):
-    if not (connect and read_only and paper and reference):
-        raise ValueError('explicit connection, paper authentication, socket/Read-Only API and permission reference required')
+def acquire(archive,batches,plan_path,output,*,port,client_id,connect=False,read_only=False,paper=False,
+            account_mode=None,reference=None):
+    mode=account_mode or ('paper' if paper else None)
+    if paper and mode!='paper':raise ValueError('conflicting operator account-mode confirmations')
+    if not (connect and read_only and mode in {'paper','non-paper'} and reference):
+        raise ValueError('explicit connection, account mode, socket/Read-Only API and permission reference required')
     if type(port) is not int or not 1<=port<=65535 or type(client_id) is not int or client_id<=0:
         raise ValueError('explicit local port and positive unique client ID required')
     plan_files,plan_hash=read_bundle(Path(plan_path));planned=json.loads(plan_files['coverage-audit.json'])
@@ -61,7 +64,8 @@ def acquire(archive,batches,plan_path,output,*,port,client_id,connect=False,read
     attempts=asyncio.run(qualify(current['instruments'],'127.0.0.1',port,client_id,pacer=pacer))
     hashes=write_bundle(root/'qualification-v1',{'qualification.json':encode({'schema_version':'marketlife_qualification_v1',
         'started_at':asof,'completed_at':datetime.now(UTC).isoformat(),'attempts':attempts,'pre_audit_sha256':plan_hash['bundle_sha256'],
-        'host':'127.0.0.1','port':port,'client_id':client_id,'paper_authenticated_operator_confirmed':True,
+        'host':'127.0.0.1','port':port,'client_id':client_id,'operator_reported_account_mode':mode,
+        'paper_authenticated_operator_confirmed':mode=='paper',
         'socket_and_read_only_operator_confirmed':True,'reference':reference,'account_details_requested':False})})
     provider=IBKRDailyProvider(port=port,client_id=client_id,pacer=pacer,max_attempts=2)
     paths=[];cal,required=completed_window(asof,archive['calendar']['start'])

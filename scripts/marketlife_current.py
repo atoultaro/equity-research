@@ -26,6 +26,7 @@ def main():
     source.add_argument('--incoming',type=Path,required=True)
     for name in ('ibkr-port','ibkr-client-id'):acquire.add_argument('--'+name,type=int,required=True)
     for name in ('connect','read-only-api-confirmed','paper-authenticated-confirmed'):acquire.add_argument('--'+name,action='store_true')
+    acquire.add_argument('--account-mode',choices=('paper','non-paper'),help='operator-reported mode; no account query')
     acquire.add_argument('--pre-audit',type=Path,required=True);acquire.add_argument('--permission-reference',required=True)
     freeze.add_argument('--acquisition',type=Path,action='append',default=[])
     freeze.add_argument('--acquisition-root',type=Path,help='directory produced by acquire')
@@ -55,6 +56,7 @@ def main():
             from equity_research.marketlife_acquire import acquire as fetch
             paths=fetch(archive,batches,args.pre_audit,args.output,port=args.ibkr_port,client_id=args.ibkr_client_id,
                 connect=args.connect,read_only=args.read_only_api_confirmed,paper=args.paper_authenticated_confirmed,
+                account_mode=args.account_mode,
                 reference=args.permission_reference)
             print(json.dumps({'acquisitions':paths}));return
         else:

@@ -222,9 +222,22 @@ def test_registration_failure_has_no_output_and_cli_has_no_backdate(tmp_path,cur
 
 
 def test_acquisition_rejects_missing_operator_confirmations_before_connection(tmp_path,current):
-    with pytest.raises(ValueError,match='paper authentication'):
+    with pytest.raises(ValueError,match='account mode'):
         acquire(current,[batch()],tmp_path/'unused',tmp_path/'out',port=7497,client_id=999,
             connect=True,read_only=True,paper=False,reference='synthetic')
+    assert not (tmp_path/'out').exists()
+
+
+def test_non_paper_mode_is_explicit_without_claiming_paper_authentication(tmp_path,current):
+    from equity_research.marketlife_intake import coverage_audit
+    report=coverage_audit(current,[batch()],NOW);report['required_latest_completed_session']='1900-01-01'
+    plan=tmp_path/'plan';write_bundle(plan,{'coverage-audit.json':encode(report)})
+    with pytest.raises(ValueError,match='stale or differs'):
+        acquire(current,[batch()],plan,tmp_path/'out',port=7496,client_id=999,connect=True,
+            read_only=True,account_mode='non-paper',reference='synthetic operator non-paper confirmation')
+    with pytest.raises(ValueError,match='conflicting'):
+        acquire(current,[batch()],plan,tmp_path/'out',port=7496,client_id=999,connect=True,
+            read_only=True,account_mode='non-paper',paper=True,reference='synthetic')
     assert not (tmp_path/'out').exists()
 
 
@@ -305,6 +318,37 @@ def test_committed_blocked_evidence_is_honest_and_reports_reproduce(tmp_path):
     assert json.loads(files['source-completeness.json'])['status']=='FAIL'
     state=json.loads(files['source-manifest.json'])
     assert len(state['alerts'])==10 and state['captured_setup_episodes']==34
+    result=subprocess.run([sys.executable,str(root/'scripts/report_marketlife_current.py'),'report',
+        '--evidence',str(path),'--output',str(tmp_path/'report')],capture_output=True,text=True,
+        env={**os.environ,'PYTHONPATH':str(root/'src')})
+    assert result.returncode==0,result.stderr
+    assert read_bundle(tmp_path/'report')[1]['bundle_sha256']=='94ff8a9c8f720161e44d2713e5f48e910c519282bba19468f96ab4157caaed9e'
+
+
+def test_frozen_live_non_paper_evidence_and_revision_blockers(tmp_path):
+    import os
+    root=Path(__file__).parents[1];path=root/'docs/evidence/pr9d-current-readiness-v3'
+    files,_=read_bundle(path);coverage=json.loads(files['market-coverage.json'])
+    assert len(coverage['instruments'])==11 and all(not r['missing_sessions'] for r in coverage['instruments'])
+    assert all(r['identity_status']=='QUALIFIED_RECORDED' and r['latest']=='2026-10-29' for r in coverage['instruments'])
+    access=json.loads(files['access-status.json'])
+    assert access['operator_reported_account_mode']=='non-paper' and access['port']==7496
+    assert not access['paper_authenticated_operator_confirmed'] and access['read_only_operator_confirmed']
+    assert access['capture_summary']=={'instruments':11,'selected_rows':715,'native_rows':1012,
+        'historical_requests':44,'requested_start':'2026-07-30','requested_end':'2026-10-29'}
+    assert all(a['status']=='SUCCESS' for a in access['daily_capture_statuses'])
+    revisions=json.loads(files['revision-audit.json'])
+    assert len(revisions['differences'])==6 and not revisions['earlier_canonical_rows_replaced']
+    assert all(r['retained']==r['earlier'] and r['fresh']!=r['earlier'] for r in revisions['differences'])
+    assert {r['symbol']:r['field'] for r in revisions['differences']}=={
+        'CNQ':'volume','MMM':'volume','SAIL':'volume','SIG':'high','SLB':'volume','SPY':'volume'}
+    gate=json.loads(files['registration-audit.json']);assert not gate['passed']
+    assert all(s['status']=='AVAILABLE' and s['feature_session']=='2026-10-29' for s in gate['features'].values())
+    assert len(gate['problems'])==8 and not any('MISSING_REQUIRED_COMPLETED_SESSIONS'==p['code'] for p in gate['problems'])
+    assert 'prediction.json' not in files
+    context=json.loads(files['operator-context.json'])
+    assert context['source_availability_statement']=='Why did you ask me this? I gave you all I have.'
+    assert not context['source_completeness_assertion_inferred']
     result=subprocess.run([sys.executable,str(root/'scripts/report_marketlife_current.py'),'report',
         '--evidence',str(path),'--output',str(tmp_path/'report')],capture_output=True,text=True,
         env={**os.environ,'PYTHONPATH':str(root/'src')})
