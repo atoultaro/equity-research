@@ -169,6 +169,8 @@ def test_atr_current_features_are_causal_and_report_underlying_session(current):
     after=readiness(current,b,a,NOW)['features']['AAPL']
     assert before['feature_session']=='2026-10-23' and after['feature_session']=='2026-10-26'
     assert after['atr14']>0 and after['sma10']['value'] and after['features']['sma50']['value']
+    benchmark=readiness(current,b,a,NOW)['features']['SPY']
+    assert benchmark['published_stop'] is None and benchmark['entry_to_stop_ATR'] is None
     changed=deepcopy(current);changed['prices']['AAPL'][-1].update(open='999',high='1001',low='998',close='1000')
     assert readiness(changed,b,a,'2026-10-26T16:30:00-04:00')['features']['AAPL']==before
 
@@ -291,7 +293,7 @@ def test_stale_pre_acquisition_plan_fails_without_broker_or_output(tmp_path,curr
 def test_committed_blocked_evidence_is_honest_and_reports_reproduce(tmp_path):
     import os
     root=Path(__file__).parents[1]
-    path=root/'docs/evidence/pr9d-current-readiness-v1';files,h=read_bundle(path)
+    path=root/'docs/evidence/pr9d-current-readiness-v2';files,h=read_bundle(path)
     coverage=json.loads(files['market-coverage.json']);gate=json.loads(files['registration-audit.json'])
     assert coverage['required_latest_completed_session']=='2026-10-29'
     assert len(coverage['instruments'])==11 and not gate['passed']
@@ -308,3 +310,26 @@ def test_committed_blocked_evidence_is_honest_and_reports_reproduce(tmp_path):
         env={**os.environ,'PYTHONPATH':str(root/'src')})
     assert result.returncode==0,result.stderr
     for name,content in read_bundle(tmp_path/'report')[0].items():assert content==(root/'docs/reports'/name).read_bytes()
+
+
+def test_invalid_retained_history_cannot_be_silently_repaired_by_new_import(tmp_path,current):
+    proof=native_proof(tmp_path,current)
+    duplicate=deepcopy(current);duplicate['prices']['AAPL'].append(deepcopy(duplicate['prices']['AAPL'][-1]))
+    with pytest.raises(ValueError,match='no implicit repair'):merge_evidence(duplicate,[batch()],[proof],NOW)
+    reversed_rows=deepcopy(current);reversed_rows['prices']['AAPL'].reverse()
+    with pytest.raises(ValueError,match='no implicit repair'):merge_evidence(reversed_rows,[batch()],[proof],NOW)
+    merged,findings=merge_evidence(current,[batch()],[proof,proof],NOW)
+    assert not findings and merged['prices']==current['prices']
+
+
+def test_safe_qualification_error_categories_are_retained_without_raw_account_text(current):
+    class EventFailure(MockIB):
+        async def qualify(self,security):
+            result=await super().qualify(security)
+            self.errors.append({'code':162,'category':'PROVIDER_ERROR'})
+            return result
+    fake=EventFailure();v=VirtualTime()
+    records=asyncio.run(qualify([{'symbol':'AAPL','contract':current['coverage']['AAPL']['contract']}],
+        '127.0.0.1',7497,999,backend_factory=lambda:fake,pacer=Pacer(clock=v.now,sleep=v.sleep)))
+    assert records[0]['status']=='FAILED' and records[0]['diagnostics']==[{'code':162,'category':'PROVIDER_ERROR'}]
+    assert 'private' not in json.dumps(records).lower() and fake.disconnected

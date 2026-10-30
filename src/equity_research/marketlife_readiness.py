@@ -66,7 +66,7 @@ def readiness(archive,batches,assurance,asof,findings=()):
     if findings:problems.extend(findings)
     for symbol in required_symbols(state):
         info=archive['coverage'].get(symbol,{})
-        if archive['alerts']['origin']!='synthetic' and info.get('origin') not in {None,'ibkr_client'}:
+        if archive['alerts']['origin']!='synthetic' and info.get('origin')!='ibkr_client':
             problems.append({'code':'NON_NATIVE_MARKET_EVIDENCE_IN_OPERATIONAL_ARCHIVE','symbol':symbol})
         try:
             validate_contract(symbol,info.get('contract') or {})
@@ -86,6 +86,9 @@ def readiness(archive,batches,assurance,asof,findings=()):
         for symbol in required_symbols(state):
             setup=active.get(symbol,{'direction':'LONG','published_stop':'0'})
             snap=snapshot(evidence,symbol,asof,setup['published_stop'],setup['direction']);features[symbol]=snap
+            if symbol not in active:
+                snap.update(feature_role='BENCHMARK_NO_SOURCE_SETUP',published_stop=None,
+                    entry_to_stop_distance=None,entry_to_stop_ATR=None)
             required=('close','atr14','sma20','sma50','prior20_high','prior20_low',
                 'realized_volatility20','range_contraction10_previous20')
             if (snap['status']!='AVAILABLE' or snap['feature_session']!=state['required_sessions'][-1]

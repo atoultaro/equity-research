@@ -13,6 +13,7 @@ def render(files,public_hash):
     stale=[r for r in rows if r['missing_sessions']]
     assertion=json.loads(files['source-completeness.json'])
     forecast=json.loads(files['forecast-status.json'])
+    evidence_directory=manifest.get('public_evidence_directory','pr9d-current-readiness-v1')
     provenance=f"Audit as of {coverage['asof']}. Native current archive SHA256: `{manifest['native_archive_sha256']}`. Public evidence SHA256: `{public_hash}`. "
     provenance+='[Input registry](../evidence/pr9d-current-readiness-v1/manifest.json); [regression and replay record](../evidence/pr9d-validation-v1/validation.json).'
     market=[
@@ -74,4 +75,5 @@ def render(files,public_hash):
         'A documented blocker is an acceptable result. Resolve the exact failed prerequisites, freeze a new pre-acquisition audit, run the explicitly confirmed bounded intake, then build a new immutable archive version. Only a PASS at the actual registration clock may create a forecast. Original PR9C artifacts, forecasts, source records and the October 26 CSV remain unchanged. There are no orders, account queries, new vendors, subscriptions, CI changes or automatic merge.',
     ]
     return dict(zip(('MARKETLIFE_CURRENT_DATA_AUDIT.md','MARKETLIFE_SOURCE_COMPLETENESS.md','MARKETLIFE_PROSPECTIVE_READINESS.md'),
-        (('\n\n'.join(parts)+'\n').encode() for parts in (market,source_report,readiness))))
+        (('\n\n'.join(parts)+'\n').replace('pr9d-current-readiness-v1',evidence_directory).encode()
+         for parts in (market,source_report,readiness))))

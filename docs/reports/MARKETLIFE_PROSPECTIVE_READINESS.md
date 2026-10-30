@@ -2,7 +2,7 @@
 
 Readiness: **FAIL**. Forecast status: **NOT_REGISTERED_READINESS_FAIL**. Required completed session 2026-10-29; declared observed market end 2026-10-26. Source-completeness status: FAIL; acquisition status: NOT_ATTEMPTED_CURRENT_PAPER_CONFIGURATION_UNCONFIRMED.
 
-Audit as of 2026-10-30T04:18:39.038139+00:00. Native current archive SHA256: `4ddaffe7a674d6a44091bc17b3cc4d8ca1f307335d43f05699948d1d7ddcc14d`. Public evidence SHA256: `41bdf05d660bc0cc24ba6d9ca5a734f8c105e1c6b087beaf2af295f407dc0ac1`. [Input registry](../evidence/pr9d-current-readiness-v1/manifest.json); [regression and replay record](../evidence/pr9d-validation-v1/validation.json).
+Audit as of 2026-10-30T04:29:06.369653+00:00. Native current archive SHA256: `7bad57dffed892962140f42d39370fe9002a65c724126506f27c9e54b7c35add`. Public evidence SHA256: `2b4f2a01a7964dcd0e5d9ba6a817b18e93c6091d2b91702cafcb855f9431501e`. [Input registry](../evidence/pr9d-current-readiness-v2/manifest.json); [regression and replay record](../evidence/pr9d-validation-v1/validation.json).
 
 | Setup | Direction | Source lifecycle | Entry eligibility | Latest stop |
 | --- | --- | --- | --- | --- |
@@ -31,7 +31,7 @@ This is the latest supplied source state, conditional on its completeness assert
 | Additional intake/readiness validation | FAIL |
 | Operational forecasts written | 0 |
 
-The exact typed failures and per-symbol feature availability are in [registration-audit.json](../evidence/pr9d-current-readiness-v1/registration-audit.json). Nothing weakens the original gate to obtain a forecast. Missing completed observations, incompatible identities/bases, invalid provenance, conflicting historical vintages and source-completeness failures block registration before a prediction directory is created.
+The exact typed failures and per-symbol feature availability are in [registration-audit.json](../evidence/pr9d-current-readiness-v2/registration-audit.json). Nothing weakens the original gate to obtain a forecast. Missing completed observations, incompatible identities/bases, invalid provenance, conflicting historical vintages and source-completeness failures block registration before a prediction directory is created.
 
 The eligibility-persistence baseline and exploratory one-reference-ATR directional-breakout hypothesis remain byte-identical PR9C code. Source-removal and numeric-stop abstentions remain unchanged. This wrapper uses separately labeled conditional information-time views to call that existing implementation for each publication scenario; it never rewrites original publication facts. Tests compare the resulting numerical forecasts with the original implementation, including a date-only reopening. No threshold optimization or new execution convention is introduced.
 

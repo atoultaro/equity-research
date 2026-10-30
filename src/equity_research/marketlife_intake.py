@@ -156,7 +156,11 @@ def merge_evidence(parent,batches,proofs,asof):
     archive=deepcopy(parent);state=source_state(parent,batches,asof);required=set(required_symbols(state))
     completed=set(s['session_date'] for s in state['calendar']['sessions']
         if timestamp(s['closes_at'])+timedelta(minutes=60)<timestamp(asof))
-    findings=[];identities=[]
+    for rows in parent['prices'].values():
+        dates=[r['session_date'] for r in rows]
+        if dates!=sorted(dates) or len(dates)!=len(set(dates)):
+            raise ValueError('retained canonical history is duplicate or nonchronological; no implicit repair')
+    findings=[];identities={}
     for proof in proofs:
         security=Security(**proof['security']);symbol=security.symbol
         if symbol not in required:raise ValueError('market intake outside the current source universe and SPY')
@@ -197,8 +201,8 @@ def merge_evidence(parent,batches,proofs,asof):
         archive['coverage'][symbol]={**old_info,'security':security.record(),'contract':contract,
             'price_basis':PRICE_BASIS,'volume_basis':VOLUME_BASIS,'corporate_action_completeness':'UNKNOWN',
             'origin':req['origin'],'source_bundle_sha256':proof['hashes']['bundle_sha256']}
-        identities.append(contract['conId'])
-    if len(identities)!=len(set(identities)):raise ValueError('ambiguous duplicate intake contract identity')
+        identities[symbol]=contract['conId']
+    if len(identities)!=len(set(identities.values())):raise ValueError('ambiguous duplicate intake contract identity')
     archive['calendar']=state['calendar']
     archive['market_observation_end']=max((r['session_date'] for rows in archive['prices'].values() for r in rows
         if r['session_date'] in completed),default=parent['market_observation_end'])

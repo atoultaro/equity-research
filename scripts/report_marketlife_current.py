@@ -12,6 +12,7 @@ from equity_research.marketlife_current_reports import render
 def main():
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='operation',required=True)
     project=sub.add_parser('project');project.add_argument('--archive',type=Path,required=True)
+    project.add_argument('--supersedes',type=Path,help='earlier immutable public evidence, retained unchanged')
     project.add_argument('--pre-audit',type=Path,required=True);project.add_argument('--prediction',type=Path)
     report=sub.add_parser('report');report.add_argument('--evidence',type=Path,required=True)
     for command in (project,report):command.add_argument('--output',type=Path,required=True)
@@ -43,6 +44,7 @@ def main():
                 'independent_subscriber_feed_verification':False}),
             'forecast-status.json':encode({'status':'NOT_REGISTERED_READINESS_FAIL' if not gate['passed'] else 'NOT_REGISTERED_REQUIRES_ACTUAL_CLOCK_GATE'}),
             'manifest.json':encode({'schema_version':'marketlife_current_public_projection_v1','native_archive_sha256':h['bundle_sha256'],
+                'public_evidence_directory':args.output.name,
                 'native_archive_file_registry':h,'pre_acquisition_audit_sha256':preh['bundle_sha256'],
                 'market_observation_end':json.loads(native['archive.json'])['market_observation_end'],
                 'native_manifest':json.loads(native['manifest.json']),'large_native_frames_or_full_commentaries_published':False,
@@ -53,6 +55,9 @@ def main():
             files['forecast-status.json']=encode({'status':'REGISTERED_UNRESOLVED','sha256':ph['bundle_sha256'],
                 'registered_at':payload['registered_at'],'outcome':payload['outcome']})
             files['prediction.json']=pred['prediction.json']
+        if args.supersedes:
+            m=json.loads(files['manifest.json']);m['supersedes_public_projection_sha256']=read_bundle(args.supersedes)[1]['bundle_sha256']
+            files['manifest.json']=encode(m)
     h=write_bundle(args.output,files)
     print(json.dumps({'bundle_sha256':h['bundle_sha256'],'members':len(h['files'])}))
 

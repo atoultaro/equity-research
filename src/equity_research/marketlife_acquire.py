@@ -30,14 +30,17 @@ async def qualify(selections,host,port,client_id,*,backend_factory=make_backend,
                 if any(e['category']!='INFORMATION' for e in backend.errors[mark:]):raise ValueError('qualification provider error')
                 if len(native)!=1:raise ValueError('ambiguous or empty qualification')
                 validate_contract(symbol,native[0],old)
-                records.append({'symbol':symbol,'status':'SUCCESS','contracts':native})
+                records.append({'symbol':symbol,'status':'SUCCESS','contracts':native,'diagnostics':backend.errors[mark:]})
             except Exception as exc:
                 records.append({'symbol':symbol,'status':'FAILED','contracts':native,
-                    'error_type':type(exc).__name__,'error_code':error_code(exc)})
+                    'error_type':type(exc).__name__,'error_code':error_code(exc),'diagnostics':backend.errors[mark:]})
     except Exception as exc:
-        records.append({'symbol':None,'status':'CONNECTION_FAILED','error_type':type(exc).__name__,'error_code':error_code(exc)})
+        records.append({'symbol':None,'status':'CONNECTION_FAILED','error_type':type(exc).__name__,'error_code':error_code(exc),
+            'diagnostics':list(backend.errors) if backend is not None else []})
     finally:
-        if backend is not None:backend.disconnect()
+        if backend is not None:
+            try:backend.disconnect()
+            except Exception as exc:records.append({'symbol':None,'status':'DISCONNECT_ERROR','error_type':type(exc).__name__})
     return records
 
 

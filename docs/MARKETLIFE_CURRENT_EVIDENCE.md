@@ -2,7 +2,7 @@
 
 PR9D starts from merged PR9C, commit `4ee534ada90ad622872f677cac809b6ae05d8628`, on branch `research/marketlife-current-evidence-v1`. It adds current source/native-market intake, immutable archives and readiness validation. The setup lifecycle, fresh-entry eligibility, opportunity versions and unobserved subscriber executions remain separate. The PR9C eligibility-persistence and exploratory price-extension models are unchanged.
 
-The recorded result is **blocked**, with no operational forecast. See the [market audit](reports/MARKETLIFE_CURRENT_DATA_AUDIT.md), [source completeness](reports/MARKETLIFE_SOURCE_COMPLETENESS.md), [readiness report](reports/MARKETLIFE_PROSPECTIVE_READINESS.md), and [machine audit](evidence/pr9d-current-readiness-v1/registration-audit.json). Existing historical artifacts and the October 26 CSV remain unchanged.
+The recorded result is **blocked**, with no operational forecast. See the [market audit](reports/MARKETLIFE_CURRENT_DATA_AUDIT.md), [source completeness](reports/MARKETLIFE_SOURCE_COMPLETENESS.md), [readiness report](reports/MARKETLIFE_PROSPECTIVE_READINESS.md), and [machine audit](evidence/pr9d-current-readiness-v2/registration-audit.json). Existing historical artifacts and the October 26 CSV remain unchanged.
 
 ## Evidence and availability
 
@@ -112,7 +112,7 @@ The source-removal and numeric-stop abstentions remain intact. Hypothetical subs
 ```sh
 # Reproduce the three committed reports using only public derived evidence.
 PYTHONPATH=src .venv/bin/python scripts/report_marketlife_current.py report \
-  --evidence docs/evidence/pr9d-current-readiness-v1 --output runs/current-reports-NEW
+  --evidence docs/evidence/pr9d-current-readiness-v2 --output runs/current-reports-NEW
 .venv/bin/python -m pytest -q
 ```
 
