@@ -341,3 +341,14 @@ non-operational and unevaluated. October 27–29 source backfill is retained, wh
 current prices and explicit source completeness remain missing: no replacement
 forecast is registered. `scripts/marketlife_setups.py --help` lists the amended
 offline workflow; no subscriber, vendor or brokerage access occurs.
+
+PR9D adds [current MarketLife source and IBKR evidence intake](docs/MARKETLIFE_CURRENT_EVIDENCE.md),
+append-only native reconciliation, immutable current archives and actual-clock
+readiness validation around the unchanged PR9C models. See the
+[current-data audit](docs/reports/MARKETLIFE_CURRENT_DATA_AUDIT.md),
+[source completeness report](docs/reports/MARKETLIFE_SOURCE_COMPLETENESS.md) and
+[prospective readiness](docs/reports/MARKETLIFE_PROSPECTIVE_READINESS.md).
+The recorded run is blocked: required current prices/identities, a current paper-TWS
+confirmation and source-completeness assertion are missing. No broker connection
+or replacement forecast was created. Offline commands fetch nothing; acquisition
+is a separate explicitly confirmed local paper-TWS operation.
