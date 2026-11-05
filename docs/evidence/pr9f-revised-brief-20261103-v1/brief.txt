@@ -1,0 +1,432 @@
+# PR9F — Initial Stop Inference from Grimes' Trading Patterns
+
+**Repository:** `atoultaro/equity-research`  
+**Scope:** Recover existing PR9F work, reconcile the expanded MarketLife observations, and investigate initial stop placement.
+
+## 1. Recover the interrupted work
+
+PR9F was manually paused. Continue on the existing branch.
+
+Before making changes:
+
+1. Inspect `git status --short`, current branch and HEAD.
+2. Identify committed, uncommitted and partially generated PR9F work.
+3. Preserve all valid work, including uncommitted changes.
+4. Check for incomplete or corrupted generated artifacts.
+5. Reuse valid implementation and tests.
+
+Do not reset, clean, discard changes or start another PR.
+
+If previously generated research artifacts depend on the older input population, regenerate them under a new immutable version rather than silently overwriting them.
+
+The previous PR9F instructions are superseded by this document.
+
+## 2. Scientific objective
+
+Infer the latent reasoning behind Adam Grimes' **initial published stop prices**.
+
+Our working causal model is:
+
+**Trading pattern and market context → Structural invalidation → Protective stop → Risk evaluation → Entry decision**
+
+The protective stop may include room for anticipated volatility expansion.
+
+Crucially, the structural invalidation level and protective stop need not be identical.
+
+ATR14 is used to normalize and evaluate risk. Do not assume that Grimes calculates initial stops from a fixed ATR multiplier.
+
+This is scientific hypothesis investigation, not a production trading system.
+
+Read:
+
+- `AGENTS.md`
+- `docs/research/GRIMES_RESEARCH_ROADMAP.md`
+- `docs/MARKETLIFE_SETUP_AND_OPPORTUNITY_MODEL.md`
+- `docs/reports/GRIMES_STRUCTURAL_STOP_INFERENCE.md`
+
+## 3. Grimes' own trading patterns are the theoretical foundation
+
+Use Grimes' published article:
+
+https://www.adamhgrimes.com/fundamental-trading-patterns/
+
+And the user-provided excerpts from *The Art and Science of Technical Analysis*, particularly:
+
+- Chapter 3: Simple and Complex Pullbacks.
+- Chapter 10: Nested Pullback, including Figure 10.9.
+
+These establish important distinctions.
+
+### Simple pullback
+
+A correction against an established trend.
+
+Candidate invalidation structure: the relevant pullback extreme.
+
+### Complex pullback
+
+A two-legged correction in which an attempted resumption fails and the correction continues.
+
+Candidate invalidation structure may differ from the first pullback extreme.
+
+### Nested pullback
+
+A small consolidation or pullback within a larger driving pattern, often following a strong thrust or breakout.
+
+It is **not synonymous with complex pullback**.
+
+Grimes explicitly discusses using a deeper protective stop because volatility can expand following compression.
+
+Investigate:
+
+- Local consolidation boundary.
+- Larger-pattern structural boundary.
+- Additional protective room for volatility expansion.
+
+These are competing explanations, not predetermined answers.
+
+### Failure test
+
+Price tests or briefly exceeds a significant level, then reverses.
+
+Investigate whether the failed test's extreme defines invalidation.
+
+### Snap pullback / Anti
+
+A pullback following a potential reversal or sharp directional shift.
+
+Investigate the structure appropriate to that reversal thesis.
+
+### Breakout
+
+A move beyond established support or resistance.
+
+Investigate the breakout signal, preceding base and failure boundary.
+
+**Important:** Grimes' fundamental pattern taxonomy and MarketLife dashboard labels are related, but not necessarily identical.
+
+Do not silently map MarketLife's "Tight pullback" or "Nested pullback" onto another book category.
+
+## 4. Reconcile the new MarketLife alert log
+
+The user supplied a change log labeled:
+
+**Last 14 days · 118 changes**
+
+Visible rows span October 20 through November 2, 2026.
+
+Use the complete user-supplied text as source evidence.
+
+Preserve the reported event dates. Do not infer exact intraday publication timestamps.
+
+Distinguish the log date, any publication date and the intended trading session where known.
+
+The earlier November 3 commentary refers to changes for Tuesday, but the log itself labels those entries Monday, November 2.
+
+Do not rewrite either source.
+
+### Source actions
+
+Reconcile the following event types:
+
+- NEW SETUP
+- TRIGGERED
+- STOPPED OUT
+- STOP MOVED
+- DROPPED / TAKEN OFF
+
+Use the new log to correct or enrich the existing source reconstruction.
+
+Do not treat every TRIGGERED event as a new setup.
+
+Do not treat every STOP MOVED event as an initial stop.
+
+Do not interpret STOPPED OUT as independent proof of a particular subscriber's brokerage execution.
+
+Preserve original alert records and provenance; do not rewrite prior frozen evidence.
+
+### Critical SLB example
+
+Earlier episode:
+
+- October 26: NEW LONG SETUP, stop 51.10.
+- October 27: TRIGGERED LONG, stop 52.60.
+- November 2: STOPPED OUT LONG at 52.60.
+
+New episode:
+
+- November 2: NEW LONG PULLBACK SETUP, initial stop 51.90.
+
+These are distinct episodes.
+
+The new SLB stop must not be treated as another revision of the earlier setup.
+
+### Other important event chains
+
+**CNQ LONG**
+
+- October 23: NEW SETUP, stop 53.30.
+- October 30: TRIGGERED LONG, stop 55.10.
+- November 2: STOPPED OUT at 55.10.
+
+**DUK LONG**
+
+- October 28: NEW SETUP, stop 122.90.
+- October 29: TRIGGERED LONG, stop 124.70.
+- October 30 and November 2: subsequent revisions.
+
+**CRWV SHORT**
+
+- October 29: NEW SETUP, stop 66.20.
+- October 30: TRIGGERED SHORT, stop 58.80.
+- November 2: current stop revised to 55.00.
+
+These examples show why the initial-stop study must use NEW SETUP records rather than current UNDERWAY stops.
+
+## 5. Research population
+
+Begin with PR9E's 34 captured setup episodes and initial stops.
+
+Reconcile all visible new-log events against those episodes.
+
+Add previously uncaptured NEW SETUP episodes, including October 30 and November 2 additions.
+
+Do not assume the final population is exactly 37.
+
+Deduplicate overlapping source reports using setup identity, direction, chronology and source evidence.
+
+A newly created setup following a prior stopped-out or dropped episode must retain a distinct episode identity.
+
+Report:
+
+- Original PR9E population.
+- Newly identified opening episodes.
+- Overlapping or conflicting records.
+- Final reconciled initial-stop count.
+- LONG/SHORT breakdown.
+- Observed setup-family coverage.
+
+**Do not spend the PR attempting to establish complete MarketLife history.**
+
+Study the complete population of initial stops actually captured in the supplied evidence.
+
+## 6. Incorporate MarketLife setup classifications
+
+The recent dashboard and alert logs explicitly identify:
+
+- Pullback.
+- Tight pullback.
+- Nested pullback.
+- Breakout.
+
+Record these classifications with source provenance and observation date.
+
+Examples from the new log:
+
+| Symbol | Direction | Type | Initial stop |
+| --- | --- | --- | --- |
+| AVGO | SHORT | Nested pullback | 335.40 |
+| GME | SHORT | Nested pullback | 24.90 |
+| SLB | LONG | Pullback | 51.90 |
+| AXGN | LONG | Pullback | 47.30 |
+| BA | SHORT | Tight pullback | 177.30 |
+| KSS | LONG | Pullback | 22.80 |
+| NCLH | LONG | Tight pullback | 17.01 |
+| XOP | LONG | Pullback | 194.90 |
+
+Use the original NEW SETUP observation to establish the initial stop.
+
+A setup type observed in a later dashboard is not automatically proven to have been published at the original setup date.
+
+Do not invent classifications for older episodes.
+
+## 7. Distinguish setup, trigger, entry and stop
+
+Preserve the following separate concepts:
+
+1. NEW SETUP: A published candidate with an initial stop.
+2. TRIGGERED: MarketLife reports that an entry condition was met.
+3. UNDERWAY: The opportunity has progressed beyond attractive fresh-entry conditions.
+4. ENTRY REFERENCE: A reported approximate or actual reference price.
+5. STOPPED OUT: MarketLife reports a tracked stop-triggered outcome.
+6. DROPPED: A setup or tracked idea is removed, not necessarily because its stop was hit.
+
+Do not infer private subscriber transactions.
+
+For the initial-stop study, prioritize the stop attached to NEW SETUP.
+
+Do not substitute a later triggered or underway stop.
+
+For any known entry reference:
+
+LONG initial risk = entry reference − initial stop.
+
+SHORT initial risk = initial stop − entry reference.
+
+If the entry reference was not available at the initial decision, distinguish retrospective realized/reference risk from information available when the setup was first published.
+
+Never use LAST as a fabricated entry price.
+
+## 8. Initial-stop hypotheses
+
+Compare pattern-conditioned structural explanations.
+
+### H1: Swing invalidation
+
+The stop protects a meaningful prior swing high or low.
+
+The PR9E strict confirmed-pivot detector remains one baseline, not the definition of all significant swings.
+
+### H2: Pullback invalidation
+
+The stop protects the extreme of the relevant simple pullback.
+
+### H3: Complex pullback invalidation
+
+The stop reflects the possibility of a second countertrend leg or protects a completed multi-leg correction.
+
+Do not confuse a complex pullback with a nested pullback.
+
+### H4: Breakout/failure structure
+
+The stop protects the breakout base, signal region or failed-test extreme.
+
+### H5: Nested pullback and volatility compression
+
+A small consolidation occurs within a larger driving pattern.
+
+Compare:
+
+- Local consolidation extreme.
+- Larger pattern's structural invalidation level.
+- A deeper protective stop accommodating anticipated volatility expansion.
+
+Do not equate volatility compression with an ATR-based stop formula.
+
+### H6: Volatility-derived alternative
+
+Consider a volatility-based stop independent of a recognizable structural boundary.
+
+Keep it as an alternative hypothesis, without fitting an arbitrary ATR multiplier.
+
+These hypotheses can overlap. An observed stop may remain compatible with multiple mechanisms.
+
+## 9. Research method
+
+For every initial-stop observation:
+
+1. Identify the original NEW SETUP event and its source provenance.
+2. Establish the relevant market-information cutoff.
+3. Reconstruct available daily OHLCV and context.
+4. Identify the likely trading-pattern family where supported.
+5. Generate candidate structural invalidation levels without consulting the published stop.
+6. Consider whether protective room beyond the invalidation level is warranted by anticipated price behavior.
+7. Compare published stop with candidates.
+8. Document supportive and contradictory evidence.
+9. Identify latent assumptions and discriminating tests.
+
+Preserve time uncertainty and conditional market-information views.
+
+Do not use future price action to explain what Grimes could have known at the initial decision.
+
+Do not select arbitrary lookbacks or buffers to make historical stops fit.
+
+## 10. Evaluate explanation quality
+
+Go beyond PR9E's weak geometric compatibility metric.
+
+Distinguish:
+
+- Candidate pattern present or absent.
+- Structural boundary identified.
+- Boundary relevant to the proposed trading thesis.
+- Stop appropriately positioned relative to boundary.
+- Additional protective room consistent with the observed structure.
+- Competing explanation equally plausible.
+- Contradiction.
+- UNKNOWN.
+
+Report signed stop-to-boundary distance, ATR14 normalization and any sensitivity to publication timing.
+
+Do not treat geometric correspondence as proof of Grimes' private rationale.
+
+## 11. Full-population analysis
+
+Produce one primary observation per captured initial-stop decision.
+
+Stratify by:
+
+- LONG versus SHORT.
+- MarketLife setup type where observed.
+- Proposed structural-pattern family.
+- Initial-stop explanation.
+- Evidence availability.
+- Ambiguity and contradiction.
+
+Select detailed case studies after constructing the full inventory.
+
+Include examples with good correspondence, competing interpretations and failures.
+
+Preserve counterexamples.
+
+Do not claim predictive accuracy from the retrospective sample used to develop the hypotheses.
+
+## 12. Deliverables
+
+Create:
+
+1. `docs/reports/GRIMES_INITIAL_STOP_INFERENCE.md`
+2. Reconciled initial-stop inventory.
+3. Source-event and episode reconciliation report.
+4. Setup-type evidence register.
+5. Pattern-conditioned structural hypothesis matrix.
+6. Compression and nested-pullback diagnostics.
+7. Selected annotated charts.
+8. Reproducibility and validation summary.
+
+Update `docs/research/GRIMES_RESEARCH_ROADMAP.md` with findings and unresolved hypotheses.
+
+Preserve PR9E evidence unchanged.
+
+Keep regenerated PR9F artifacts immutable and versioned.
+
+## 13. Explicit exclusions
+
+Do not investigate:
+
+- Subsequent stop-revision rules.
+- Trailing-stop management.
+- STOPPED OUT mechanics.
+- DROPPED decision mechanisms.
+- Actual private executions.
+- Trading profitability.
+- Production forecast deployment.
+
+Do not introduce:
+
+- A new acquisition pipeline.
+- Exhaustive subscriber-history requirements.
+- Arbitrary ATR stop formulas.
+- A fitted stop-price predictor.
+- Unnecessary infrastructure or architecture changes.
+
+Existing source history, price data and research utilities should be reused.
+
+## 14. Definition of done
+
+PR9F must answer:
+
+1. How many distinct initial-stop decisions are now captured?
+2. Which price structures plausibly explain them?
+3. Does the relevant trading-pattern family change the structural invalidation level?
+4. How do Nested pullback and Complex pullback differ in initial-stop reasoning?
+5. When does a protective stop appear deeper than the immediate local structure?
+6. Which published stops contradict our explanations?
+7. What information remains latent?
+8. What future observations would discriminate between competing hypotheses?
+
+The successful outcome is a defensible scientific account of initial stop placement, with uncertainties and counterexamples.
+
+**Do not optimize for the number of fitted stops. Optimize for explanatory insight.**
+
+Preserve the interrupted PR9F work, keep the existing branch, and leave the PR open for review. Do not merge automatically.

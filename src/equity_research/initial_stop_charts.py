@@ -2,11 +2,13 @@
 from io import BytesIO
 import json
 from pathlib import Path
+from textwrap import wrap
 
 from .ingestion.storage import digest, encode
 from .initial_stops import FAMILIES
 
 COLORS = dict(zip(FAMILIES, ('#713ca6', '#007b92', '#9e7100', '#22622d', '#c04b00', '#555555')))
+COLORS['COMPLEX_PULLBACK'] = '#9e7100'
 
 
 def charts(files, hashes, *, masked=False, selection=None):
@@ -17,6 +19,7 @@ def charts(files, hashes, *, masked=False, selection=None):
     from matplotlib.lines import Line2D
     from matplotlib import rc_context
     study = json.loads(files['study.json']); annotations = json.loads(files['annotations.json'])
+    families = study['protocol'].get('families', FAMILIES)
     decisions = {d['decision_id']: d for d in study['inventory']}
     known = {v['view_id'] for v in annotations['views']}
     selected = set(selection['view_ids']) if selection else known
@@ -40,7 +43,7 @@ def charts(files, hashes, *, masked=False, selection=None):
                     ax.add_patch(Rectangle((i - .3, min(o, c)), .6, max(abs(c - o), .001),
                         facecolor=color, edgecolor=color, lw=.6))
                 for candidate in view['candidates']:
-                    if candidate['family'] == 'COMPRESSION' and candidate['level'] is not None:
+                    if candidate['family'] == 'COMPRESSION' and candidate['level'] is not None and candidate.get('interval_sessions'):
                         common = [t for t in candidate['interval_sessions'] if t in window]
                         if common:
                             x = window.index(common[0]); width = len(common)
@@ -48,9 +51,15 @@ def charts(files, hashes, *, masked=False, selection=None):
                             ax.add_patch(Rectangle((x - .45, low), width - .1, high - low,
                                 facecolor=COLORS['COMPRESSION'], edgecolor=COLORS['COMPRESSION'],
                                 alpha=.12 if candidate['primary'] else .05, lw=1))
-                    if candidate['primary'] and candidate['level'] is not None:
+                    extra = candidate.get('role','').startswith('FAILURE_TEST') or candidate.get('role') in {'FIRST_LEG_ONLY','LARGER_PRE_DRIVER_BASE','DRIVER_CANDLE_EXTREME'}
+                    if (candidate['primary'] or extra) and candidate['level'] is not None:
                         ax.axhline(float(candidate['level']), color=COLORS[candidate['family']],
                             ls=':' if candidate['family'] == 'RANGE' else '-.', lw=.9, alpha=.8)
+                    if candidate['primary'] and candidate.get('ordered_pivots'):
+                        seq = [(p['session'],p['level']) for p in candidate['ordered_pivots']]
+                        seq.append((candidate['second_leg_session'],candidate['second_leg_extreme']))
+                        visible = [(window.index(d),float(p)) for d,p in seq if d in window]
+                        if visible: ax.plot([x for x,y in visible],[y for x,y in visible],color=COLORS['COMPLEX_PULLBACK'],lw=1.1,marker='o',ms=3)
                 for p in view['pivots']:
                     if p['session'] in window:
                         ax.scatter(window.index(p['session']), float(p['level']), marker='v' if p['kind'] == 'HIGH' else '^',
@@ -78,7 +87,7 @@ def charts(files, hashes, *, masked=False, selection=None):
             headline = 'STOP MASKED' if masked else f"initial stop {d['published_stop']}"
             fig.suptitle(f"{d['symbol']} {d['direction']} | INITIAL ONLY | {headline}\n"
                 f"{d['decision_id']} | {', '.join(view['scenarios'])} | latest eligible {view['expected_session']}", fontsize=12, y=.975)
-            handles = [Line2D([0], [0], color=COLORS[f], ls='-.', label=f) for f in FAMILIES[:-1]]
+            handles = [Line2D([0], [0], color=COLORS[f], ls='-.', label=f) for f in families[:-1]]
             axes[0].legend(handles=handles, loc='upper left', ncol=5, fontsize=8)
             rows = [r for r in study['matrix'] if r['view_id'] == view['view_id'] and r['primary']]
             footer = [f"Source: {d['publication_display']} | exact publication: {d['observed_publication']} | reported TYPE: {d['marketlife_type']}",
@@ -88,6 +97,9 @@ def charts(files, hashes, *, masked=False, selection=None):
                 residual = '' if masked else (f" | outward buffer {row['buffer_price']} / ATR14 {row['buffer_ATR14']:.3f}"
                     if row['buffer_ATR14'] is not None else ' | residual UNKNOWN')
                 footer.append(f"{row['family']}: {row['level'] or 'UNKNOWN'} @ {row['anchor_session'] or 'UNKNOWN'}{residual}")
+            alternatives = [r for r in study['matrix'] if r['view_id']==view['view_id'] and not r['primary'] and r['level'] is not None and
+                (r.get('role','').startswith('FAILURE_TEST') or r.get('role') in {'FIRST_LEG_ONLY','LARGER_PRE_DRIVER_BASE','DRIVER_CANDLE_EXTREME'})]
+            if alternatives: footer.extend(wrap('Alternatives: '+'; '.join(f"{r['candidate_id']}={r['level']}" for r in alternatives),165))
             compression = next(r for r in rows if r['family'] == 'COMPRESSION')
             if compression['level'] is not None:
                 footer.extend([f"Primary compression {compression['interval_start']} to {compression['interval_end']}: ranges {', '.join(compression['daily_ranges'])}.",
@@ -95,8 +107,8 @@ def charts(files, hashes, *, masked=False, selection=None):
             context = []
             for symbol, f in view['market_context'].items():
                 r = f.get('return20'); context.append(f'{symbol} 20-session price return {r:.2%}' if r is not None else f'{symbol} context unavailable')
-            footer.extend(['; '.join(context), 'Conditional native split-adjusted prices. ATR normalizes level residuals only. No entry, risk evaluation or later-stop analysis.'])
-            fig.text(.065, .285, '\n'.join(footer), va='top', fontsize=8, linespacing=1.5)
+            footer.extend(['; '.join(context), 'Conditional native prices; structure and protective stop are distinct. ATR does not construct the stop or an entry.'])
+            fig.text(.065, .285, '\n'.join(part for line in footer for part in wrap(line,170)), va='top', fontsize=8, linespacing=1.4)
             svg = BytesIO(); fig.savefig(svg, format='svg', metadata={'Date': None, 'Creator': 'equity-research PR9F'})
             name = f"{view['view_id']}-{d['symbol']}{'-masked' if masked else ''}"
             output[name + '.svg'] = ('\n'.join(line.rstrip() for line in svg.getvalue().decode().splitlines()) + '\n').encode()
