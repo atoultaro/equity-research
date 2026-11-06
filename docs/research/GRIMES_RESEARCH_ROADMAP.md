@@ -4,6 +4,8 @@ Living charter, established October 30, 2026. **Current priority: review initial
 
 Five-minute route: A–D for the question and semantics, H for priorities, and J for findings and interpretation corrections. F/G supply the theoretical references and competing hypotheses.
 
+For a source-linked reading of Grimes' actual blog teachings on **SETUPs, flexible entries, prospective initial stops, and the separate management of entered trades**, see [Grimes blog reading notes](GRIMES_BLOG_SETUP_ENTRY_STOPS_AND_MANAGEMENT.md). Read this before interpreting published SETUP stop changes as personal trailing-stop actions.
+
 ## A. Mission
 
 Infer the latent trading decision rules behind Adam Grimes' published MarketLife alerts from partial observations, financial time series and his educational writing. Explain why a stock is ADDED, which structures justify its initial stop, why stops change, why entry remains attractive or becomes UNDERWAY, when eligibility returns, and why a setup is DROPPED. Relate these decisions to trend, volatility, market regime and anticipated price behavior.
