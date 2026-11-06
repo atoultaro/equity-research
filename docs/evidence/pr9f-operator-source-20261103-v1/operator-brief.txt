@@ -1,0 +1,342 @@
+# PR9F: Initial Structural Stop Inference
+
+Repository: `atoultaro/equity-research`
+
+## 1. Scientific objective
+
+Infer the latent reasoning behind Adam Grimes' **initial published stop prices** using all captured MarketLife setup episodes.
+
+Our working causal model is:
+
+**Setup and price structure → Structural invalidation → Initial stop → Risk assessment → Entry decision**
+
+We hypothesize that Grimes identifies a meaningful structural invalidation level, selects a stop consistent with that structure, and then evaluates whether the resulting risk makes the opportunity attractive.
+
+ATR14 may normalize risk, but it is not assumed to generate the stop price.
+
+This is a scientific inference study, not a stop-price optimization or execution-system project.
+
+Read and follow:
+
+- `AGENTS.md`
+- `docs/research/GRIMES_RESEARCH_ROADMAP.md`
+- `docs/MARKETLIFE_SETUP_AND_OPPORTUNITY_MODEL.md`
+- `docs/reports/GRIMES_STRUCTURAL_STOP_INFERENCE.md`
+
+## 2. Research population
+
+Begin with the **34 captured initial-stop decisions from PR9E**, comprising 17 LONG and 17 SHORT episodes.
+
+Extend the observed population with the November 3, 2026 MarketLife alert.
+
+Three new setup episodes:
+
+| Symbol | Direction | MarketLife type | Initial stop |
+| --- | --- | --- | --- |
+| AVGO | SHORT | Nested pullback | 335.40 |
+| GME | SHORT | Nested pullback | 24.90 |
+| SLB | LONG | Pullback | 51.90 |
+
+The expected population is **37 initial-stop decisions**, subject to source-ledger reconciliation.
+
+Retain the original 34-decision cohort separately so its historical findings remain reproducible.
+
+Do not count repeated publication-time scenarios as independent decisions.
+
+A newly ADDED setup after a STOPPED_OUT or DROPPED outcome is a new episode, even if the symbol previously appeared.
+
+## 3. Preserve the complete November 3 source observation
+
+The user supplied the following MarketLife changes for Tuesday, November 3, 2026.
+
+### Explicitly stopped out
+
+- CNQ LONG at 55.10.
+- Previous SLB LONG at 52.60.
+
+### New setups
+
+- AVGO SHORT, Nested pullback, stop 335.40.
+- GME SHORT, Nested pullback, stop 24.90.
+- SLB LONG, Pullback, stop 51.90.
+
+### Stops revised
+
+- AXGN LONG: 47.30 → 47.50.
+- BA SHORT: 177.30 → 178.30.
+- CRWV SHORT: 58.80 → 55.00.
+- DUK LONG: 126.20 → 126.60.
+- KSS LONG: 22.80 → 23.00.
+
+### Dropped setups
+
+- NCLH LONG.
+- SAIL LONG.
+- XOP LONG.
+
+### Market context
+
+The user supplied commentary that indexes failed to bounce, crude sold off sharply, new short index setups appeared, and several stock positions were exited for small losses.
+
+Preserve this as operator-supplied source context. Do not automatically convert it into verified market observations or claims about individual brokerage executions.
+
+Store this alert as a separately dated, immutable source observation with its actual provenance and available timestamp precision.
+
+Do not invent an exact publication time.
+
+**Research boundary:** Only the three new initial stops enter PR9F's primary analysis. Preserve the other actions for subsequent research without investigating their management rationale in this PR.
+
+## 4. Incorporate MarketLife's observed setup types
+
+The recent dashboards explicitly distinguish:
+
+- Pullback
+- Tight pullback
+- Nested pullback
+- Breakout
+
+Treat these as source-observed classifications, not classifications inferred by our algorithms.
+
+Create a setup-family evidence register containing:
+
+- Symbol and setup episode ID.
+- Direction.
+- Observed MarketLife TYPE.
+- Source snapshot date and provenance.
+- Whether the classification was observed at the original setup decision or only in a later snapshot.
+- Uncertainty about historical applicability.
+
+Do not assign later dashboard classifications retrospectively without qualification.
+
+The November 3 alert explicitly identifies AVGO and GME as Nested pullback SHORT setups and SLB as a Pullback LONG setup.
+
+## 5. Distinguish initial stops, entries and current stops
+
+The research must maintain separate concepts:
+
+- Initial published stop.
+- Current published stop.
+- Source-reported entry reference.
+- Entry reference type: AE, AHE or UNKNOWN.
+- Source-reported tracked stop-out.
+- Actual subscriber execution: UNKNOWN unless independently documented.
+
+For example, the November 2 dashboard showed:
+
+**DUK LONG UNDERWAY**
+- Entry reference: 125.12 AHE.
+- Current stop: 126.60.
+- LAST: 128.38.
+
+**CRWV SHORT UNDERWAY**
+- Entry reference: 56.12 AHE.
+- Current stop: 55.00.
+- LAST: 50.15.
+
+These current stops have moved favorably beyond their reported entry references.
+
+They must not be mistaken for initial stops.
+
+For a known candidate entry, initial risk is:
+
+LONG:
+
+`entry_price - initial_stop`
+
+SHORT:
+
+`initial_stop - entry_price`
+
+Normalize by the decision-time ATR14 when suitable evidence exists.
+
+If the candidate entry is unknown, entry-to-stop risk remains UNKNOWN.
+
+Never substitute LAST or the closing price for an unobserved entry.
+
+The dashboard's TO STOP metric is not the same as original entry risk.
+
+## 6. Competing initial-stop hypotheses
+
+For each initial stop, compare six hypothesis families.
+
+### H1: Confirmed swing structure
+
+The stop protects a meaningful prior swing low for LONG or swing high for SHORT.
+
+Retain PR9E's strict confirmed-pivot detector as a baseline, but recognize that meaningful structure can exist at different scales.
+
+Do not select pivots based on closeness to the published stop.
+
+### H2: Pullback extreme
+
+The stop protects the low of a relevant pullback for LONG or the high for SHORT.
+
+Identify the pullback using market context available before the decision.
+
+### H3: Consolidation boundary
+
+The stop protects the boundary of a meaningful trading range.
+
+A fixed ten-bar high/low is only a descriptive baseline, not proof of consolidation.
+
+### H4: Breakout or breakdown structure
+
+The stop protects a breakout/breakdown signal bar, the preceding base or another identifiable invalidation boundary.
+
+Distinguish a signal candle from the structure that produced it.
+
+### H5: Volatility-compression structure
+
+Investigate whether several days of contracting daily ranges, overlapping candles or declining volatility create a meaningful structural boundary.
+
+For LONG setups, the initial stop may sit below the compression's lowest low.
+
+For SHORT setups, the initial stop may sit above the compression's highest high.
+
+The causal hypothesis is:
+
+**Compression pattern → Structural boundary → Initial stop**
+
+Not:
+
+**ATR multiplier → Initial stop**
+
+Use simple, predeclared compression definitions. Do not optimize window lengths or buffers to reproduce published stops.
+
+### H6: Volatility-derived alternative
+
+Retain ATR-derived or other volatility-based stop construction as a competing explanation.
+
+Do not presume it is Grimes' primary mechanism.
+
+Do not fit arbitrary ATR multipliers to historical stops and call the fit evidence of his policy.
+
+## 7. Reconstruct the pre-decision chart
+
+For every initial stop:
+
+1. Identify its source alert and setup episode.
+2. Establish the permissible information cutoff.
+3. Reconstruct the available daily OHLCV.
+4. Identify candidate setup structures without using the published stop.
+5. Record candidate invalidation levels and structural significance.
+6. Compare candidates with the published initial stop.
+7. Evaluate competing explanations, contradictions and unidentified variables.
+
+Preserve conditional scenarios for uncertain publication timing.
+
+Do not use future bars or pivots that were confirmed only afterward.
+
+Use existing archived market evidence. Missing historical observations should result in explicit UNKNOWN or CONDITIONAL classifications, not a new infrastructure initiative.
+
+## 8. Evaluate explanatory strength
+
+Do not treat a stop lying on the correct side of a candidate boundary as sufficient proof.
+
+Distinguish:
+
+- Geometric compatibility.
+- Proximity to the structural boundary.
+- Meaningfulness of the identified pattern.
+- Contradictory price behavior.
+- Multiple plausible interpretations.
+- UNKNOWN or insufficient evidence.
+
+Measure stop-to-anchor distance in native price units and ATR14 units.
+
+Use declared descriptive tolerances only if necessary, with sensitivity analysis. Do not optimize thresholds for maximum historical agreement.
+
+For each hypothesis, document:
+
+- Supporting evidence.
+- Contradictory evidence.
+- Latent assumptions.
+- Alternative explanation.
+- Discriminating observation.
+
+## 9. Compare setup families
+
+Where source TYPE evidence is available, compare structural-stop explanations for:
+
+- Pullback.
+- Tight pullback.
+- Nested pullback.
+- Breakout.
+
+In particular, investigate whether nested pullbacks use smaller, local invalidation structures within larger trends.
+
+The two new nested SHORT setups, AVGO and GME, offer useful examples.
+
+The fresh SLB LONG setup, following an explicitly reported stop-out of its earlier LONG episode, provides another important case.
+
+However, do not infer its structural rationale merely from the change between stop prices 52.60 and 51.90.
+
+No universal stop-placement rule should be assumed across setup families.
+
+## 10. Full-population analysis
+
+Produce one initial-stop record for every captured episode, including unavailable cases.
+
+Report:
+
+- Total initial stops and direction breakdown.
+- Setup-type evidence coverage.
+- Candidate structural explanations.
+- Geometric and structural correspondence.
+- Compression-pattern observations.
+- Unexplained and contradictory stops.
+- Publication-time sensitivity.
+- Differences between the original PR9E cohort and newly observed episodes.
+
+Select detailed chart case studies from the full population, including positive examples, ambiguous cases and counterexamples.
+
+Avoid fitting the hypotheses to known stops and then presenting retrospective correspondence as predictive accuracy.
+
+## 11. Deliverables
+
+Create:
+
+1. `docs/reports/GRIMES_INITIAL_STOP_INFERENCE.md`
+2. Machine-readable initial-stop inventory.
+3. Structural hypothesis comparison matrix.
+4. Compression-pattern diagnostics.
+5. MarketLife setup-family evidence register.
+6. Selected annotated charts.
+7. Immutable November 3 source-evidence batch.
+8. Reproducibility and validation summary.
+
+Update `docs/research/GRIMES_RESEARCH_ROADMAP.md` with the provisional findings.
+
+Preserve all previous frozen evidence and reports.
+
+## 12. Explicit exclusions
+
+Do not:
+
+- Investigate subsequent stop revisions or trailing-stop management.
+- Model stop-out mechanics or DROPPED decisions.
+- Infer private subscriber executions.
+- Replace missing entries with LAST.
+- Choose stop levels mechanically from one ATR.
+- Optimize a stop-price prediction model.
+- Build another acquisition pipeline.
+- Require complete external subscriber history.
+- Modify operational forecast registration gates.
+- Change the execution simulator.
+- Rewrite PR9E's historical conclusions.
+
+## 13. Definition of done
+
+PR9F should answer:
+
+1. Which observable price structures plausibly explain the original 34 initial stops and three new November 3 stops?
+2. Can multi-day volatility compression explain cases the earlier structural proxies could not?
+3. Does Grimes appear to use different invalidation structures for different explicitly identified setup types?
+4. What explains the new AVGO, GME and SLB initial stops?
+5. Which cases contradict the strongest hypotheses?
+6. What information remains latent or unidentified?
+7. What observations would distinguish the remaining explanations?
+
+The output is an explanatory scientific study, not a production trading system.
+
+Keep the PR focused, reviewable and open for inspection. Do not merge automatically.

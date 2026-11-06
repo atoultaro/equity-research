@@ -1,6 +1,6 @@
 # Reverse-Engineering Adam Grimes' Trading Decisions: Research Charter and Roadmap
 
-Living charter, established October 30, 2026. **Current priority: competing structural-stop explanations using existing evidence.** The [first full-population study](../reports/GRIMES_STRUCTURAL_STOP_INFERENCE.md) retains 77 observed stop decisions, including failures and timing-sensitive cases. Update this document when evidence changes our understanding, rather than whenever engineering work finishes. Historical PR names below identify evidence, not future milestone numbers.
+Living charter, established October 30, 2026. **Current priority: review initial-stop explanations, then investigate structural entry triggers separately.** The [PR9F initial-stop study](../reports/GRIMES_INITIAL_STOP_INFERENCE.md) reconciles 42 openings from the supplied log and earlier ledger. The [first full-population study](../reports/GRIMES_STRUCTURAL_STOP_INFERENCE.md) retains its original 77 stop decisions, including revisions, failures and timing-sensitive cases. Update this document when evidence changes our understanding, rather than whenever engineering work finishes. Historical PR names below identify evidence, not future milestone numbers.
 
 Five-minute route: A–D for the question and semantics, H for priorities, and J for findings and interpretation corrections. F/G supply the theoretical references and competing hypotheses.
 
@@ -12,16 +12,18 @@ This is scientific reverse-engineering of a partially observed policy. It does n
 
 ## B. Governing causal model
 
-**Price structure → Structural invalidation → Stop placement → Risk assessment → Decision**
+**Pattern/context → Structural entry and invalidation → Protective stop → Entry-to-stop risk assessment → Decision**
 
 1. Identify market context and the candidate setup.
-2. Identify pre-existing structural levels whose violation could invalidate that setup.
-3. Choose a stop consistent with that structure, potentially with a buffer.
-4. Evaluate a causally defined candidate entry, its stop distance and available completed ATR14.
+2. Identify a structurally meaningful entry/confirmation and pre-existing levels whose violation could invalidate that setup.
+3. Choose a protective stop consistent with invalidation and expected behavior, potentially allowing volatility-expansion room.
+4. Calculate entry-to-stop risk with ATR14 appropriate to the entry decision. Unknown entry means unknown initial risk; LAST and later references are not substitutes.
 5. Assess remaining opportunity quality, including plausible reward relative to risk.
 6. Publish ADDED, retain ENTERABLE, mark UNDERWAY, revise the stop or DROP the setup.
 
-This ordering is our working causal hypothesis, not a verified deterministic account of Grimes' private process. Competing explanations, including volatility-based construction, can challenge it. ATR14 normalizes volatility and risk; it does not dictate a stop one ATR from entry. Exact stop-price prediction is secondary to explaining structural rationale. Rejecting a universal multiplier as an assumption does not exclude individual stops at that distance.
+This ordering is our working causal hypothesis, not a verified deterministic account of Grimes' private process. Competing explanations, including volatility-based construction, can challenge it. ATR14 normalizes volatility and risk; it does not dictate a stop one ATR from entry or generate an entry backward from the stop. Exact stop-price prediction is secondary to explaining structural rationale. Rejecting a universal multiplier as an assumption does not exclude individual stops at that distance.
+
+The user reports that Grimes prefers approximately **0.8–1.4 ATR entry-to-stop risk**, with risk above approximately **2 ATR** potentially excessive. These are attributed preferences, not independently verified quotations or universal rules. The [PR9F risk section](../reports/GRIMES_INITIAL_STOP_INFERENCE.md#entry-to-stop-risk-as-a-decision-filter) preserves their provenance and separates structural identification from descriptive risk bands. It has zero fully timed entry-risk observations; later conditional reference calculations cannot identify the actual policy. This does not rewrite the differently dated S4 teaching below.
 
 ## C. Observable and latent variables
 
@@ -102,7 +104,8 @@ Keep four attribution layers distinct: **Grimes' published teachings; user-suppl
 | Milestone | Status and scientific output |
 | --- | --- |
 | **Phase 1 — Evidence interpretation** | **Substantially established** by PR9A–PR9D: source reconstruction, setup/execution separation, independent opportunities, publication uncertainty, market features and exploratory retrospective studies. Source coverage, vintage and identifiability limits remain. No successful operational forecast was achieved. Use the existing infrastructure. |
-| **Phase 2 — Structural-stop inference** | **First full-population experiment completed; interpretation remains provisional.** [PR9E](../reports/GRIMES_STRUCTURAL_STOP_INFERENCE.md) inventories all 34 captured episodes / 77 stop decisions before selecting illustrations. Recent pullback extremes have more geometric compatibility than the fixed latest-confirmed-swing proxy; unchanged-anchor revisions, inside-boundary stops and publication sensitivity resist a universal explanation. Next discriminate structural scale and buffer reassessment on another supplied case. |
+| **Phase 2 — Structural-stop inference** | **Two retrospective experiments completed; interpretation remains provisional.** [PR9E](../reports/GRIMES_STRUCTURAL_STOP_INFERENCE.md) retains its 34 episodes / 77 stop decisions. [PR9F](../reports/GRIMES_INITIAL_STOP_INFERENCE.md) reconciles 42 initial stops, with 31 usable charts and 11 unavailable. Local versus larger structure, failed-resumption sequences and compression supply competing explanations, not a recovered universal rule. Later revisions remain preserved for separate research. |
+| **Phase 2b — Structural entry-trigger inference** | **Next proposed scientific stage; not implemented by PR9F.** Explain reported TRIGGERED conditions using price structure/confirmation, then evaluate independently identified entry/stop risk by setup family. Test waiting, rejection or removal alternatives only where evidence discriminates them. Never infer an entry from the preferred ATR band. |
 | **Phase 3 — Entry-eligibility inference** | **Proposed extension of initial descriptives.** Compare ENTERABLE/UNDERWAY transitions, structural risk and extension, explicit returns, and same-direction controls. Separate initial historical measurements from any newly performed analysis. |
 | **Phase 4 — Setup selection and removal** | **Proposed.** Compare ADDED/DROPPED cases, setup families and market context. Investigate differently treated but observably similar securities and counterexamples. Do not infer a complete candidate population from alert omissions. |
 | **Phase 5 — Prospective hypothesis evaluation** | **Not yet demonstrated.** Freeze hypotheses and available inputs before new observations; predict observable decisions, then score subsequent supplied observations. Track target eligibility, coverage, uncertainty and failures. Revise explicitly rather than silently tune. |
@@ -130,6 +133,8 @@ This charter changes research priorities, **not code or existing registration po
 | Structural predictor / H2,H3 | [Historical exploratory evaluation](../reports/GRIMES_WALK_FORWARD_EVALUATION.md): Model E matched 4/26 offered actual revision directions and 3/26 intervals | Same alerts informed hypotheses; weak results do not justify retuning to fit | Replace numerical imitation with competing structural explanations |
 | Market evidence / H2–H5 | [PR9D audit](../reports/MARKETLIFE_CURRENT_DATA_AUDIT.md): 11 qualified instruments, 65 sessions each through October 29; current features available | Six revised October 26 observations; incomplete source/publication evidence; [no operational forecast](../reports/MARKETLIFE_PROSPECTIVE_READINESS.md) | Use existing evidence; assess revision materiality in chosen cases |
 | Structural-stop experiment / H2,H3 | [PR9E full inventory and cases](../reports/GRIMES_STRUCTURAL_STOP_INFERENCE.md): 77 decisions; 66 usable LATE charts; provisional pullback anchors geometrically compatible in 32 decisions | Geometry is not expert intent; GME/HUM/AAOI supply inside-boundary counterexamples; CDE/SAIL are timing-sensitive. Known retained/fresh vintages change SIG normalization, no anchors/verdicts | Freeze competing new-extreme, confirmed-pivot, signal-bar and changed-buffer explanations before another supplied stop revision |
+| Initial-stop patterns / H1,H2 | [PR9F](../reports/GRIMES_INITIAL_STOP_INFERENCE.md): 42 openings; 31 usable charts; local-counterleg geometry in 29/31. CLMT, ANET, EBAY and AMD separate structural scales, failed tests, complex corrections and protective room | CNQ/SAIL contradict a universal local rule; multiple families share boundaries. All eight explicitly typed new setups lack complete prices. Historical hypothesis selection prevents predictive claims | Independently investigate structural entry triggers; retain UNKNOWN cases rather than tune buffers |
+| Entry-risk guidance / H4 | User-reported 0.8–1.4 ATR preference, concern above approximately 2 ATR; separate from source TO STOP and stop-to-boundary residuals | Zero fully timed entry-risk observations. DUK/CRWV later AHE references permit only explicitly conditional calculations, not actual initial risk or a frequency estimate | Identify entry timing and structural confirmation before testing risk as a decision filter |
 
 Foundational interpretation decisions, retained alongside the unchanged historical artifacts:
 

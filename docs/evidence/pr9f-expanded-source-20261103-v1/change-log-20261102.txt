@@ -1,0 +1,120 @@
+Last 14 days · 118 changes
+Day	Ticker	Change
+Mon Nov 2	CNQ	stopped out (long)
+Mon Nov 2	SLB	stopped out (long)
+Mon Nov 2	AVGO	new short nested pullback setup, stop 335.40
+Mon Nov 2	GME	new short nested pullback setup, stop 24.90
+Mon Nov 2	SLB	new long pullback setup, stop 51.90
+Mon Nov 2	AXGN	stop moved to 47.50 (from 47.30)
+Mon Nov 2	BA	stop moved to 178.30 (from 177.30)
+Mon Nov 2	CRWV	stop moved to 55.00 (from 58.80)
+Mon Nov 2	DUK	stop moved to 126.60 (from 126.20)
+Mon Nov 2	KSS	stop moved to 23.00 (from 22.80)
+Mon Nov 2	NCLH	dropped from potential longs
+Mon Nov 2	SAIL	dropped from potential longs
+Mon Nov 2	XOP	dropped from potential longs
+Fri Oct 30	CNQ	triggered long; stop 55.10
+Fri Oct 30	CRWV	triggered short; stop 58.80
+Fri Oct 30	MMM	stopped out (long)
+Fri Oct 30	PAA	stopped out (long)
+Fri Oct 30	SIG	stopped out (long)
+Fri Oct 30	AXGN	new long pullback setup, stop 47.30
+Fri Oct 30	BA	new short tight pullback setup, stop 177.30
+Fri Oct 30	KSS	new long pullback setup, stop 22.80
+Fri Oct 30	NCLH	new long tight pullback setup, stop 17.01
+Fri Oct 30	XOP	new long pullback setup, stop 194.90
+Fri Oct 30	DUK	stop moved to 126.20 (from 124.70)
+Fri Oct 30	SAIL	stop moved to 20.50 (from 20.70)
+Fri Oct 30	FCX	dropped from potential shorts
+Fri Oct 30	NBIS	dropped from potential shorts
+Thu Oct 29	SAIL	stop moved to 20.70 (from 21.40)
+Thu Oct 29	DUK	triggered long; stop 124.70
+Thu Oct 29	MMM	triggered long; stop 173.80
+Thu Oct 29	PAA	triggered long; stop 26.66
+Thu Oct 29	SIG	triggered long; stop 116.60
+Thu Oct 29	CRWV	new short setup, stop 66.20
+Thu Oct 29	NBIS	new short setup, stop 185.80
+Thu Oct 29	PLTR	taken off the long setups
+Thu Oct 29	GTLB	taken off the long trades underway
+Thu Oct 29	DECK	taken off the short setups
+Thu Oct 29	GE	taken off the short setups
+Thu Oct 29	MRNA	taken off the short setups
+Wed Oct 28	DUK	new long setup, stop 122.90
+Wed Oct 28	PAA	new long setup, stop 26.00
+Wed Oct 28	GTLB	triggered long; stop 55.00
+Wed Oct 28	SAIL	stop moved to 21.40 (from 21.30)
+Wed Oct 28	DECK	new short setup, stop 82.90
+Wed Oct 28	FCX	new short setup, stop 67.50
+Wed Oct 28	GE	stop moved to 306.60 (from 301.30)
+Wed Oct 28	MRNA	stop moved to 222.50 (from 214.30)
+Wed Oct 28	ABBV	taken off the long setups
+Wed Oct 28	ELF	taken off the long setups
+Wed Oct 28	HUM	taken off the long setups
+Wed Oct 28	OMER	taken off the short setups
+Tue Oct 27	ABBV	stop moved to 277.20 (from 276.30)
+Tue Oct 27	GTLB	stop moved to 52.60 (from 52.10)
+Tue Oct 27	HUM	stop moved to 406.00 (from 408.10)
+Tue Oct 27	PLTR	new long setup, stop 187.40
+Tue Oct 27	SAIL	triggered long; stop 21.30
+Tue Oct 27	SLB	triggered long; stop 52.60
+Tue Oct 27	GE	stop moved to 301.30 (from 295.80)
+Tue Oct 27	MRNA	new short setup, stop 214.30
+Tue Oct 27	OMER	stop moved to 17.68 (from 17.35)
+Tue Oct 27	EBAY	taken off the long setups
+Tue Oct 27	SCCO	taken off the short setups
+Tue Oct 27	CDE	taken off the short trades underway
+Mon Oct 26	EBAY	stop moved to 117.50 (from 119.20)
+Mon Oct 26	GTLB	stop moved to 52.10 (from 51.60)
+Mon Oct 26	SAIL	new long setup, stop 20.90
+Mon Oct 26	SLB	new long setup, stop 51.10
+Mon Oct 26	GE	new short setup, stop 295.80
+Mon Oct 26	SCCO	new short setup, stop 191.70
+Mon Oct 26	GME	taken off the long setups
+Mon Oct 26	AAPL	taken off the long trades underway
+Mon Oct 26	SNOW	taken off the short setups
+Mon Oct 26	ANET	taken off the short trades underway
+Fri Oct 23	ABBV	new long setup, stop 276.30
+Fri Oct 23	CNQ	new long setup, stop 53.30
+Fri Oct 23	EBAY	new long setup, stop 119.20
+Fri Oct 23	ELF	stop moved to 109.20 (from 108.60)
+Fri Oct 23	GME	stop moved to 24.40 (from 24.78)
+Fri Oct 23	GTLB	new long setup, stop 51.60
+Fri Oct 23	MMM	new long setup, stop 169.90
+Fri Oct 23	SIG	stop moved to 112.50 (from 111.80)
+Fri Oct 23	AAPL	stop moved to 344.70 (from 343.50)
+Fri Oct 23	SNOW	new short setup, stop 330.70
+Fri Oct 23	ANET	stop moved to 175.20 (from 176.80)
+Fri Oct 23	CDE	stop moved to 13.90 (from 14.30)
+Fri Oct 23	TEVA	taken off the long setups
+Fri Oct 23	AAOI	taken off the short trades underway
+Fri Oct 23	AMD	taken off the short trades underway
+Fri Oct 23	SNDK	taken off the short trades underway
+Thu Oct 22	ELF	stop moved to 108.60 (from 110.50)
+Thu Oct 22	GME	stop moved to 24.78 (from 25.01)
+Thu Oct 22	HUM	stop moved to 408.10 (from 404.00)
+Thu Oct 22	TEVA	stop moved to 39.05 (from 39.35)
+Thu Oct 22	AAPL	triggered long; stop 343.50
+Thu Oct 22	OMER	stop moved to 17.35 (from 17.20)
+Thu Oct 22	AAOI	triggered short; stop 70.70
+Thu Oct 22	AMD	triggered short; stop 519.35
+Thu Oct 22	ANET	triggered short; stop 176.80
+Thu Oct 22	CDE	triggered short; stop 14.30
+Thu Oct 22	SNDK	triggered short; stop 1296.00
+Thu Oct 22	T	taken off the short trades underway
+Wed Oct 21	GME	new long setup, stop 25.01
+Wed Oct 21	TEVA	stop moved to 39.35 (from 40.40)
+Wed Oct 21	AAOI	new short setup, stop 89.82
+Wed Oct 21	AMD	new short setup, stop 569.90
+Wed Oct 21	ANET	new short setup, stop 191.25
+Wed Oct 21	SNDK	new short setup, stop 1458.00
+Wed Oct 21	T	stop moved to 22.20 (from 23.80)
+Wed Oct 21	CLMT	taken off the long setups
+Wed Oct 21	ASST	taken off the short setups
+Tue Oct 20	AAPL	stop moved to 336.25 (from 337.80)
+Tue Oct 20	CLMT	stop moved to 53.02 (from 53.40)
+Tue Oct 20	ELF	new long setup, stop 110.50
+Tue Oct 20	HUM	new long setup, stop 404.00
+Tue Oct 20	SIG	new long setup, stop 111.80
+Tue Oct 20	ASST	new short setup, stop 28.45
+Tue Oct 20	OMER	new short setup, stop 17.20
+Tue Oct 20	CAT	taken off the short setups
